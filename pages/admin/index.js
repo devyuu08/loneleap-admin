@@ -2,7 +2,21 @@ import AdminProtectedRoute from "@/components/auth/AdminProtectedRoute";
 import AdminLayout from "@/components/layout/AdminLayout";
 import Link from "next/link";
 
-export default function AdminDashboard({ stats, recentReports }) {
+export default function AdminDashboard({ stats, recentReports = [], error }) {
+  if (error) {
+    return (
+      <div className="p-6 text-red-600 text-center font-semibold">
+        ⚠️ 관리자 데이터를 불러오는 중 오류가 발생했습니다.
+        <br />
+        {error}
+      </div>
+    );
+  }
+
+  const reviewReports = stats?.reviewReports ?? 0;
+  const chatReports = stats?.chatReports ?? 0;
+  const activeUsers = stats?.activeUsers ?? 0;
+
   return (
     <AdminProtectedRoute>
       <AdminLayout>
@@ -20,18 +34,17 @@ export default function AdminDashboard({ stats, recentReports }) {
           {/* 통계 카드 */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div className="bg-white p-4 rounded-xl shadow">
-              신고된 리뷰: <strong>{stats.reviewReports}</strong>
+              신고된 리뷰: <strong>{reviewReports}</strong>
             </div>
             <div className="bg-white p-4 rounded-xl shadow">
-              신고된 채팅: <strong>{stats.chatReports}</strong>
+              신고된 채팅: <strong>{chatReports}</strong>
             </div>
             <div className="bg-white p-4 rounded-xl shadow">
-              활성 사용자:{" "}
-              <strong>{stats.activeUsers.toLocaleString()}명</strong>
+              활성 사용자: <strong>{activeUsers.toLocaleString()}명</strong>
             </div>
           </div>
 
-          {/* 차트 박스 영역 */}
+          {/* 차트 영역 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div className="bg-white p-6 h-60 rounded-xl shadow flex items-center justify-center text-gray-400">
               <p>라인 차트 영역 (구현 예정)</p>
@@ -40,6 +53,7 @@ export default function AdminDashboard({ stats, recentReports }) {
               <p>바 차트 영역 (구현 예정)</p>
             </div>
           </div>
+
           {/* 최근 신고 내역 */}
           <div className="bg-white p-6 rounded-xl shadow">
             <div className="flex justify-between mb-4">
