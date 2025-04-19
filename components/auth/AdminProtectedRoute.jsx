@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { adminEmails } from "@/lib/constants";
-import LoadingSpinner from "../common/LoadingSpinner";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 
 export default function AdminProtectedRoute({ children }) {
   const router = useRouter();

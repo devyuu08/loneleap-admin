@@ -1,5 +1,3 @@
-// components/reports/DetailSection.jsx
-
 export default function DetailSection({ title, children }) {
   return (
     <section className="space-y-1">

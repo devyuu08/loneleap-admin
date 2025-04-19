@@ -1,4 +1,3 @@
-// loneleap-admin/pages/api/reviewReports/getReviewReports.js
 import { db } from "@/lib/firebaseAdmin";
 import { verifyAdminToken } from "@/lib/auth";
 

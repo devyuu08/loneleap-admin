@@ -1,4 +1,3 @@
-// loneleap-admin/pages/api/chatReports/getChatReports.js
 import { db } from "@/lib/firebaseAdmin";
 import { verifyAdminToken } from "@/lib/auth";
 

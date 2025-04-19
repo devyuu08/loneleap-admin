@@ -1,12 +1,11 @@
-// loneleap-admin/pages/admin/reports/chats.js
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import AdminProtectedRoute from "@/components/auth/AdminProtectedRoute";
 import AdminLayout from "@/components/layout/AdminLayout";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
-import ChatReportTable from "@/components/reports/ChatReportTable";
-import ChatReportDetail from "@/components/reports/ChatReportDetail";
-import NoReportSelected from "@/components/reports/NoReportSelected";
+import ChatReportTable from "@/components/reports/tables/ChatReportTable";
+import ChatReportDetail from "@/components/reports/details/ChatReportDetail";
+import NoReportSelected from "@/components/reports/ui/NoReportSelected";
 
 export default function AdminChatReportsPage() {
   const [authReady, setAuthReady] = useState(false);

@@ -1,4 +1,3 @@
-// pages/admin/dashboard.js
 import AdminProtectedRoute from "@/components/auth/AdminProtectedRoute";
 import AdminLayout from "@/components/layout/AdminLayout";
 import Link from "next/link";

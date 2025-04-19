@@ -1,8 +1,6 @@
-// loneleap-admin/components/reports/ChatReportDetail.jsx
-
 import { format } from "date-fns";
-import ActionButtons from "../reports/ActionButtons";
-import DetailSection from "./DetailSection";
+import ActionButtons from "@/components/reports/ui/ActionButtons";
+import DetailSection from "@/components/reports/details/DetailSection";
 import PropTypes from "prop-types";
 
 export default function ChatReportDetail({ report, onSuccess }) {

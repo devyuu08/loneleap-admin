@@ -1,10 +1,9 @@
-// loneleap-admin/components/layout/AdminLayout.jsx
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import InlineSpinner from "../common/InlineSpinner";
+import InlineSpinner from "@/components/common/InlineSpinner";
 
 export default function AdminLayout({ children }) {
   const router = useRouter();
@@ -39,7 +38,7 @@ export default function AdminLayout({ children }) {
           {/* 메뉴 목록 */}
           <nav className="flex flex-col gap-2 px-4 py-4 text-sm text-gray-700">
             {[
-              { href: "/admin/dashboard", label: "대시보드", icon: "🏠" },
+              { href: "/admin", label: "대시보드", icon: "🏠" },
               {
                 href: "/admin/reports/reviews",
                 label: "리뷰 신고",

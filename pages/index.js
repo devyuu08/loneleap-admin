@@ -1,5 +1,3 @@
-// admin/pages/index.js
-
 export async function getServerSideProps() {
   return {
     redirect: {

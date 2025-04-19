@@ -1,4 +1,3 @@
-// pages/404.js
 import { useRouter } from "next/router";
 import AdminLayout from "@/components/layout/AdminLayout";
 import { useState, useEffect } from "react";
@@ -18,7 +17,7 @@ export default function Custom404() {
           <h1 className="text-3xl font-bold mb-4">페이지를 찾을 수 없습니다</h1>
           <p className="text-gray-500">존재하지 않는 관리자 경로입니다.</p>
           <button
-            onClick={() => router.push("/admin/dashboard")}
+            onClick={() => router.push("/admin")}
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
             대시보드로 돌아가기

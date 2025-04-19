@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getAuth } from "firebase/auth";
-import InlineSpinner from "../common/InlineSpinner";
+import InlineSpinner from "@/components/common/InlineSpinner";
 
 export default function ActionButtons({ report, onSuccess }) {
   const [deleting, setDeleting] = useState(false);

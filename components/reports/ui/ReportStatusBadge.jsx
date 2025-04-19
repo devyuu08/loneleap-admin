@@ -1,4 +1,3 @@
-// loneleap-admin/components/reports/ReportStatusBadge.jsx
 import PropTypes from "prop-types";
 
 const STATUS = {

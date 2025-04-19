@@ -6,10 +6,10 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import ErrorMessage from "./ErrorMessage";
+import ErrorMessage from "@/components/auth/ErrorMessage";
 import { FcGoogle } from "react-icons/fc";
 import { FiMail, FiLock } from "react-icons/fi";
-import InlineSpinner from "./common/InlineSpinner";
+import InlineSpinner from "@/components/common/InlineSpinner";
 
 export default function AdminLoginForm({ errorMessage }) {
   const router = useRouter();
@@ -44,7 +44,7 @@ export default function AdminLoginForm({ errorMessage }) {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push("/admin/dashboard");
+      router.push("/admin");
     } catch (err) {
       // 외부 errorMessage가 없을 때만 setError 실행
       if (!errorMessage) {
@@ -77,7 +77,7 @@ export default function AdminLoginForm({ errorMessage }) {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
-      router.push("/admin/dashboard");
+      router.push("/admin");
     } catch (err) {
       const code = err?.code || "";
       switch (code) {

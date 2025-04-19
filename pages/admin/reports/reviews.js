@@ -1,12 +1,11 @@
-// loneleap-admin/pages/admin/reports/reviews.js
 import { useEffect, useState } from "react";
 import AdminProtectedRoute from "@/components/auth/AdminProtectedRoute";
 import AdminLayout from "@/components/layout/AdminLayout";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
-import ReviewReportTable from "@/components/reports/ReviewReportTable";
-import ReviewReportDetail from "@/components/reports/ReviewReportDetail";
+import ReviewReportTable from "@/components/reports/tables/ReviewReportTable";
+import ReviewReportDetail from "@/components/reports/details/ReviewReportDetail";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import NoReportSelected from "@/components/reports/NoReportSelected";
+import NoReportSelected from "@/components/reports/ui/NoReportSelected";
 
 export default function AdminReviewReportsPage() {
   const [authReady, setAuthReady] = useState(false);
