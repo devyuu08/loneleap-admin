@@ -1,7 +1,6 @@
 import AdminProtectedRoute from "@/components/auth/AdminProtectedRoute";
 import AdminLayout from "@/components/layout/AdminLayout";
 import Link from "next/link";
-import { getAuth } from "firebase-admin/auth";
 
 export default function AdminDashboard({ stats, recentReports }) {
   return (
