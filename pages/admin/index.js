@@ -114,6 +114,7 @@ export default function AdminDashboard({ stats, recentReports }) {
 // 서버 사이드에서만 실행되는 코드 (admin SDK는 여기서만!)
 export async function getServerSideProps() {
   const { db } = await import("@/lib/firebaseAdmin");
+  const { getAuth } = await import("firebase-admin/auth");
 
   const [reviewSnap, chatSnap, userSnap] = await Promise.all([
     db.collection("review_reports").get(),
