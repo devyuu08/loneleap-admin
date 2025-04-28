@@ -5,6 +5,8 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
+import { setCookie } from "nookies";
+
 import { auth } from "@/lib/firebase";
 import ErrorMessage from "@/components/auth/ErrorMessage";
 import { FcGoogle } from "react-icons/fc";
@@ -43,7 +45,21 @@ export default function AdminLoginForm({ errorMessage }) {
     setPasswordMatchError("");
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const token = await userCredential.user.getIdToken();
+
+      await fetch("/api/admin/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      });
+
       router.push("/admin");
     } catch (err) {
       // 외부 errorMessage가 없을 때만 setError 실행
