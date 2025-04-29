@@ -13,6 +13,8 @@ export default function AdminLoginPage() {
       setError("관리자 계정이 아닙니다.");
     } else if (queryError === "unauthenticated") {
       setError("관리자 계정 로그인이 필요합니다.");
+    } else if (queryError === "session-expired") {
+      setError("세션이 만료되었습니다. 다시 로그인해주세요.");
     } else {
       setError("");
     }

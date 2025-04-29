@@ -17,11 +17,12 @@ export default async function createAdminSession(req, res) {
     const decoded = await adminAuth.verifyIdToken(token);
 
     // HttpOnly 쿠키 저장
-    setCookie({ res }, "token", token, {
+    setCookie({ res }, "admin-auth-token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       path: "/",
+      maxAge: 60 * 60, // 1시간(3600초) 후 세션 만료
     });
 
     return res.status(200).json({ message: "로그인에 성공했습니다." });

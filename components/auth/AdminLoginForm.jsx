@@ -5,7 +5,6 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { setCookie } from "nookies";
 
 import { auth } from "@/lib/firebase";
 import ErrorMessage from "@/components/auth/ErrorMessage";
@@ -60,6 +59,7 @@ export default function AdminLoginForm({ errorMessage }) {
         body: JSON.stringify({ token }),
       });
 
+      localStorage.setItem("sessionStart", new Date().toISOString());
       router.push("/admin");
     } catch (err) {
       // 외부 errorMessage가 없을 때만 setError 실행
@@ -92,8 +92,20 @@ export default function AdminLoginForm({ errorMessage }) {
     setError("");
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-      router.push("/admin");
+      const result = await signInWithPopup(auth, provider); // 1번만 로그인
+      const token = await result.user.getIdToken(); // 토큰 발급
+
+      await fetch("/api/admin/login", {
+        // 서버에 토큰 전송
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      });
+
+      localStorage.setItem("sessionStart", new Date().toISOString());
+      router.push("/admin"); // 세션 세팅 완료 후 /admin 이동
     } catch (err) {
       const code = err?.code || "";
       switch (code) {
