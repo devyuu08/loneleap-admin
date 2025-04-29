@@ -4,6 +4,7 @@ import Link from "next/link";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import InlineSpinner from "@/components/common/InlineSpinner";
+import SessionTimer from "@/components/auth/SessionTimer";
 
 export default function AdminLayout({ children }) {
   const router = useRouter();
@@ -63,8 +64,12 @@ export default function AdminLayout({ children }) {
           </nav>
         </div>
 
-        {/* 로그아웃 */}
-        <div className="p-6 border-t">
+        {/* 로그아웃 + 세션 타이머 */}
+        <div className="p-6 border-t flex flex-col gap-4">
+          <div className="text-xs text-gray-400 text-center">
+            <SessionTimer />
+          </div>
+
           <button
             onClick={handleLogout}
             disabled={isLoading}

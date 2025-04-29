@@ -5,7 +5,6 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { setCookie } from "nookies";
 
 import { auth } from "@/lib/firebase";
 import ErrorMessage from "@/components/auth/ErrorMessage";
@@ -60,6 +59,7 @@ export default function AdminLoginForm({ errorMessage }) {
         body: JSON.stringify({ token }),
       });
 
+      localStorage.setItem("sessionStart", new Date().toISOString());
       router.push("/admin");
     } catch (err) {
       // 외부 errorMessage가 없을 때만 setError 실행
@@ -104,6 +104,7 @@ export default function AdminLoginForm({ errorMessage }) {
         body: JSON.stringify({ token }),
       });
 
+      localStorage.setItem("sessionStart", new Date().toISOString());
       router.push("/admin"); // 세션 세팅 완료 후 /admin 이동
     } catch (err) {
       const code = err?.code || "";

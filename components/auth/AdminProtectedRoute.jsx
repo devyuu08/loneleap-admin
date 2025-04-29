@@ -20,9 +20,9 @@ export default function AdminProtectedRoute({ children }) {
           router.replace(
             {
               pathname: "/admin/login",
-              query: { error: "unauthorized" },
+              query: { error: "session-expired" },
             },
-            "/admin/login?error=unauthorized"
+            "/admin/login?error=session-expired"
           );
         } else {
           console.error("인증 체크 중 오류 발생:", error);
