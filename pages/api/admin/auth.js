@@ -1,9 +1,11 @@
 import { adminAuth } from "@/lib/firebaseAdmin";
-import { clearAuthCookie } from "@/lib/auth";
+import { clearAuthCookie } from "@/lib/cookies";
+import { parseCookies } from "nookies";
 
 export default async function checkAdminAuth(req, res) {
   try {
-    const token = req.cookies["admin-auth-token"];
+    const cookies = parseCookies({ req });
+    const token = cookies["admin-auth-token"];
 
     if (!token) {
       throw new Error("No token");

@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/lib/firebase";
-import { adminEmails } from "@/lib/constants";
+import { clearAuthCookie } from "@/lib/cookies";
+import axios from "axios";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 
 export default function AdminProtectedRoute({ children }) {
@@ -10,36 +9,28 @@ export default function AdminProtectedRoute({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      // 로그인 X
-      if (!user) {
-        router.replace(
-          {
-            pathname: "/admin/login",
-            query: { error: "unauthenticated" },
-          },
-          "/admin/login?error=unauthenticated"
-        );
-        return;
+    const checkAuth = async () => {
+      try {
+        await axios.get("/api/admin/auth");
+        // 정상 인증 → 로딩 해제
+        setLoading(false);
+      } catch (error) {
+        if (error.response?.status === 401) {
+          clearAuthCookie(); // 인증 실패 → 쿠키 삭제
+          router.replace(
+            {
+              pathname: "/admin/login",
+              query: { error: "unauthorized" },
+            },
+            "/admin/login?error=unauthorized"
+          );
+        } else {
+          console.error("인증 체크 중 오류 발생:", error);
+        }
       }
+    };
 
-      // 관리자 X
-      if (!adminEmails.includes(user.email)) {
-        router.replace(
-          {
-            pathname: "/admin/login",
-            query: { error: "not-admin" },
-          },
-          "/admin/login?error=not-admin"
-        );
-        return;
-      }
-
-      // 관리자 인증 통과
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
+    checkAuth();
   }, [router]);
 
   if (loading) {
