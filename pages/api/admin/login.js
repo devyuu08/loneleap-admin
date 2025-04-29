@@ -22,6 +22,7 @@ export default async function createAdminSession(req, res) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       path: "/",
+      maxAge: 60 * 60, // 1시간(3600초) 후 세션 만료
     });
 
     return res.status(200).json({ message: "로그인에 성공했습니다." });
