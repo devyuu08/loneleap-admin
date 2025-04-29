@@ -17,7 +17,7 @@ export default async function createAdminSession(req, res) {
     const decoded = await adminAuth.verifyIdToken(token);
 
     // HttpOnly 쿠키 저장
-    setCookie({ res }, "token", token, {
+    setCookie({ res }, "admin-auth-token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
