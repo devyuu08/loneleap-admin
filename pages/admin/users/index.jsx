@@ -7,7 +7,6 @@ export default function AdminUsersPage() {
     <AdminProtectedRoute>
       <AdminLayout>
         <div className="p-6">
-          <h1 className="text-2xl font-bold mb-6">사용자 관리</h1>
           <UserTableContainer />
         </div>
       </AdminLayout>
