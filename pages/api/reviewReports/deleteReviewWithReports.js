@@ -1,7 +1,8 @@
 import { db } from "@/lib/firebaseAdmin";
 import { verifyAdminToken } from "@/lib/auth";
+import admin from "firebase-admin";
 
-export default async function handler(req, res) {
+export default async function deleteReviewWithReports(req, res) {
   // 1. 관리자 인증
   try {
     await verifyAdminToken(req, res); // 이 안에서 토큰 검증 + 이메일 체크 진행
@@ -38,11 +39,21 @@ export default async function handler(req, res) {
         .json({ error: "삭제할 리뷰가 존재하지 않습니다." });
     }
 
-    // 5. 트랜잭션으로 리뷰 + 신고 일괄 삭제
+    const { authorId } = reviewDoc.data();
+    if (!authorId) {
+      return res.status(400).json({ error: "작성자 정보가 없습니다." });
+    }
+
+    // 5. 트랜잭션: 리뷰 + 신고 삭제 + 작성자 신고카운트 감소
     await db.runTransaction(async (transaction) => {
       transaction.delete(reviewRef);
       snapshot.docs.forEach((doc) => {
         transaction.delete(doc.ref);
+      });
+
+      const userRef = db.collection("users").doc(authorId);
+      transaction.update(userRef, {
+        reportedCount: admin.firestore.FieldValue.increment(-1),
       });
     });
 
