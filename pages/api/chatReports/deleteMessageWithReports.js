@@ -1,5 +1,6 @@
 import { db } from "@/lib/firebaseAdmin";
 import { verifyAdminToken } from "@/lib/auth";
+import admin from "firebase-admin";
 
 export default async function deleteMessageWithReports(req, res) {
   // 메서드 검사
@@ -42,18 +43,31 @@ export default async function deleteMessageWithReports(req, res) {
     // 트랜잭션: 메시지 + 신고 일괄 삭제
     await db.runTransaction(async (transaction) => {
       const messageRef = db.collection("chatMessages").doc(messageId);
-
       const messageSnap = await transaction.get(messageRef);
+
       if (!messageSnap.exists) {
-        const error = new Error("삭제할 메시지가 존재하지 않습니다.");
-        error.code = "not-found";
-        throw error;
+        throw Object.assign(new Error("삭제할 메시지가 존재하지 않습니다."), {
+          code: "not-found",
+        });
       }
 
+      const { senderId } = messageSnap.data();
+      if (!senderId) {
+        throw new Error("메시지에 senderId 정보가 없습니다.");
+      }
+
+      // 1. 메시지 삭제
       transaction.delete(messageRef);
 
-      snapshot.docs.forEach((doc) => {
-        transaction.delete(doc.ref);
+      // 2. 관련 신고 문서들 삭제
+      reportsSnapshot.forEach((reportDoc) => {
+        transaction.delete(reportDoc.ref);
+      });
+
+      // 3. 해당 유저의 reportedCount 감소
+      const userRef = db.collection("users").doc(senderId);
+      transaction.update(userRef, {
+        reportedCount: admin.firestore.FieldValue.increment(-1),
       });
     });
 

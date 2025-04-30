@@ -53,20 +53,38 @@ export default function UserTable({ users }) {
               </td>
 
               {/* 작성 일정 수 */}
-              <td className="px-4 py-4 text-center text-gray-800">7</td>
+              <td className="px-4 py-4 text-center text-gray-800">
+                {user.itineraryCount ?? 0}
+              </td>
 
               {/* 리뷰 수 */}
-              <td className="px-4 py-4 text-center text-gray-800">11</td>
+              <td className="px-4 py-4 text-center text-gray-800">
+                {user.reviewCount ?? 0}
+              </td>
 
               {/* 신고 이력 */}
               <td className="px-4 py-4 text-center">
-                <span className="text-sm text-red-500 font-semibold">2회</span>
+                <span className="text-sm text-red-500 font-semibold">
+                  {user.reportedCount ?? 0}회
+                </span>
               </td>
 
               {/* 상태 */}
               <td className="px-4 py-4 text-center">
-                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
-                  활성
+                <span
+                  className={`text-xs px-2 py-1 rounded-full ${
+                    user.status === "active"
+                      ? "bg-green-100 text-green-800"
+                      : user.status === "warned"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : "bg-gray-100 text-gray-600"
+                  }`}
+                >
+                  {user.status === "active"
+                    ? "활성"
+                    : user.status === "warned"
+                    ? "경고"
+                    : "휴면"}
                 </span>
               </td>
 

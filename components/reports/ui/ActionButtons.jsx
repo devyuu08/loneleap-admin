@@ -63,8 +63,8 @@ export default function ActionButtons({ report, onSuccess }) {
 
       const res = await fetch(
         isChat
-          ? "/api/chatReports/dismissChatReport"
-          : "/api/reviewReports/dismissReport",
+          ? "/api/chatReports/dismissChatReports"
+          : "/api/reviewReports/dismissReviewReports",
         {
           method: "POST",
           headers: {
