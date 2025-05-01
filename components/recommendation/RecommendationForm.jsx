@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function RecommendationForm({ onSubmit, loading }) {
+export default function RecommendationForm({
+  onSubmit,
+  loading,
+  initialValues,
+}) {
   const [name, setName] = useState("");
   const [summary, setSummary] = useState("");
   const [location, setLocation] = useState("");
@@ -12,6 +16,20 @@ export default function RecommendationForm({ onSubmit, loading }) {
   const [direction, setDirection] = useState("");
   const [nearby, setNearby] = useState("");
 
+  useEffect(() => {
+    if (initialValues) {
+      setName(initialValues.name || "");
+      setSummary(initialValues.summary || "");
+      setLocation(initialValues.location || "");
+      setDescription(initialValues.description || "");
+      setImagePreview(initialValues.imageUrl || null);
+      setVisible(initialValues.visible ?? true);
+      setLocationInfo(initialValues.locationInfo || "");
+      setDirection((initialValues.directions || []).join("\n"));
+      setNearby((initialValues.nearbyInfo || []).join("\n"));
+    }
+  }, [initialValues]);
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -21,8 +39,7 @@ export default function RecommendationForm({ onSubmit, loading }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("📤 handleSubmit 실행됨");
-    if (!name || !location || !description || !imageFile) {
+    if (!name || !location || !description || (!imageFile && !imagePreview)) {
       return alert("필수 항목을 모두 입력하세요.");
     }
 
@@ -50,7 +67,9 @@ export default function RecommendationForm({ onSubmit, loading }) {
       onSubmit={handleSubmit}
       className="max-w-2xl mx-auto p-8 bg-white rounded-2xl shadow space-y-10"
     >
-      <h2 className="text-2xl font-semibold text-gray-900">추천 여행지 등록</h2>
+      <h2 className="text-2xl font-semibold text-gray-900">
+        {initialValues ? "추천 여행지 수정" : "추천 여행지 등록"}
+      </h2>
 
       {/* 기본 정보 */}
       <section className="space-y-4">
@@ -178,13 +197,26 @@ export default function RecommendationForm({ onSubmit, loading }) {
         </span>
       </div>
 
+      {/* 취소 버튼 */}
+      <button
+        type="button"
+        onClick={() => window.history.back()}
+        className="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-100"
+      >
+        수정 취소
+      </button>
+
       {/* 등록 버튼 */}
       <button
         type="submit"
         disabled={loading}
         className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition"
       >
-        {loading ? "등록 중..." : "추천 여행지 등록하기"}
+        {loading
+          ? "처리 중..."
+          : initialValues
+          ? "추천 여행지 수정하기"
+          : "추천 여행지 등록하기"}
       </button>
     </form>
   );

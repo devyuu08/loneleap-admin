@@ -7,7 +7,7 @@ import { format } from "date-fns";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { MapPin, Eye, EyeOff, User, Clock, ArrowLeft } from "lucide-react";
+import { MapPin, Eye, EyeOff, Clock, ArrowLeft, Pencil } from "lucide-react";
 
 export default function AdminRecommendationDetailPage() {
   const router = useRouter();
@@ -38,7 +38,8 @@ export default function AdminRecommendationDetailPage() {
           </div>
 
           {/* 기본 정보 */}
-          <div className="bg-white rounded-xl shadow p-6 space-y-4">
+          <div className="bg-white rounded-xl shadow p-6">
+            {/* 이미지 */}
             <div className="relative w-full h-[320px] rounded-lg overflow-hidden">
               <Image
                 src={data.imageUrl}
@@ -50,16 +51,38 @@ export default function AdminRecommendationDetailPage() {
               />
             </div>
 
-            <div className="space-y-1">
-              <h1 className="text-3xl font-bold text-gray-900">{data.name}</h1>
-              <p className="text-gray-500 flex items-center gap-1">
-                <MapPin className="w-4 h-4" />
-                {data.location}
-              </p>
-              <p className="text-gray-700">{data.summary}</p>
+            {/* 텍스트 + 메타 정보 분리 레이아웃 */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mt-6 gap-6">
+              {/* 텍스트 정보 */}
+              <div className="space-y-2">
+                <h1 className="text-3xl font-bold text-gray-900">
+                  {data.name}
+                </h1>
+                <p className="text-gray-500 flex items-center gap-1">
+                  <MapPin className="w-4 h-4" />
+                  {data.location}
+                </p>
+                <p className="text-gray-700">{data.summary}</p>
+              </div>
+
+              {/* 등록/수정일 */}
+              <div className="text-xs text-gray-500 space-y-1">
+                <p className="flex items-center gap-1">
+                  <Clock className="w-3 h-3" />
+                  등록일:{" "}
+                  {data.createdAt?.toDate
+                    ? format(data.createdAt.toDate(), "yyyy.MM.dd")
+                    : "-"}
+                </p>
+                {data.updatedAt?.toDate && (
+                  <p className="flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    수정일: {format(data.updatedAt.toDate(), "yyyy.MM.dd")}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
-
           {/* 상세 설명 */}
           {data.description && (
             <div className="bg-white rounded-xl shadow p-6 space-y-4">
@@ -130,9 +153,10 @@ export default function AdminRecommendationDetailPage() {
             </div>
           )}
 
-          {/* 메타 정보 */}
-          <div className="bg-white rounded-xl shadow p-6 text-sm text-gray-500 space-y-2">
+          {/* 메타 정보 + 버튼 */}
+          <div className="bg-white rounded-xl shadow p-6 text-sm text-gray-500">
             <div className="flex items-center justify-between">
+              {/* 공개 여부 */}
               <span
                 className={`inline-flex items-center gap-1 px-3 py-1 rounded-full font-medium text-xs ${
                   data.visible
@@ -151,28 +175,15 @@ export default function AdminRecommendationDetailPage() {
                 )}
               </span>
 
-              <span className="flex items-center gap-1 text-xs">
-                <Clock className="w-4 h-4" />
-                등록일:{" "}
-                {data.createdAt?.toDate
-                  ? format(data.createdAt.toDate(), "yyyy.MM.dd")
-                  : "-"}
-              </span>
+              {/* 수정 버튼 */}
+              <Link
+                href={`/admin/recommendation/${id}/edit`}
+                className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-800 hover:bg-black rounded-lg transition"
+              >
+                <Pencil className="w-4 h-4 mr-2" />
+                수정하기
+              </Link>
             </div>
-
-            {data.updatedAt?.toDate && (
-              <div className="text-xs flex items-center gap-1">
-                <Clock className="w-4 h-4" /> 수정일:{" "}
-                {format(data.updatedAt.toDate(), "yyyy.MM.dd")}
-              </div>
-            )}
-
-            {data.authorEmail && (
-              <div className="text-xs flex items-center gap-1 text-gray-400">
-                <User className="w-4 h-4" /> 등록자:{" "}
-                <span className="font-mono">{data.authorEmail}</span>
-              </div>
-            )}
           </div>
         </div>
       </AdminLayout>
