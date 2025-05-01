@@ -1,25 +1,31 @@
 import AdminProtectedRoute from "@/components/auth/AdminProtectedRoute";
 import AdminLayout from "@/components/layout/AdminLayout";
+import { useFetchRecommendations } from "@/hooks/useFetchRecommendations";
+import RecommendationList from "@/components/recommendation/RecommendationList";
 import Link from "next/link";
 
 export default function AdminSpotsPage() {
+  const { recommendations, loading } = useFetchRecommendations();
+
   return (
     <AdminProtectedRoute>
       <AdminLayout>
-        <div className="flex flex-col items-center justify-center h-full py-24 text-center">
-          <h1 className="text-2xl font-bold mb-4">추천 여행지 관리</h1>
-          <p className="text-gray-500 max-w-md">
-            이 페이지는{" "}
-            <span className="font-semibold text-gray-700">v4.0</span> 버전에서
-            도입될 예정입니다.
-            <br /> 여행지 데이터 등록, 수정, 삭제 기능이 제공될 예정이에요.
-          </p>
-          <p className="text-gray-500 mt-2">예상 출시일: 2025년 6월</p>
-          <div className="mt-6">
-            <Link href="/admin" className="text-blue-500 hover:underline mx-2">
-              대시보드로 돌아가기
+        <div className="px-6 py-10">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-2xl font-bold">추천 여행지 목록</h1>
+            <Link
+              href="/admin/recommendation/new"
+              className="text-sm bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
+            >
+              + 새 여행지 등록
             </Link>
           </div>
+
+          {loading ? (
+            <p className="text-gray-500">불러오는 중...</p>
+          ) : (
+            <RecommendationList recommendations={recommendations} />
+          )}
         </div>
       </AdminLayout>
     </AdminProtectedRoute>
