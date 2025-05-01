@@ -11,6 +11,7 @@ export function useAddRecommendation() {
   const router = useRouter();
 
   const addRecommendation = async (formData) => {
+    console.log("🔥 addRecommendation 실행됨");
     const {
       name,
       summary,
@@ -19,8 +20,8 @@ export function useAddRecommendation() {
       imageFile,
       visible,
       locationInfo,
-      direction,
-      nearby,
+      directions,
+      nearbyInfo,
     } = formData;
 
     setLoading(true);
@@ -40,8 +41,8 @@ export function useAddRecommendation() {
         imageUrl,
         visible,
         locationInfo,
-        direction,
-        nearby,
+        directions: directions ?? [],
+        nearbyInfo: nearbyInfo ?? [],
         createdAt: serverTimestamp(),
       });
 

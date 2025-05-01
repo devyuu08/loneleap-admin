@@ -1,3 +1,4 @@
+import Link from "next/link"; // ⬅️ 꼭 추가해줘
 import Image from "next/image";
 import { format } from "date-fns";
 
@@ -13,8 +14,9 @@ export default function RecommendationList({ recommendations }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {recommendations.map((item) => (
-        <div
+        <Link
           key={item.id}
+          href={`/admin/recommendation/${item.id}`}
           className="bg-white rounded-xl shadow hover:bg-gray-50 transition overflow-hidden"
         >
           <div className="relative w-full h-48">
@@ -49,7 +51,7 @@ export default function RecommendationList({ recommendations }) {
               </span>
             </div>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );
