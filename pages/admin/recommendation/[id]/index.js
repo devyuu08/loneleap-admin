@@ -7,12 +7,22 @@ import { format } from "date-fns";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { MapPin, Eye, EyeOff, Clock, ArrowLeft, Pencil } from "lucide-react";
+import {
+  MapPin,
+  Eye,
+  EyeOff,
+  Clock,
+  ArrowLeft,
+  Pencil,
+  Trash2,
+} from "lucide-react";
+import { useDeleteRecommendation } from "@/hooks/useDeleteRecommendation";
 
 export default function AdminRecommendationDetailPage() {
   const router = useRouter();
   const { id } = router.query;
   const { data, loading, notFound } = useRecommendationDetail(id);
+  const { deleteRecommendation, loading: deleting } = useDeleteRecommendation();
 
   if (loading) return <div className="p-10 text-center">불러오는 중...</div>;
   if (notFound)
@@ -21,6 +31,14 @@ export default function AdminRecommendationDetailPage() {
         존재하지 않는 여행지입니다.
       </div>
     );
+
+  const handleDelete = async () => {
+    const confirm = window.confirm("정말 삭제하시겠습니까?");
+    if (!confirm) return;
+
+    await deleteRecommendation(id);
+    router.push("/admin/recommendation");
+  };
 
   return (
     <AdminProtectedRoute>
@@ -50,10 +68,9 @@ export default function AdminRecommendationDetailPage() {
                 priority
               />
             </div>
-
             {/* 텍스트 + 메타 정보 분리 레이아웃 */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end mt-6 gap-6">
-              {/* 텍스트 정보 */}
+              {/* 텍스트 정보 (왼쪽) */}
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold text-gray-900">
                   {data.name}
@@ -65,24 +82,47 @@ export default function AdminRecommendationDetailPage() {
                 <p className="text-gray-700">{data.summary}</p>
               </div>
 
-              {/* 등록/수정일 */}
-              <div className="text-xs text-gray-500 space-y-1">
-                <p className="flex items-center gap-1">
-                  <Clock className="w-3 h-3" />
-                  등록일:{" "}
-                  {data.createdAt?.toDate
-                    ? format(data.createdAt.toDate(), "yyyy.MM.dd")
-                    : "-"}
-                </p>
-                {data.updatedAt?.toDate && (
+              {/* 오른쪽: 공개 여부 + 등록일/수정일 */}
+              <div className="flex flex-col items-end gap-2">
+                {/* 공개 여부 뱃지 */}
+                <span
+                  className={`inline-flex items-center gap-1 px-3 py-1 rounded-full font-medium text-xs ${
+                    data.visible
+                      ? "bg-green-100 text-green-700"
+                      : "bg-gray-200 text-gray-600"
+                  }`}
+                >
+                  {data.visible ? (
+                    <>
+                      <Eye className="w-4 h-4" /> 공개
+                    </>
+                  ) : (
+                    <>
+                      <EyeOff className="w-4 h-4" /> 비공개
+                    </>
+                  )}
+                </span>
+
+                {/* 등록/수정일 */}
+                <div className="text-xs text-gray-500 text-right space-y-1">
                   <p className="flex items-center gap-1">
                     <Clock className="w-3 h-3" />
-                    수정일: {format(data.updatedAt.toDate(), "yyyy.MM.dd")}
+                    등록일:{" "}
+                    {data.createdAt?.toDate
+                      ? format(data.createdAt.toDate(), "yyyy.MM.dd")
+                      : "-"}
                   </p>
-                )}
+                  {data.updatedAt?.toDate && (
+                    <p className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      수정일: {format(data.updatedAt.toDate(), "yyyy.MM.dd")}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
+
           {/* 상세 설명 */}
           {data.description && (
             <div className="bg-white rounded-xl shadow p-6 space-y-4">
@@ -153,37 +193,25 @@ export default function AdminRecommendationDetailPage() {
             </div>
           )}
 
-          {/* 메타 정보 + 버튼 */}
-          <div className="bg-white rounded-xl shadow p-6 text-sm text-gray-500">
-            <div className="flex items-center justify-between">
-              {/* 공개 여부 */}
-              <span
-                className={`inline-flex items-center gap-1 px-3 py-1 rounded-full font-medium text-xs ${
-                  data.visible
-                    ? "bg-green-100 text-green-700"
-                    : "bg-gray-200 text-gray-600"
-                }`}
-              >
-                {data.visible ? (
-                  <>
-                    <Eye className="w-4 h-4" /> 공개
-                  </>
-                ) : (
-                  <>
-                    <EyeOff className="w-4 h-4" /> 비공개
-                  </>
-                )}
-              </span>
+          <div className="flex flex-col md:flex-row justify-end items-center gap-4 mt-8">
+            {/* 수정하기 */}
+            <Link
+              href={`/admin/recommendation/${id}/edit`}
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-medium text-white bg-gray-800 hover:bg-black transition"
+            >
+              <Pencil className="w-4 h-4" />
+              수정하기
+            </Link>
 
-              {/* 수정 버튼 */}
-              <Link
-                href={`/admin/recommendation/${id}/edit`}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-800 hover:bg-black rounded-lg transition"
-              >
-                <Pencil className="w-4 h-4 mr-2" />
-                수정하기
-              </Link>
-            </div>
+            {/* 삭제하기 */}
+            <button
+              onClick={handleDelete}
+              disabled={deleting}
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition disabled:opacity-50"
+            >
+              <Trash2 className="w-4 h-4" />
+              삭제하기
+            </button>
           </div>
         </div>
       </AdminLayout>
