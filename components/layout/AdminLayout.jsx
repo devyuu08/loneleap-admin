@@ -47,7 +47,11 @@ export default function AdminLayout({ children }) {
               },
               { href: "/admin/reports/chats", label: "채팅 신고", icon: "💬" },
               { href: "/admin/users", label: "사용자 관리", icon: "👤" },
-              { href: "/admin/spots", label: "추천 여행지 관리", icon: "📍" },
+              {
+                href: "/admin/recommendation",
+                label: "추천 여행지 관리",
+                icon: "📍",
+              },
             ].map(({ href, label, icon }) => (
               <Link
                 key={href}
