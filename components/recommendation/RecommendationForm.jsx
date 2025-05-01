@@ -197,27 +197,30 @@ export default function RecommendationForm({
         </span>
       </div>
 
-      {/* 취소 버튼 */}
-      <button
-        type="button"
-        onClick={() => window.history.back()}
-        className="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-100"
-      >
-        수정 취소
-      </button>
+      {/* 버튼 영역 */}
+      <div className="flex justify-between items-center gap-4">
+        {initialValues && (
+          <button
+            type="button"
+            onClick={() => window.history.back()}
+            className="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-100"
+          >
+            수정 취소
+          </button>
+        )}
 
-      {/* 등록 버튼 */}
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition"
-      >
-        {loading
-          ? "처리 중..."
-          : initialValues
-          ? "추천 여행지 수정하기"
-          : "추천 여행지 등록하기"}
-      </button>
+        <button
+          type="submit"
+          disabled={loading}
+          className="flex-1 bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition"
+        >
+          {loading
+            ? "처리 중..."
+            : initialValues
+            ? "추천 여행지 수정하기"
+            : "추천 여행지 등록하기"}
+        </button>
+      </div>
     </form>
   );
 }
