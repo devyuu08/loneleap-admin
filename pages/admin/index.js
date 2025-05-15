@@ -9,6 +9,11 @@ const ReviewReportLineChart = dynamic(
   { ssr: false }
 );
 
+const ChatReportLineChart = dynamic(
+  () => import("@/components/dashboard/ChatReportLineChart"),
+  { ssr: false }
+);
+
 export default function AdminDashboard({
   stats,
   recentReports = [],
@@ -59,10 +64,7 @@ export default function AdminDashboard({
           {/* 차트 영역 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <ReviewReportLineChart data={chartData.reviewReports} />
-
-            <div className="bg-white p-6 h-60 rounded-xl shadow flex items-center justify-center text-gray-400">
-              <p>바 차트 영역 (구현 예정)</p>
-            </div>
+            <ChatReportLineChart data={chartData.chatReports} />
           </div>
 
           {/* 최근 신고 내역 */}
