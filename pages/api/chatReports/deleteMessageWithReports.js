@@ -51,29 +51,26 @@ export default async function deleteMessageWithReports(req, res) {
         });
       }
 
-      const { senderId } = messageSnap.data();
-      if (!senderId) {
-        throw new Error("메시지에 senderId 정보가 없습니다.");
+      const senderUid = messageSnap.data()?.sender?.uid;
+      if (!senderUid) {
+        throw new Error("메시지 작성자 정보가 없습니다.");
       }
 
       // 1. 메시지 삭제
       transaction.delete(messageRef);
 
       // 2. 관련 신고 문서들 삭제
-      reportsSnapshot.forEach((reportDoc) => {
-        transaction.delete(reportDoc.ref);
+      snapshot.docs.forEach((doc) => {
+        transaction.delete(doc.ref);
       });
 
       // 3. 해당 유저의 reportedCount 감소
-      const userRef = db.collection("users").doc(senderId);
+      const userRef = db.collection("users_private").doc(senderUid);
       transaction.update(userRef, {
         reportedCount: admin.firestore.FieldValue.increment(-1),
       });
     });
 
-    console.log(
-      `메시지 ID: ${messageId}, 방 ID: ${roomId}의 메시지 및 관련 신고 ${snapshot.size}개 삭제 완료`
-    );
     return res.status(200).json({ message: "메시지 및 관련 신고 삭제 완료" });
   } catch (err) {
     console.error("채팅 메시지 삭제 오류:", err);
