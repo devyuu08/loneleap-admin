@@ -37,10 +37,29 @@ export default function UserTable({ users }) {
             <tr key={user.id} className="hover:bg-gray-50 transition">
               <td className="px-4 py-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-gray-200 rounded-full" />
+                  {/* 
+                  next/image 대신 <img>를 사용하는 이유:
+                  1. next/image는 onError 핸들링이 불가능하여 fallback 이미지 처리 불가
+                  2. 외부 이미지(Firebase Storage)에서 잘못된 URL이나 만료된 링크가 있을 수 있음
+                  3. <img> + onError를 사용하면 이미지 로드 실패 시 기본 이미지로 확실하게 대체 가능
+                  */}
+                  <img
+                    src={user.photoURL || "/images/default-profile.png"}
+                    alt="사용자 프로필"
+                    width={32}
+                    height={32}
+                    className="w-8 h-8 rounded-full object-cover bg-gray-100 shrink-0"
+                    onError={(e) => {
+                      const img = e.currentTarget;
+                      if (!img.dataset.fallback) {
+                        img.dataset.fallback = "true";
+                        img.src = "/images/default-profile.png";
+                      }
+                    }}
+                  />
                   <div>
                     <p className="font-medium text-gray-800">
-                      {user.displayName || "이름 없음"}
+                      {user.displayName || "탈퇴한 사용자"}
                     </p>
                     <p className="text-xs text-gray-500">{user.email}</p>
                   </div>
