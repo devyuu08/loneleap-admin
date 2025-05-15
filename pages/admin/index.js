@@ -1,8 +1,35 @@
 import AdminProtectedRoute from "@/components/auth/AdminProtectedRoute";
 import AdminLayout from "@/components/layout/AdminLayout";
 import Link from "next/link";
+import dayjs from "dayjs";
+import dynamic from "next/dynamic";
 
-export default function AdminDashboard({ stats, recentReports = [], error }) {
+const ReviewReportLineChart = dynamic(
+  () => import("@/components/dashboard/ReviewReportLineChart"),
+  { ssr: false }
+);
+
+const ChatReportLineChart = dynamic(
+  () => import("@/components/dashboard/ChatReportLineChart"),
+  { ssr: false }
+);
+
+const UserStatusDoughnutChart = dynamic(
+  () => import("@/components/dashboard/UserStatusDoughnutChart"),
+  { ssr: false }
+);
+
+const ContentActivityBarChart = dynamic(
+  () => import("@/components/dashboard/ContentActivityBarChart"),
+  { ssr: false }
+);
+
+export default function AdminDashboard({
+  stats,
+  recentReports = [],
+  chartData,
+  error,
+}) {
   if (error) {
     return (
       <div className="p-6 text-red-600 text-center font-semibold">
@@ -46,12 +73,13 @@ export default function AdminDashboard({ stats, recentReports = [], error }) {
 
           {/* 차트 영역 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div className="bg-white p-6 h-60 rounded-xl shadow flex items-center justify-center text-gray-400">
-              <p>라인 차트 영역 (구현 예정)</p>
-            </div>
-            <div className="bg-white p-6 h-60 rounded-xl shadow flex items-center justify-center text-gray-400">
-              <p>바 차트 영역 (구현 예정)</p>
-            </div>
+            <ReviewReportLineChart data={chartData.reviewReports} />
+            <ChatReportLineChart data={chartData.chatReports} />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <UserStatusDoughnutChart data={chartData.userStatusDist} />
+            <ContentActivityBarChart data={chartData.activityByMonth} />
           </div>
 
           {/* 최근 신고 내역 */}
@@ -136,6 +164,50 @@ export async function getServerSideProps() {
       db.collection("users_private").where("status", "==", "active").get(),
     ]);
 
+    // 리뷰 신고 추이 차트용 데이터
+    const today = dayjs().endOf("day");
+    const sevenDaysAgo = today.subtract(6, "day").startOf("day");
+
+    const recentReviewForChartSnap = await db
+      .collection("review_reports")
+      .where("reportedAt", ">=", sevenDaysAgo.toDate())
+      .get();
+
+    const reviewCountMap = {};
+
+    recentReviewForChartSnap.forEach((doc) => {
+      const date = dayjs(doc.data().reportedAt?.toDate()).format("YYYY-MM-DD");
+      reviewCountMap[date] = (reviewCountMap[date] || 0) + 1;
+    });
+
+    const reviewReportsForChart = Array.from({ length: 7 }).map((_, i) => {
+      const date = sevenDaysAgo.add(i, "day").format("YYYY-MM-DD");
+      return {
+        date,
+        count: reviewCountMap[date] || 0,
+      };
+    });
+
+    // 채팅 신고 추이용 스냅샷
+    const recentChatForChartSnap = await db
+      .collection("chatReports")
+      .where("reportedAt", ">=", sevenDaysAgo.toDate())
+      .get();
+
+    const chatCountMap = {};
+    recentChatForChartSnap.forEach((doc) => {
+      const date = dayjs(doc.data().reportedAt?.toDate()).format("YYYY-MM-DD");
+      chatCountMap[date] = (chatCountMap[date] || 0) + 1;
+    });
+
+    const chatReportsForChart = Array.from({ length: 7 }).map((_, i) => {
+      const date = sevenDaysAgo.add(i, "day").format("YYYY-MM-DD");
+      return {
+        date,
+        count: chatCountMap[date] || 0,
+      };
+    });
+
     // 최근 신고 5개씩 가져오기
     const recentReviewDocs = await db
       .collection("review_reports")
@@ -171,6 +243,72 @@ export async function getServerSideProps() {
       }
     });
     await Promise.all(userFetches);
+
+    // 사용자 상태 분포 데이터 수집
+    const [activeStatusSnap, warnedStatusSnap, inactiveStatusSnap] =
+      await Promise.all([
+        db.collection("users_private").where("status", "==", "active").get(),
+        db.collection("users_private").where("status", "==", "warned").get(),
+        db.collection("users_private").where("status", "==", "inactive").get(),
+      ]);
+
+    const userStatusData = {
+      active: activeStatusSnap.size,
+      warned: warnedStatusSnap.size,
+      inactive: inactiveStatusSnap.size,
+    };
+
+    // 사용자 상태 비율 계산
+    const userStatusSnap = await db.collection("users_private").get();
+    const userStatusDistMap = {};
+
+    userStatusSnap.forEach((doc) => {
+      const status = doc.data().status || "unknown";
+      userStatusDistMap[status] = (userStatusDistMap[status] || 0) + 1;
+    });
+
+    const userStatusDist = Object.entries(userStatusDistMap).map(
+      ([status, count]) => ({
+        status,
+        count,
+      })
+    );
+
+    // 6개월치 월별 리뷰/일정 작성 수 수집
+    const now = dayjs();
+    const sixMonthsAgo = now.subtract(5, "month").startOf("month");
+
+    const reviewSnapForBar = await db
+      .collection("reviews")
+      .where("createdAt", ">=", sixMonthsAgo.toDate())
+      .get();
+
+    const itinerarySnapForBar = await db
+      .collection("itineraries")
+      .where("createdAt", ">=", sixMonthsAgo.toDate())
+      .get();
+
+    const reviewMap = {};
+    reviewSnapForBar.forEach((doc) => {
+      const date = dayjs(doc.data().createdAt.toDate()).format("YYYY-MM");
+      reviewMap[date] = (reviewMap[date] || 0) + 1;
+    });
+
+    const itineraryMap = {};
+    itinerarySnapForBar.forEach((doc) => {
+      const date = dayjs(doc.data().createdAt.toDate()).format("YYYY-MM");
+      itineraryMap[date] = (itineraryMap[date] || 0) + 1;
+    });
+
+    const labels = Array.from({ length: 6 }).map((_, i) =>
+      sixMonthsAgo.add(i, "month").format("YYYY-MM")
+    );
+
+    const activityChartData = labels.map((label) => ({
+      month: label,
+      reviews: reviewMap[label] || 0,
+      itineraries: itineraryMap[label] || 0,
+    }));
 
     // 통합 신고 리스트 정리
     const recentReports = [
@@ -208,6 +346,13 @@ export async function getServerSideProps() {
           activeUsers: activeUserSnap.size,
         },
         recentReports,
+        chartData: {
+          reviewReports: reviewReportsForChart,
+          chatReports: chatReportsForChart,
+          userStatusDist,
+          activityByMonth: activityChartData,
+        },
+        userStatusData,
       },
     };
   } catch (error) {
