@@ -171,6 +171,26 @@ export async function getServerSideProps() {
       };
     });
 
+    // 채팅 신고 추이용 스냅샷
+    const recentChatForChartSnap = await db
+      .collection("chatReports")
+      .where("reportedAt", ">=", sevenDaysAgo.toDate())
+      .get();
+
+    const chatCountMap = {};
+    recentChatForChartSnap.forEach((doc) => {
+      const date = dayjs(doc.data().reportedAt?.toDate()).format("YYYY-MM-DD");
+      chatCountMap[date] = (chatCountMap[date] || 0) + 1;
+    });
+
+    const chatReportsForChart = Array.from({ length: 7 }).map((_, i) => {
+      const date = sevenDaysAgo.add(i, "day").format("YYYY-MM-DD");
+      return {
+        date,
+        count: chatCountMap[date] || 0,
+      };
+    });
+
     // 최근 신고 5개씩 가져오기
     const recentReviewDocs = await db
       .collection("review_reports")
@@ -245,6 +265,7 @@ export async function getServerSideProps() {
         recentReports,
         chartData: {
           reviewReports: reviewReportsForChart,
+          chatReports: chatReportsForChart,
         },
       },
     };
