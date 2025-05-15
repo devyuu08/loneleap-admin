@@ -39,9 +39,11 @@ export default async function deleteReviewWithReports(req, res) {
         .json({ error: "삭제할 리뷰가 존재하지 않습니다." });
     }
 
-    const { authorId } = reviewDoc.data();
-    if (!authorId) {
-      return res.status(400).json({ error: "작성자 정보가 없습니다." });
+    const createdBy = reviewDoc.data()?.createdBy;
+    const authorUid = createdBy?.uid;
+
+    if (!authorUid) {
+      return res.status(400).json({ error: "작성자 UID가 없습니다." });
     }
 
     // 5. 트랜잭션: 리뷰 + 신고 삭제 + 작성자 신고카운트 감소
@@ -51,7 +53,7 @@ export default async function deleteReviewWithReports(req, res) {
         transaction.delete(doc.ref);
       });
 
-      const userRef = db.collection("users").doc(authorId);
+      const userRef = db.collection("users_private").doc(authorUid);
       transaction.update(userRef, {
         reportedCount: admin.firestore.FieldValue.increment(-1),
       });
