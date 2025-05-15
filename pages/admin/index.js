@@ -14,6 +14,11 @@ const ChatReportLineChart = dynamic(
   { ssr: false }
 );
 
+const UserStatusDoughnutChart = dynamic(
+  () => import("@/components/dashboard/UserStatusDoughnutChart"),
+  { ssr: false }
+);
+
 export default function AdminDashboard({
   stats,
   recentReports = [],
@@ -65,6 +70,10 @@ export default function AdminDashboard({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <ReviewReportLineChart data={chartData.reviewReports} />
             <ChatReportLineChart data={chartData.chatReports} />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <UserStatusDoughnutChart data={chartData.userStatusDist} />
           </div>
 
           {/* 최근 신고 내역 */}
@@ -243,6 +252,22 @@ export async function getServerSideProps() {
       inactive: inactiveStatusSnap.size,
     };
 
+    // 사용자 상태 비율 계산
+    const userStatusSnap = await db.collection("users_private").get();
+    const userStatusDistMap = {};
+
+    userStatusSnap.forEach((doc) => {
+      const status = doc.data().status || "unknown";
+      userStatusDistMap[status] = (userStatusDistMap[status] || 0) + 1;
+    });
+
+    const userStatusDist = Object.entries(userStatusDistMap).map(
+      ([status, count]) => ({
+        status,
+        count,
+      })
+    );
+
     // 통합 신고 리스트 정리
     const recentReports = [
       ...recentReviewDocs.docs.map((doc) => {
@@ -282,6 +307,7 @@ export async function getServerSideProps() {
         chartData: {
           reviewReports: reviewReportsForChart,
           chatReports: chatReportsForChart,
+          userStatusDist,
         },
         userStatusData,
       },
