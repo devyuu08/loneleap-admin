@@ -47,25 +47,16 @@ export default function ReviewReportTable({ reports = [], onSelect }) {
                 }}
               >
                 <td className="px-4 py-2 whitespace-nowrap">
-                  <div className="space-y-1 max-w-[260px]">
-                    <p className="text-sm font-medium text-gray-800">
-                      {report.review?.destination || "여행지 없음"}
-                    </p>
-
-                    {report.review?.interviewAnswers ? (
-                      Object.entries(report.review.interviewAnswers).map(
-                        ([key, value]) => (
-                          <p
-                            key={key}
-                            className="text-xs text-gray-600 truncate"
-                          >
-                            <strong>Q{key}.</strong> {value}
-                          </p>
+                  <div className="max-w-[240px] truncate">
+                    {report.review?.interviewAnswers
+                      ? Object.entries(report.review.interviewAnswers).map(
+                          ([key, value]) => (
+                            <p key={key}>
+                              <strong>Q{key}.</strong> {value}
+                            </p>
+                          )
                         )
-                      )
-                    ) : (
-                      <p className="text-sm text-gray-400">삭제된 리뷰</p>
-                    )}
+                      : "삭제된 리뷰"}
                   </div>
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap">
