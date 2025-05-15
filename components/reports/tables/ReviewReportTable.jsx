@@ -48,7 +48,7 @@ export default function ReviewReportTable({ reports = [], onSelect }) {
               >
                 <td className="px-4 py-2 whitespace-nowrap">
                   <div className="max-w-[240px] truncate">
-                    {report.review?.content || "삭제된 리뷰"}
+                    {report.review?.title || "삭제된 리뷰"}
                   </div>
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap">

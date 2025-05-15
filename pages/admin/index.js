@@ -130,10 +130,10 @@ export async function getServerSideProps() {
     const { db } = await import("@/lib/firebaseAdmin");
     const { getAuth } = await import("firebase-admin/auth");
 
-    const [reviewSnap, chatSnap, userSnap] = await Promise.all([
+    const [reviewSnap, chatSnap, activeUserSnap] = await Promise.all([
       db.collection("review_reports").get(),
       db.collection("chatReports").get(),
-      db.collection("users").get(),
+      db.collection("users_private").where("status", "==", "active").get(),
     ]);
 
     // 최근 신고 5개씩 가져오기
@@ -205,7 +205,7 @@ export async function getServerSideProps() {
         stats: {
           reviewReports: reviewSnap.size,
           chatReports: chatSnap.size,
-          activeUsers: userSnap.size,
+          activeUsers: activeUserSnap.size,
         },
         recentReports,
       },

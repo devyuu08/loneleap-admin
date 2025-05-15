@@ -82,7 +82,7 @@ export default async function getChatReports(req, res) {
     // 5단계: 사용자 ID → 이메일 조회
     const reporterIds = [...new Set(data.map((r) => r.reporterId))];
     const userSnaps = await Promise.all(
-      reporterIds.map((uid) => db.collection("users").doc(uid).get())
+      reporterIds.map((uid) => db.collection("users_private").doc(uid).get())
     );
     const userMap = {};
     userSnaps.forEach((snap) => {

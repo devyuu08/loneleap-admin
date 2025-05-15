@@ -33,15 +33,17 @@ export default async function dismissReviewReports(req, res) {
       return res.status(404).json({ error: "리뷰 문서를 찾을 수 없습니다." });
     }
 
-    const { authorId } = reviewDoc.data();
-    if (!authorId) {
-      return res.status(400).json({ error: "리뷰 작성자 정보가 없습니다." });
+    const createdBy = reviewDoc.data().createdBy;
+    const authorUid = createdBy?.uid;
+
+    if (!authorUid) {
+      return res.status(400).json({ error: "리뷰 작성자 UID가 없습니다." });
     }
 
     // 트랜잭션으로 신고 문서 삭제 + 작성자 reportedCount 감소
     await db.runTransaction(async (transaction) => {
       transaction.delete(docRef);
-      const userRef = db.collection("users").doc(authorId);
+      const userRef = db.collection("users_private").doc(authorUid);
       transaction.update(userRef, {
         reportedCount: admin.firestore.FieldValue.increment(-1),
       });
