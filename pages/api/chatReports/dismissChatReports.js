@@ -41,9 +41,11 @@ export default async function dismissChatReport(req, res) {
         .json({ error: "신고 대상 메시지를 찾을 수 없습니다." });
     }
 
-    const { senderId } = messageSnap.data();
-    if (!senderId) {
-      return res.status(400).json({ error: "senderId 정보가 누락되었습니다." });
+    const messageData = messageSnap.data();
+    const senderUid = messageData?.sender?.uid;
+
+    if (!senderUid) {
+      return res.status(400).json({ error: "메시지 작성자 UID가 없습니다." });
     }
 
     // 트랜잭션 처리
@@ -52,7 +54,7 @@ export default async function dismissChatReport(req, res) {
       transaction.delete(reportRef);
 
       // 유저 신고 카운트 감소
-      const userRef = db.collection("users").doc(senderId);
+      const userRef = db.collection("users_private").doc(senderUid);
       transaction.update(userRef, {
         reportedCount: admin.firestore.FieldValue.increment(-1),
       });
@@ -63,7 +65,7 @@ export default async function dismissChatReport(req, res) {
         action: "dismissChatReport",
         adminId,
         reportId,
-        senderId,
+        senderId: senderUid,
         reportData,
         timestamp: new Date(),
       });
