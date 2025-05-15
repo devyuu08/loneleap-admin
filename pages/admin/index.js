@@ -79,7 +79,7 @@ export default function AdminDashboard({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <UserStatusDoughnutChart data={chartData.userStatusDist} />
-            <ContentActivityBarChart data={chartData.userActivity} />
+            <ContentActivityBarChart data={chartData.activityByMonth} />
           </div>
 
           {/* 최근 신고 내역 */}
