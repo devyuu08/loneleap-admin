@@ -31,18 +31,22 @@ export default function ReviewReportDetail({ report, onSuccess }) {
 
   return (
     <div className="p-6 space-y-6">
-      <DetailSection title="리뷰 원문">
-        {review?.content || "삭제된 리뷰입니다."}
-      </DetailSection>
-
       <DetailSection title="신고 사유">{reason}</DetailSection>
 
       <DetailSection title="신고자">{reporterId || "-"}</DetailSection>
 
-      <DetailSection title="신고일자">
-        {reportedAt
-          ? format(new Date(reportedAt), "yyyy.MM.dd HH:mm")
-          : "날짜 없음"}
+      <DetailSection title="리뷰 원문">
+        {review?.interviewAnswers ? (
+          <div className="space-y-2">
+            {Object.entries(review.interviewAnswers).map(([key, value]) => (
+              <p key={key} className="text-sm text-gray-700 leading-snug">
+                <strong>Q{key}.</strong> {value}
+              </p>
+            ))}
+          </div>
+        ) : (
+          "삭제된 리뷰입니다."
+        )}
       </DetailSection>
 
       <div className="pt-4 border-t">
