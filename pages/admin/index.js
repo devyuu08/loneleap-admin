@@ -2,8 +2,19 @@ import AdminProtectedRoute from "@/components/auth/AdminProtectedRoute";
 import AdminLayout from "@/components/layout/AdminLayout";
 import Link from "next/link";
 import dayjs from "dayjs";
+import dynamic from "next/dynamic";
 
-export default function AdminDashboard({ stats, recentReports = [], error }) {
+const ReviewReportLineChart = dynamic(
+  () => import("@/components/dashboard/ReviewReportLineChart"),
+  { ssr: false }
+);
+
+export default function AdminDashboard({
+  stats,
+  recentReports = [],
+  chartData,
+  error,
+}) {
   if (error) {
     return (
       <div className="p-6 text-red-600 text-center font-semibold">
@@ -47,9 +58,8 @@ export default function AdminDashboard({ stats, recentReports = [], error }) {
 
           {/* 차트 영역 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div className="bg-white p-6 h-60 rounded-xl shadow flex items-center justify-center text-gray-400">
-              <p>라인 차트 영역 (구현 예정)</p>
-            </div>
+            <ReviewReportLineChart data={chartData.reviewReports} />
+
             <div className="bg-white p-6 h-60 rounded-xl shadow flex items-center justify-center text-gray-400">
               <p>바 차트 영역 (구현 예정)</p>
             </div>
