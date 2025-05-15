@@ -268,6 +268,42 @@ export async function getServerSideProps() {
       })
     );
 
+    // 6개월치 월별 리뷰/일정 작성 수 수집
+    const now = dayjs();
+    const sixMonthsAgo = now.subtract(5, "month").startOf("month");
+
+    const reviewSnapForBar = await db
+      .collection("reviews")
+      .where("createdAt", ">=", sixMonthsAgo.toDate())
+      .get();
+
+    const itinerarySnapForBar = await db
+      .collection("itineraries")
+      .where("createdAt", ">=", sixMonthsAgo.toDate())
+      .get();
+
+    const reviewMap = {};
+    reviewSnapForBar.forEach((doc) => {
+      const date = dayjs(doc.data().createdAt.toDate()).format("YYYY-MM");
+      reviewMap[date] = (reviewMap[date] || 0) + 1;
+    });
+
+    const itineraryMap = {};
+    itinerarySnapForBar.forEach((doc) => {
+      const date = dayjs(doc.data().createdAt.toDate()).format("YYYY-MM");
+      itineraryMap[date] = (itineraryMap[date] || 0) + 1;
+    });
+
+    const labels = Array.from({ length: 6 }).map((_, i) =>
+      sixMonthsAgo.add(i, "month").format("YYYY-MM")
+    );
+
+    const activityChartData = labels.map((label) => ({
+      month: label,
+      reviews: reviewMap[label] || 0,
+      itineraries: itineraryMap[label] || 0,
+    }));
+
     // 통합 신고 리스트 정리
     const recentReports = [
       ...recentReviewDocs.docs.map((doc) => {
@@ -308,6 +344,7 @@ export async function getServerSideProps() {
           reviewReports: reviewReportsForChart,
           chatReports: chatReportsForChart,
           userStatusDist,
+          activityByMonth: activityChartData,
         },
         userStatusData,
       },
