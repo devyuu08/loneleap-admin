@@ -229,6 +229,20 @@ export async function getServerSideProps() {
     });
     await Promise.all(userFetches);
 
+    // 사용자 상태 분포 데이터 수집
+    const [activeStatusSnap, warnedStatusSnap, inactiveStatusSnap] =
+      await Promise.all([
+        db.collection("users_private").where("status", "==", "active").get(),
+        db.collection("users_private").where("status", "==", "warned").get(),
+        db.collection("users_private").where("status", "==", "inactive").get(),
+      ]);
+
+    const userStatusData = {
+      active: activeStatusSnap.size,
+      warned: warnedStatusSnap.size,
+      inactive: inactiveStatusSnap.size,
+    };
+
     // 통합 신고 리스트 정리
     const recentReports = [
       ...recentReviewDocs.docs.map((doc) => {
@@ -269,6 +283,7 @@ export async function getServerSideProps() {
           reviewReports: reviewReportsForChart,
           chatReports: chatReportsForChart,
         },
+        userStatusData,
       },
     };
   } catch (error) {
