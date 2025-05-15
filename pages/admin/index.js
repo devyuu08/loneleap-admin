@@ -19,6 +19,11 @@ const UserStatusDoughnutChart = dynamic(
   { ssr: false }
 );
 
+const ContentActivityBarChart = dynamic(
+  () => import("@/components/dashboard/ContentActivityBarChart"),
+  { ssr: false }
+);
+
 export default function AdminDashboard({
   stats,
   recentReports = [],
@@ -74,6 +79,7 @@ export default function AdminDashboard({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <UserStatusDoughnutChart data={chartData.userStatusDist} />
+            <ContentActivityBarChart data={chartData.userActivity} />
           </div>
 
           {/* 최근 신고 내역 */}
