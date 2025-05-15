@@ -1,6 +1,7 @@
 import AdminProtectedRoute from "@/components/auth/AdminProtectedRoute";
 import AdminLayout from "@/components/layout/AdminLayout";
 import Link from "next/link";
+import dayjs from "dayjs";
 
 export default function AdminDashboard({ stats, recentReports = [], error }) {
   if (error) {
@@ -136,6 +137,30 @@ export async function getServerSideProps() {
       db.collection("users_private").where("status", "==", "active").get(),
     ]);
 
+    // 리뷰 신고 추이 차트용 데이터
+    const today = dayjs().endOf("day");
+    const sevenDaysAgo = today.subtract(6, "day").startOf("day");
+
+    const recentReviewForChartSnap = await db
+      .collection("review_reports")
+      .where("reportedAt", ">=", sevenDaysAgo.toDate())
+      .get();
+
+    const reviewCountMap = {};
+
+    recentReviewForChartSnap.forEach((doc) => {
+      const date = dayjs(doc.data().reportedAt?.toDate()).format("YYYY-MM-DD");
+      reviewCountMap[date] = (reviewCountMap[date] || 0) + 1;
+    });
+
+    const reviewReportsForChart = Array.from({ length: 7 }).map((_, i) => {
+      const date = sevenDaysAgo.add(i, "day").format("YYYY-MM-DD");
+      return {
+        date,
+        count: reviewCountMap[date] || 0,
+      };
+    });
+
     // 최근 신고 5개씩 가져오기
     const recentReviewDocs = await db
       .collection("review_reports")
@@ -208,6 +233,9 @@ export async function getServerSideProps() {
           activeUsers: activeUserSnap.size,
         },
         recentReports,
+        chartData: {
+          reviewReports: reviewReportsForChart,
+        },
       },
     };
   } catch (error) {
