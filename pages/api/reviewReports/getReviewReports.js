@@ -52,10 +52,7 @@ export default async function getReviewReportsHandler(req, res) {
     const reviewsMap = {};
     reviewSnaps.forEach((snap) => {
       if (snap.exists) {
-        console.log("✅ 리뷰 있음:", snap.id);
         reviewsMap[snap.id] = snap.data();
-      } else {
-        console.log("❌ 리뷰 없음:", snap.id);
       }
     });
 
@@ -65,6 +62,7 @@ export default async function getReviewReportsHandler(req, res) {
         ...report,
         review: review
           ? {
+              title: review.title || null,
               destination: review.destination || null,
               interviewAnswers: review.interviewAnswers || null,
               imageUrl: review.imageUrl || null,
