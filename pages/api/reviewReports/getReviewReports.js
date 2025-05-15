@@ -52,35 +52,47 @@ export default async function getReviewReportsHandler(req, res) {
     const reviewsMap = {};
     reviewSnaps.forEach((snap) => {
       if (snap.exists) {
+        console.log("✅ 리뷰 있음:", snap.id);
         reviewsMap[snap.id] = snap.data();
+      } else {
+        console.log("❌ 리뷰 없음:", snap.id);
       }
     });
 
-    const dataWithReviews = reports.map((report) => ({
-      ...report,
-      review: reviewsMap[report.reviewId] || null,
-    }));
+    const dataWithReviewInfo = reports.map((report) => {
+      const review = reviewsMap[report.reviewId];
+      return {
+        ...report,
+        review: review
+          ? {
+              destination: review.destination || null,
+              interviewAnswers: review.interviewAnswers || null,
+              imageUrl: review.imageUrl || null,
+            }
+          : null,
+      };
+    });
 
     // 3. 사용자 ID → 이메일 조회
-    const reporterIds = [...new Set(dataWithReviews.map((r) => r.reporterId))];
+    const reporterIds = [
+      ...new Set(dataWithReviewInfo.map((r) => r.reporterId)),
+    ];
     const userSnaps = await Promise.all(
-      reporterIds.map((uid) => db.collection("users").doc(uid).get())
+      reporterIds.map((uid) => db.collection("users_private").doc(uid).get())
     );
     const userMap = {};
     userSnaps.forEach((snap) => {
       if (snap.exists) {
         const userData = snap.data();
-        userMap[snap.id] = userData.email || "(이메일 없음)";
+        userMap[snap.id] = userData?.email || "(이메일 없음)";
       }
     });
 
     // 4. reporterEmail 추가
-    const enrichedData = dataWithReviews.map((report) => {
-      return {
-        ...report,
-        reporterEmail: userMap[report.reporterId] || "(탈퇴한 사용자)",
-      };
-    });
+    const enrichedData = dataWithReviewInfo.map((report) => ({
+      ...report,
+      reporterEmail: userMap[report.reporterId] || "(탈퇴한 사용자)",
+    }));
 
     return res.status(200).json(enrichedData);
   } catch (error) {
