@@ -66,9 +66,15 @@ export default async function deleteMessageWithReports(req, res) {
 
       // 3. 해당 유저의 reportedCount 감소
       const userRef = db.collection("users_private").doc(senderUid);
-      transaction.update(userRef, {
-        reportedCount: admin.firestore.FieldValue.increment(-1),
-      });
+      const userSnap = await transaction.get(userRef);
+      const currentCount = userSnap.data()?.reportedCount || 0;
+
+      // 0 이하로 내려가지 않도록 조건 처리
+      if (currentCount > 0) {
+        transaction.update(userRef, {
+          reportedCount: admin.firestore.FieldValue.increment(-1),
+        });
+      }
     });
 
     return res.status(200).json({ message: "메시지 및 관련 신고 삭제 완료" });

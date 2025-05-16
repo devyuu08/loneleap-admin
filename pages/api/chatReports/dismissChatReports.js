@@ -55,9 +55,15 @@ export default async function dismissChatReport(req, res) {
 
       // 유저 신고 카운트 감소
       const userRef = db.collection("users_private").doc(senderUid);
-      transaction.update(userRef, {
-        reportedCount: admin.firestore.FieldValue.increment(-1),
-      });
+      const userSnap = await transaction.get(userRef);
+      const currentCount = userSnap.data()?.reportedCount || 0;
+
+      // 0 이하로 내려가지 않도록 방어
+      if (currentCount > 0) {
+        transaction.update(userRef, {
+          reportedCount: admin.firestore.FieldValue.increment(-1),
+        });
+      }
 
       // 감사 로그
       const adminId = decoded.uid || decoded.email || "unknown";

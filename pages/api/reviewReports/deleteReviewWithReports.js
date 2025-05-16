@@ -54,9 +54,14 @@ export default async function deleteReviewWithReports(req, res) {
       });
 
       const userRef = db.collection("users_private").doc(authorUid);
-      transaction.update(userRef, {
-        reportedCount: admin.firestore.FieldValue.increment(-1),
-      });
+      const userSnap = await transaction.get(userRef);
+      const currentCount = userSnap.data()?.reportedCount || 0;
+
+      if (currentCount > 0) {
+        transaction.update(userRef, {
+          reportedCount: admin.firestore.FieldValue.increment(-1),
+        });
+      }
     });
 
     return res.status(200).json({
