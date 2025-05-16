@@ -43,10 +43,17 @@ export default async function dismissReviewReports(req, res) {
     // 트랜잭션으로 신고 문서 삭제 + 작성자 reportedCount 감소
     await db.runTransaction(async (transaction) => {
       transaction.delete(docRef);
+
       const userRef = db.collection("users_private").doc(authorUid);
-      transaction.update(userRef, {
-        reportedCount: admin.firestore.FieldValue.increment(-1),
-      });
+      const userSnap = await transaction.get(userRef);
+      const currentCount = userSnap.data()?.reportedCount || 0;
+
+      // 0 이하로 내려가지 않도록 방어
+      if (currentCount > 0) {
+        transaction.update(userRef, {
+          reportedCount: admin.firestore.FieldValue.increment(-1),
+        });
+      }
     });
 
     return res
