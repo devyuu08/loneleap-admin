@@ -25,7 +25,9 @@ export default function UserActionButtons({ userId, currentStatus }) {
     if (!confirm) return;
 
     try {
-      await recoverUser(userId);
+      await recoverUser(userId); // Firebase Auth 복구
+      await updateUserStatus(userId, "active"); // Firestore 상태 업데이트
+
       alert("계정이 복구되었습니다.");
     } catch (err) {
       console.error("계정 복구 실패:", err);
