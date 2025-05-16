@@ -1,3 +1,5 @@
+import { suspendUser } from "@/lib/admin";
+
 import { PauseCircle, Trash2, RotateCcw } from "lucide-react";
 import { updateUserStatus, deleteUserAccount } from "@/lib/users";
 
@@ -7,9 +9,11 @@ export default function UserActionButtons({ userId, currentStatus }) {
     if (!confirm) return;
 
     try {
-      await updateUserStatus(userId, "suspended");
+      await suspendUser(userId); // Firebase Auth 정지
+      await updateUserStatus(userId, "suspended"); // Firestore 상태 반영
+
       alert("계정이 정지되었습니다.");
-      // 리프레시 필요 시 외부에서 처리
+      location.reload(); // 필요 시 상태 새로고침
     } catch (err) {
       console.error("계정 정지 실패:", err);
       alert("오류가 발생했습니다.");
