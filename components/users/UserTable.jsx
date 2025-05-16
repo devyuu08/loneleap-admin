@@ -1,4 +1,4 @@
-import { Pencil, PauseCircle, Trash2 } from "lucide-react";
+import UserActionButtons from "@/components/users/UserActionButtons";
 
 export default function UserTable({ users }) {
   const formatCreatedAt = (createdAt) => {
@@ -109,15 +109,7 @@ export default function UserTable({ users }) {
 
               {/* 액션 버튼 */}
               <td className="px-4 py-4 text-center space-x-2">
-                <button className="text-gray-400 hover:text-blue-500">
-                  <Pencil size={16} strokeWidth={1.8} />
-                </button>
-                <button className="text-gray-400 hover:text-yellow-500">
-                  <PauseCircle size={16} strokeWidth={1.8} />
-                </button>
-                <button className="text-gray-400 hover:text-red-500">
-                  <Trash2 size={16} strokeWidth={1.8} />
-                </button>
+                <UserActionButtons userId={user.id} userStatus={user.status} />
               </td>
             </tr>
           ))}
