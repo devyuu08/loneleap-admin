@@ -1,4 +1,4 @@
-import { suspendUser, recoverUser } from "@/lib/admin";
+import { suspendUser, recoverUser, deleteUser } from "@/lib/admin";
 
 import { PauseCircle, Trash2, RotateCcw } from "lucide-react";
 import { updateUserStatus, deleteUserAccount } from "@/lib/users";
@@ -40,12 +40,16 @@ export default function UserActionButtons({ userId, currentStatus }) {
       "정말 이 계정을 완전히 삭제하시겠어요? 이 작업은 되돌릴 수 없습니다."
     );
     if (!confirm) return;
+
     try {
-      await deleteUserAccount(userId);
+      await deleteUser(userId); // Firebase 인증 삭제
+      await deleteUserAccount(userId); // Firestore 문서 삭제
+
       alert("계정이 삭제되었습니다.");
+      // TODO: UI에서 목록 새로고침 필요
     } catch (err) {
       console.error("계정 삭제 실패:", err);
-      alert("삭제 중 오류가 발생했습니다.");
+      alert("오류가 발생했습니다.");
     }
   };
 
