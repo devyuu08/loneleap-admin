@@ -14,6 +14,7 @@ export default function UserTableContainer() {
   });
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+
   const usersPerPage = 10;
 
   useEffect(() => {
@@ -29,6 +30,15 @@ export default function UserTableContainer() {
     };
     load();
   }, []);
+
+  const loadUsers = async () => {
+    try {
+      const data = await fetchUsers();
+      setUsers(data);
+    } catch (error) {
+      console.error("사용자 로딩 실패:", error);
+    }
+  };
 
   // 필터 상태 변경
   const handleFilterChange = (key, value) => {
@@ -89,7 +99,7 @@ export default function UserTableContainer() {
         <p className="text-gray-500">검색 결과가 없습니다.</p>
       ) : (
         <>
-          <UserTable users={currentUsers} />
+          <UserTable users={currentUsers} onReload={loadUsers} />
 
           {/* 페이지네이션 */}
           <div className="flex justify-center gap-2 mt-6">
