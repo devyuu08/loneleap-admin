@@ -1,8 +1,7 @@
 import { PauseCircle, Trash2, RotateCcw } from "lucide-react";
-import { updateUserStatus } from "@/lib/users";
+import { updateUserStatus, deleteUserAccount } from "@/lib/users";
 
 export default function UserActionButtons({ userId, currentStatus }) {
-  console.log("currentStatus:", currentStatus);
   const handleSuspend = async () => {
     const confirm = window.confirm("정말 이 사용자의 계정을 정지하시겠어요?");
     if (!confirm) return;
@@ -29,6 +28,20 @@ export default function UserActionButtons({ userId, currentStatus }) {
     }
   };
 
+  const handleDelete = async () => {
+    const confirm = window.confirm(
+      "정말 이 계정을 완전히 삭제하시겠어요? 이 작업은 되돌릴 수 없습니다."
+    );
+    if (!confirm) return;
+    try {
+      await deleteUserAccount(userId);
+      alert("계정이 삭제되었습니다.");
+    } catch (err) {
+      console.error("계정 삭제 실패:", err);
+      alert("삭제 중 오류가 발생했습니다.");
+    }
+  };
+
   return (
     <div className="flex items-center justify-center space-x-2">
       <button
@@ -51,7 +64,11 @@ export default function UserActionButtons({ userId, currentStatus }) {
       >
         <PauseCircle size={16} strokeWidth={1.8} />
       </button>
-      <button className="text-gray-400 hover:text-red-500">
+      <button
+        onClick={handleDelete}
+        className="text-gray-400 hover:text-red-500"
+        title="계정 삭제"
+      >
         <Trash2 size={16} strokeWidth={1.8} />
       </button>
     </div>
