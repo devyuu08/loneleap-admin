@@ -109,7 +109,10 @@ export default function UserTable({ users }) {
 
               {/* 액션 버튼 */}
               <td className="px-4 py-4 text-center space-x-2">
-                <UserActionButtons userId={user.id} userStatus={user.status} />
+                <UserActionButtons
+                  userId={user.id}
+                  currentStatus={user.status}
+                />
               </td>
             </tr>
           ))}
