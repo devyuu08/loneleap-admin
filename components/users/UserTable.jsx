@@ -1,6 +1,6 @@
 import UserActionButtons from "@/components/users/UserActionButtons";
 
-export default function UserTable({ users }) {
+export default function UserTable({ users, onReload }) {
   const formatCreatedAt = (createdAt) => {
     if (!createdAt) return "N/A";
     const date =
@@ -112,6 +112,7 @@ export default function UserTable({ users }) {
                 <UserActionButtons
                   userId={user.id}
                   currentStatus={user.status}
+                  onSuccess={onReload}
                 />
               </td>
             </tr>

@@ -1,6 +1,6 @@
 import { adminAuth } from "@/lib/firebaseAdmin";
 
-export default async function handler(req, res) {
+export default async function enableUserHandler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
 
   const { uid } = req.body;
