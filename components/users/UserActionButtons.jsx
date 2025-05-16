@@ -1,4 +1,4 @@
-import { suspendUser } from "@/lib/admin";
+import { suspendUser, recoverUser } from "@/lib/admin";
 
 import { PauseCircle, Trash2, RotateCcw } from "lucide-react";
 import { updateUserStatus, deleteUserAccount } from "@/lib/users";
@@ -23,8 +23,9 @@ export default function UserActionButtons({ userId, currentStatus }) {
   const handleRecover = async () => {
     const confirm = window.confirm("이 사용자의 계정을 다시 활성화할까요?");
     if (!confirm) return;
+
     try {
-      await updateUserStatus(userId, "active");
+      await recoverUser(userId);
       alert("계정이 복구되었습니다.");
     } catch (err) {
       console.error("계정 복구 실패:", err);
