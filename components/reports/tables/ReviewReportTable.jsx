@@ -11,28 +11,20 @@ export default function ReviewReportTable({ reports = [], onSelect }) {
         </div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full table-auto text-sm">
+          <table className="w-full table-auto text-sm text-gray-800">
             <thead>
-              <tr className="bg-gray-100 text-gray-700">
-                <th className="px-4 py-2 text-left whitespace-nowrap">
-                  리뷰 제목
-                </th>
-                <th className="px-4 py-2 text-left whitespace-nowrap">
-                  신고 사유
-                </th>
-                <th className="px-4 py-2 text-left whitespace-nowrap">
-                  신고자
-                </th>
-                <th className="px-4 py-2 text-left whitespace-nowrap">
-                  신고일자
-                </th>
+              <tr className="bg-gray-100 text-left text-gray-600">
+                <th className="px-4 py-2 whitespace-nowrap">리뷰 제목</th>
+                <th className="px-4 py-2 whitespace-nowrap">신고 사유</th>
+                <th className="px-4 py-2 whitespace-nowrap">신고자</th>
+                <th className="px-4 py-2 whitespace-nowrap">신고일자</th>
               </tr>
             </thead>
             <tbody>
               {reports.map((report) => (
                 <tr
                   key={report.id}
-                  className="border-b hover:bg-gray-50 cursor-pointer"
+                  className="border-b hover:bg-gray-100 transition cursor-pointer"
                   onClick={() => onSelect(report)}
                   role="button"
                   tabIndex={0}
@@ -42,23 +34,23 @@ export default function ReviewReportTable({ reports = [], onSelect }) {
                     }
                   }}
                 >
-                  <td className="px-4 py-2 whitespace-nowrap">
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <div className="max-w-[240px] truncate">
                       {report.review?.title || "삭제된 리뷰"}
                     </div>
                   </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <div className="max-w-[160px] truncate">
-                      {report.reason}
+                      {report.reason || "-"}
                     </div>
                   </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
+                  <td className="px-4 py-3 whitespace-nowrap">
                     {report.reporterEmail || "(탈퇴한 사용자)"}
                   </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
+                  <td className="px-4 py-3 whitespace-nowrap">
                     {report.reportedAt
                       ? format(new Date(report.reportedAt), "yyyy.MM.dd")
-                      : "날짜 없음"}
+                      : "-"}
                   </td>
                 </tr>
               ))}
