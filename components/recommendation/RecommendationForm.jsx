@@ -64,10 +64,6 @@ export default function RecommendationForm({
       onSubmit={handleSubmit}
       className="max-w-screen-lg mx-auto px-10 py-16 space-y-16"
     >
-      <h2 className="text-3xl font-bold text-gray-900">
-        {initialValues ? "추천 여행지 수정" : "추천 여행지 등록"}
-      </h2>
-
       {/* 1. 기본 정보 + 이미지 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div className="space-y-6">
