@@ -1,11 +1,5 @@
 import { format } from "date-fns";
-import ReportStatusBadge from "@/components/reports/ui/ReportStatusBadge";
 import PropTypes from "prop-types";
-
-const STATUS_LABELS = {
-  pending: "미처리",
-  completed: "처리완료",
-};
 
 export default function ChatReportTable({ reports = [], onSelect = () => {} }) {
   const isEmpty = !Array.isArray(reports) || reports.length === 0;
@@ -33,7 +27,6 @@ export default function ChatReportTable({ reports = [], onSelect = () => {} }) {
                 <th className="px-4 py-2 text-left whitespace-nowrap">
                   신고일자
                 </th>
-                <th className="px-4 py-2 text-left whitespace-nowrap">상태</th>
               </tr>
             </thead>
             <tbody>
@@ -69,11 +62,6 @@ export default function ChatReportTable({ reports = [], onSelect = () => {} }) {
                             : "유효하지 않은 날짜";
                         })()
                       : "날짜 없음"}
-                  </td>
-                  <td className="px-4 py-2">
-                    <ReportStatusBadge
-                      status={STATUS_LABELS[report.status] || "미처리"}
-                    />
                   </td>
                 </tr>
               ))}
