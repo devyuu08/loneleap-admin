@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { fetchUsers } from "@/lib/users";
-import UserFilterBar from "./UserFilterBar";
-import UserSearchInput from "./UserSearchInput";
-import UserTable from "./UserTable";
+import UserFilterBar from "@/components/users/UserFilterBar";
+import UserSearchInput from "@/components/users/UserSearchInput";
+import UserTable from "@/components/users/UserTable";
+import { exportToCSV } from "@/utils/exportToCSV";
 
 export default function UserTableContainer() {
   const [users, setUsers] = useState([]);
@@ -50,7 +51,21 @@ export default function UserTableContainer() {
   };
 
   const handleExport = () => {
-    alert("목록 내보내기 기능은 아직 구현되지 않았습니다.");
+    if (!filteredUsers || filteredUsers.length === 0) return;
+
+    const exportData = filteredUsers.map((user) => ({
+      UID: user.id,
+      이름: user.displayName || "",
+      이메일: user.email || "",
+      상태: user.status || "",
+      가입일: user.createdAt
+        ? new Date(user.createdAt).toLocaleDateString("ko-KR")
+        : "",
+      리뷰수: user.reviewCount ?? 0,
+      일정수: user.itineraryCount ?? 0,
+    }));
+
+    exportToCSV("loneleap_users", exportData);
   };
 
   // 필터링 + 검색
