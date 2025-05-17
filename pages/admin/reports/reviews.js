@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import AdminProtectedRoute from "@/components/auth/AdminProtectedRoute";
-import AdminLayout from "@/components/layout/AdminLayout";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ReviewReportTable from "@/components/reports/tables/ReviewReportTable";
 import ReviewReportDetail from "@/components/reports/details/ReviewReportDetail";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import NoReportSelected from "@/components/reports/ui/NoReportSelected";
 
 export default function AdminReviewReportsPage() {
@@ -21,7 +21,6 @@ export default function AdminReviewReportsPage() {
 
   // 인증 상태 체크
   useEffect(() => {
-    const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setAuthUser(user); // null or user
       setAuthReady(true);
@@ -98,7 +97,7 @@ export default function AdminReviewReportsPage() {
 
   return (
     <AdminProtectedRoute>
-      <AdminLayout title="리뷰 신고 관리">
+      <>
         <div className="mb-6">
           <h2 className="text-2xl font-semibold">리뷰 신고 목록</h2>
           <p className="text-gray-600 text-sm mt-1">
@@ -145,7 +144,7 @@ export default function AdminReviewReportsPage() {
             <NoReportSelected />
           </div>
         )}
-      </AdminLayout>
+      </>
     </AdminProtectedRoute>
   );
 }
