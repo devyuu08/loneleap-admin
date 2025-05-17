@@ -42,6 +42,7 @@ export default function UserFilterBar({
           <option value="recent">최근 가입순</option>
           <option value="oldest">오래된 가입순</option>
           <option value="review">리뷰 많은 순</option>
+          <option value="itinerary">일정 많은 순</option>
         </select>
       </div>
 
