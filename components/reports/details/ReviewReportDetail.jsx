@@ -27,13 +27,17 @@ export default function ReviewReportDetail({ report, onSuccess }) {
     );
   }
 
-  const { review, reason, reporterId, reportedAt } = report;
+  const { review, reason, reporterId } = report;
 
   return (
     <div className="p-6 space-y-6">
       <DetailSection title="신고 사유">{reason}</DetailSection>
 
       <DetailSection title="신고자">{reporterId || "-"}</DetailSection>
+
+      <DetailSection title="리뷰 작성자">
+        {review?.createdBy?.displayName || review?.createdBy?.uid || "-"}
+      </DetailSection>
 
       <DetailSection title="리뷰 원문">
         {review?.interviewAnswers ? (
