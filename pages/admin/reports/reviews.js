@@ -106,43 +106,45 @@ export default function AdminReviewReportsPage() {
           </p>
         </div>
 
-        <div className="flex gap-6">
-          <div className="w-1/2 bg-white p-6 rounded-xl shadow">
-            {error ? (
-              <div className="text-red-500 text-center">{error}</div>
-            ) : (
-              <>
-                <ReviewReportTable
-                  reports={reports}
-                  onSelect={setSelectedReport}
-                  selectedReportId={selectedReport?.id}
-                />
-                {hasMore && reports.length > 0 && (
-                  <div className="mt-4 text-center">
-                    <button
-                      onClick={handleLoadMore}
-                      className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm"
-                      disabled={loadingMore}
-                    >
-                      {loadingMore ? "불러오는 중..." : "더 보기"}
-                    </button>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-
-          <div className="w-1/2 bg-white p-6 rounded-xl shadow min-h-[300px]">
-            {selectedReport ? (
-              <ReviewReportDetail
-                report={selectedReport}
-                onSuccess={handleReportSuccess}
+        {/* 신고 목록 영역 */}
+        <div className="bg-white p-6 rounded-xl shadow mb-6">
+          {error ? (
+            <div className="text-red-500 text-center">{error}</div>
+          ) : (
+            <>
+              <ReviewReportTable
+                reports={reports}
+                onSelect={setSelectedReport}
+                selectedReportId={selectedReport?.id}
               />
-            ) : (
-              <NoReportSelected />
-            )}
-          </div>
+              {hasMore && reports.length > 0 && (
+                <div className="mt-4 text-center">
+                  <button
+                    onClick={handleLoadMore}
+                    className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm"
+                    disabled={loadingMore}
+                  >
+                    {loadingMore ? "불러오는 중..." : "더 보기"}
+                  </button>
+                </div>
+              )}
+            </>
+          )}
         </div>
+
+        {/* 상세 정보 영역 */}
+        {selectedReport ? (
+          <div className="bg-white p-6 rounded-xl shadow min-h-[300px]">
+            <ReviewReportDetail
+              report={selectedReport}
+              onSuccess={handleReportSuccess}
+            />
+          </div>
+        ) : (
+          <div className="flex items-center justify-center bg-white p-6 rounded-xl shadow min-h-[300px] text-gray-500 text-sm border border-dashed border-gray-300">
+            <NoReportSelected />
+          </div>
+        )}
       </AdminLayout>
     </AdminProtectedRoute>
   );
