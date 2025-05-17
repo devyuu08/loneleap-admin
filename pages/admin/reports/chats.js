@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import AdminProtectedRoute from "@/components/auth/AdminProtectedRoute";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ChatReportTable from "@/components/reports/tables/ChatReportTable";
 import ChatReportDetail from "@/components/reports/details/ChatReportDetail";
@@ -96,7 +95,7 @@ export default function AdminChatReportsPage() {
   }
 
   return (
-    <AdminProtectedRoute>
+    <>
       <div className="mb-6">
         <h2 className="text-2xl font-semibold">채팅 신고 목록</h2>
         <p className="text-gray-600 text-sm mt-1">
@@ -148,6 +147,6 @@ export default function AdminChatReportsPage() {
           <NoReportSelected />
         </div>
       )}
-    </AdminProtectedRoute>
+    </>
   );
 }
