@@ -22,6 +22,9 @@ export default function AdminLoginForm({ errorMessage }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMatchError, setPasswordMatchError] = useState("");
 
+  const [emailLoginLoading, setEmailLoginLoading] = useState(false);
+  const [googleLoginLoading, setGoogleLoginLoading] = useState(false);
+
   useEffect(() => {
     if (errorMessage) {
       setError(errorMessage);
@@ -52,7 +55,7 @@ export default function AdminLoginForm({ errorMessage }) {
       return;
     }
 
-    setLoading(true);
+    setEmailLoginLoading(true);
     setError("");
     setPasswordMatchError("");
 
@@ -101,7 +104,7 @@ export default function AdminLoginForm({ errorMessage }) {
   };
 
   const handleGoogleLogin = async () => {
-    setLoading(true);
+    setGoogleLoginLoading(true);
     setError("");
     try {
       const provider = new GoogleAuthProvider();
@@ -188,10 +191,10 @@ export default function AdminLoginForm({ errorMessage }) {
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={emailLoginLoading || googleLoginLoading}
           className="w-full h-11 bg-gray-900 text-white py-2 rounded-md font-semibold hover:bg-gray-800 flex items-center justify-center gap-2"
         >
-          {loading ? (
+          {emailLoginLoading ? (
             <>
               로그인 중...
               <InlineSpinner size="sm" color="white" />
@@ -205,11 +208,11 @@ export default function AdminLoginForm({ errorMessage }) {
 
         <button
           onClick={handleGoogleLogin}
-          disabled={loading}
+          disabled={emailLoginLoading || googleLoginLoading}
           className="w-full flex items-center justify-center gap-2 border py-2 rounded-md hover:bg-gray-50 text-sm"
         >
           <FcGoogle className="text-xl" />
-          {loading ? (
+          {googleLoginLoading ? (
             <>
               로그인 중...
               <InlineSpinner size="sm" />

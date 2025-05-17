@@ -20,7 +20,7 @@ export default function UserTableContainer() {
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await fetchUsers();
+        const data = await fetchUsers(filters);
         setUsers(data);
       } catch (err) {
         console.error("사용자 조회 실패", err);
@@ -29,7 +29,7 @@ export default function UserTableContainer() {
       }
     };
     load();
-  }, []);
+  }, [filters]);
 
   const loadUsers = async () => {
     try {

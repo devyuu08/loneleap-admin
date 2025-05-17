@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRecommendationDetail } from "@/hooks/useRecommendationDetail";
 import { useUpdateRecommendation } from "@/hooks/useUpdateRecommendation";
 import RecommendationForm from "@/components/recommendation/RecommendationForm";
+import { uploadImage } from "@/lib/uploadImage";
 
 export default function AdminRecommendationEditPage() {
   const router = useRouter();
@@ -30,17 +31,17 @@ export default function AdminRecommendationEditPage() {
 
   const handleUpdate = async (formData) => {
     try {
-      // 이미지 변경 시 처리
       let imageUrl = initialData.imageUrl;
+
       if (formData.imageFile) {
-        const { uploadImage } = await import("@/hooks/useUploadImage").then(
-          (mod) => mod.useUploadImage()
-        );
         imageUrl = await uploadImage(formData.imageFile, "recommendations");
       }
 
+      // imageFile 제거
+      const { imageFile, ...rest } = formData;
+
       await updateRecommendation(id, {
-        ...formData,
+        ...rest,
         imageUrl,
       });
 
@@ -51,7 +52,6 @@ export default function AdminRecommendationEditPage() {
       alert("수정 중 오류 발생");
     }
   };
-
   if (loading) return <div className="p-10 text-center">불러오는 중...</div>;
   if (notFound)
     return (
