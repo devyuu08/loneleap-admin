@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import AdminLayout from "@/components/layout/AdminLayout";
 import AdminProtectedRoute from "@/components/auth/AdminProtectedRoute";
 import { useRecommendationDetail } from "@/hooks/useRecommendationDetail";
 import { useUpdateRecommendation } from "@/hooks/useUpdateRecommendation";
@@ -64,18 +63,16 @@ export default function AdminRecommendationEditPage() {
 
   return (
     <AdminProtectedRoute>
-      <AdminLayout>
-        <div className="max-w-3xl mx-auto px-6 py-10">
-          <h1 className="text-2xl font-bold mb-6">추천 여행지 수정</h1>
-          {initialData && (
-            <RecommendationForm
-              initialValues={initialData}
-              onSubmit={handleUpdate}
-              loading={false}
-            />
-          )}
-        </div>
-      </AdminLayout>
+      <div className="px-6 py-10">
+        <h1 className="text-2xl font-bold mb-8">추천 여행지 수정</h1>
+        {initialData && (
+          <RecommendationForm
+            initialValues={initialData}
+            onSubmit={handleUpdate}
+            loading={false}
+          />
+        )}
+      </div>
     </AdminProtectedRoute>
   );
 }

@@ -61,7 +61,11 @@ export default async function getChatReports(req, res) {
               .doc(messageId)
               .get();
             if (doc.exists) {
-              messagesMap[messageId] = doc.data().message || "(빈 메시지)";
+              const data = doc.data();
+              messagesMap[messageId] = {
+                message: data.message || "(빈 메시지)",
+                sender: data.sender || null,
+              };
             }
           } catch (error) {
             console.error(`메시지(${messageId}) 조회 실패:`, error);
@@ -71,11 +75,11 @@ export default async function getChatReports(req, res) {
 
     // 4단계: 메시지 텍스트 추가
     const data = reports.map((report) => {
-      const messageText =
-        messagesMap[report.messageId] || "(메시지를 찾을 수 없습니다)";
+      const messageData = messagesMap[report.messageId] || {};
       return {
         ...report,
-        messageText,
+        messageText: messageData.message || "(메시지를 찾을 수 없습니다)",
+        messageSender: messageData.sender || null,
       };
     });
 

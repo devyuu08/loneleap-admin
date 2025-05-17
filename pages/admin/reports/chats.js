@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import AdminProtectedRoute from "@/components/auth/AdminProtectedRoute";
-import AdminLayout from "@/components/layout/AdminLayout";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ChatReportTable from "@/components/reports/tables/ChatReportTable";
 import ChatReportDetail from "@/components/reports/details/ChatReportDetail";
@@ -21,7 +21,6 @@ export default function AdminChatReportsPage() {
 
   // 인증 준비
   useEffect(() => {
-    const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setAuthUser(user);
       setAuthReady(true);
@@ -98,59 +97,57 @@ export default function AdminChatReportsPage() {
 
   return (
     <AdminProtectedRoute>
-      <AdminLayout title="채팅 신고 관리">
-        <div className="mb-6">
-          <h2 className="text-2xl font-semibold">채팅 신고 목록</h2>
-          <p className="text-gray-600 text-sm mt-1">
-            총 <strong>{reports.length}</strong>개의 신고가 접수되었습니다.
-          </p>
-        </div>
+      <div className="mb-6">
+        <h2 className="text-2xl font-semibold">채팅 신고 목록</h2>
+        <p className="text-gray-600 text-sm mt-1">
+          총 <strong>{reports.length}</strong>개의 신고가 접수되었습니다.
+        </p>
+      </div>
 
-        {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
+      {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
 
-        <div className="flex gap-6">
-          {/* 좌측 목록 */}
-          <div className="w-1/2 bg-white p-6 rounded-xl shadow">
-            {reports.length === 0 ? (
-              <div className="text-center text-gray-500">
-                신고된 채팅이 없습니다.
+      {/* 신고 목록 */}
+      <div className="bg-white p-6 rounded-xl shadow mb-6">
+        {reports.length === 0 ? (
+          <div className="text-center text-gray-500">
+            신고된 채팅이 없습니다.
+          </div>
+        ) : (
+          <>
+            <ChatReportTable
+              reports={reports}
+              onSelect={setSelectedReport}
+              selectedReportId={selectedReport?.id}
+            />
+
+            {hasMore && reports.length > 0 && (
+              <div className="mt-4 text-center">
+                <button
+                  onClick={handleLoadMore}
+                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm"
+                  disabled={loadingMore}
+                >
+                  {loadingMore ? "불러오는 중..." : "더 보기"}
+                </button>
               </div>
-            ) : (
-              <>
-                <ChatReportTable
-                  reports={reports}
-                  onSelect={setSelectedReport}
-                  selectedReportId={selectedReport?.id}
-                />
-
-                {hasMore && reports.length > 0 && (
-                  <div className="mt-4 text-center">
-                    <button
-                      onClick={handleLoadMore}
-                      className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm"
-                      disabled={loadingMore}
-                    >
-                      {loadingMore ? "불러오는 중..." : "더 보기"}
-                    </button>
-                  </div>
-                )}
-              </>
             )}
-          </div>
+          </>
+        )}
+      </div>
 
-          {/* 우측 상세 */}
-          <div className="w-1/2 bg-white p-6 rounded-xl shadow min-h-[300px]">
-            {selectedReport ? (
-              <ChatReportDetail
-                report={selectedReport}
-                onSuccess={handleReportSuccess}
-              />
-            ) : (
-              <NoReportSelected />
-            )}
-          </div>
+      {/* 상세 정보 */}
+      {selectedReport ? (
+        <div className="bg-white p-6 rounded-xl shadow min-h-[300px]">
+          <ChatReportDetail
+            report={selectedReport}
+            onSuccess={handleReportSuccess}
+          />
         </div>
-      </AdminLayout>
+      ) : (
+        <div className="flex items-center justify-center bg-white p-6 rounded-xl shadow min-h-[300px] text-gray-500 text-sm border border-dashed border-gray-300">
+          <NoReportSelected />
+        </div>
+      )}
     </AdminProtectedRoute>
   );
 }

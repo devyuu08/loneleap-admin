@@ -66,6 +66,7 @@ export default async function getReviewReportsHandler(req, res) {
               destination: review.destination || null,
               interviewAnswers: review.interviewAnswers || null,
               imageUrl: review.imageUrl || null,
+              createdBy: review.createdBy || null,
             }
           : null,
       };
