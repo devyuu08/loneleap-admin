@@ -1,4 +1,3 @@
-// 관리자 레이아웃 - 사이드바 토글 기능 + lucide 아이콘 적용
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -11,9 +10,12 @@ import {
   ChevronLeft,
   ChevronRight,
   Footprints,
+  LogOut,
 } from "lucide-react";
 import SessionTimer from "@/components/auth/SessionTimer";
 import InlineSpinner from "@/components/common/InlineSpinner";
+
+import { cn } from "@/lib/utils";
 
 export default function AdminLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -43,9 +45,10 @@ export default function AdminLayout({ children }) {
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
       <aside
-        className={`flex-shrink-0 bg-white border-r shadow-sm flex flex-col transition-all duration-300 ${
+        className={cn(
+          "flex-shrink-0 bg-white border-r shadow-sm flex flex-col transition-all duration-300",
           isSidebarOpen ? "w-64" : "w-16"
-        }`}
+        )}
       >
         {/* 상단 로고 & 토글 */}
         <div className="flex items-center justify-between h-[60px] px-4 border-b">
@@ -77,11 +80,12 @@ export default function AdminLayout({ children }) {
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-3 px-3 py-2 rounded-md transition-all ${
+              className={cn(
+                "flex items-center gap-3 px-3 py-2 rounded-md transition-all",
                 isActive(href)
                   ? "bg-gray-900 text-white font-semibold"
                   : "text-gray-700 hover:bg-gray-100"
-              }`}
+              )}
             >
               <Icon size={20} />
               {isSidebarOpen && <span>{label}</span>}
@@ -90,24 +94,27 @@ export default function AdminLayout({ children }) {
         </nav>
 
         {/* 하단 세션 + 로그아웃 */}
-        <div className="p-4 border-t flex flex-col gap-4">
-          <div className="text-xs text-gray-400 text-center">
-            <SessionTimer />
-          </div>
+        <div className="p-4 border-t flex flex-col gap-4 items-center">
+          {/* 세션 타이머: 열림 상태에서만 표시 */}
+          {isSidebarOpen && (
+            <div className="text-xs text-gray-400 text-center">
+              <SessionTimer />
+            </div>
+          )}
 
+          {/* 로그아웃 버튼 */}
           <button
             onClick={handleLogout}
             disabled={isLoading}
-            className="flex items-center justify-center gap-2 text-sm text-gray-500 hover:text-red-500 border px-3 py-2 rounded disabled:opacity-50"
-          >
-            {isLoading ? (
-              <>
-                로그아웃 중...
-                <InlineSpinner size="sm" />
-              </>
-            ) : (
-              "로그아웃"
+            className={cn(
+              "flex items-center justify-center text-sm text-gray-500 hover:text-red-500 border rounded disabled:opacity-50 transition",
+              isSidebarOpen ? "w-full px-3 py-2 gap-2" : "w-10 h-10"
             )}
+            title="로그아웃"
+          >
+            <LogOut size={20} />
+            {isSidebarOpen && (isLoading ? "로그아웃 중..." : "로그아웃")}
+            {isLoading && <InlineSpinner size={18} />}
           </button>
         </div>
       </aside>
