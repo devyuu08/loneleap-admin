@@ -13,7 +13,8 @@ export default function NewRecommendationPage() {
 
   return (
     <AdminProtectedRoute>
-      <div className="py-10">
+      <div className="px-6 py-10">
+        <h1 className="text-2xl font-bold mb-8">추천 여행지 등록</h1>
         <RecommendationForm onSubmit={handleSubmit} loading={loading} />
       </div>
     </AdminProtectedRoute>
