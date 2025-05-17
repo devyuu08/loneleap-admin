@@ -27,7 +27,7 @@ export default function ReviewReportTable({ reports = [], onSelect }) {
                   신고 사유
                 </th>
                 <th className="px-4 py-2 text-left whitespace-nowrap">
-                  작성자
+                  신고자
                 </th>
                 <th className="px-4 py-2 text-left whitespace-nowrap">
                   신고일자
