@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import {
@@ -21,6 +21,18 @@ export default function AdminLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  // 사이드바 상태 유지
+  useEffect(() => {
+    const saved = localStorage.getItem("sidebar-open");
+    if (saved !== null) {
+      setIsSidebarOpen(saved === "true");
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("sidebar-open", isSidebarOpen.toString());
+  }, [isSidebarOpen]);
 
   const isActive = (href) => router.pathname === href;
 
