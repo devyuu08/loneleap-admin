@@ -47,6 +47,10 @@ export default function ChatReportDetail({ report, onSuccess }) {
 
       <DetailSection title="신고자">{reporterId || "-"}</DetailSection>
 
+      <DetailSection title="채팅 작성자">
+        {report.messageSender?.displayName || report.messageSender?.uid || "-"}
+      </DetailSection>
+
       <DetailSection title="신고일자">
         {reportedAt
           ? (() => {
