@@ -16,6 +16,8 @@ import SessionTimer from "@/components/auth/SessionTimer";
 import InlineSpinner from "@/components/common/InlineSpinner";
 
 import { cn } from "@/lib/utils";
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 export default function AdminLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -37,11 +39,16 @@ export default function AdminLayout({ children }) {
   const isActive = (href) => router.pathname === href;
 
   const handleLogout = async () => {
-    try {
-      setIsLoading(true);
-      // 로그아웃 처리 로직 추가
-    } finally {
-      setIsLoading(false);
+    if (window.confirm("정말 로그아웃 하시겠습니까?")) {
+      try {
+        setIsLoading(true);
+        await signOut(auth);
+        router.push("/admin/login");
+      } catch (error) {
+        console.error("로그아웃 중 오류:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
