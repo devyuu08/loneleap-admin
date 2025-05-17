@@ -15,18 +15,25 @@ export default function AdminProtectedRoute({ children }) {
         // 정상 인증 → 로딩 해제
         setLoading(false);
       } catch (error) {
-        if (error.response?.status === 401) {
-          clearAuthCookie(); // 인증 실패 → 쿠키 삭제
-          router.replace(
-            {
-              pathname: "/admin/login",
-              query: { error: "session-expired" },
-            },
-            "/admin/login?error=session-expired"
-          );
-        } else {
-          console.error("인증 체크 중 오류 발생:", error);
+        const errorCode = error.response?.data?.error;
+
+        // 인증 실패 시 쿠키 제거
+        clearAuthCookie();
+
+        let errorQuery = "session-expired"; // 기본값
+        if (errorCode === "unauthenticated") {
+          errorQuery = "login-required";
+        } else if (errorCode === "unauthorized") {
+          errorQuery = "unauthorized";
         }
+
+        router.replace(
+          {
+            pathname: "/admin/login",
+            query: { error: errorQuery },
+          },
+          `/admin/login?error=${errorQuery}`
+        );
       }
     };
 
