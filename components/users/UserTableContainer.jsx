@@ -58,9 +58,12 @@ export default function UserTableContainer() {
       이름: user.displayName || "",
       이메일: user.email || "",
       상태: user.status || "",
-      가입일: user.createdAt
-        ? new Date(user.createdAt).toLocaleDateString("ko-KR")
-        : "",
+      가입일:
+        user.createdAt && user.createdAt.toDate
+          ? user.createdAt.toDate().toLocaleDateString("ko-KR")
+          : user.createdAt
+          ? new Date(user.createdAt).toLocaleDateString("ko-KR")
+          : "",
       리뷰수: user.reviewCount ?? 0,
       일정수: user.itineraryCount ?? 0,
     }));
