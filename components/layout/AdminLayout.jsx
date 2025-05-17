@@ -42,7 +42,10 @@ export default function AdminLayout({ children }) {
     if (window.confirm("정말 로그아웃 하시겠습니까?")) {
       try {
         setIsLoading(true);
-        await signOut(auth);
+
+        await signOut(auth); // Firebase 클라이언트 로그아웃
+        await fetch("/api/admin/logout", { method: "POST" }); // 서버 쿠키 제거
+
         router.push("/admin/login");
       } catch (error) {
         console.error("로그아웃 중 오류:", error);
