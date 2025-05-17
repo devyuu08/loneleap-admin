@@ -81,14 +81,25 @@ export default function AdminLayout({ children }) {
               key={href}
               href={href}
               className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-md transition-all",
+                "flex items-center px-3 py-2 rounded-md transition-colors duration-200",
                 isActive(href)
                   ? "bg-gray-900 text-white font-semibold"
                   : "text-gray-700 hover:bg-gray-100"
               )}
             >
-              <Icon size={20} />
-              {isSidebarOpen && <span>{label}</span>}
+              <Icon size={20} className="shrink-0" />
+
+              {/* 텍스트 */}
+              <div
+                className={cn(
+                  "ml-2 origin-left transition-all duration-200",
+                  isSidebarOpen
+                    ? "scale-x-100 opacity-100 visible"
+                    : "scale-x-0 opacity-0 invisible"
+                )}
+              >
+                <span className="inline-block whitespace-nowrap">{label}</span>
+              </div>
             </Link>
           ))}
         </nav>
