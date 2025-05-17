@@ -63,8 +63,8 @@ export default function AdminRecommendationEditPage() {
 
   return (
     <AdminProtectedRoute>
-      <div className="max-w-3xl mx-auto px-6 py-10">
-        <h1 className="text-2xl font-bold mb-6">추천 여행지 수정</h1>
+      <div className="px-6 py-10">
+        <h1 className="text-2xl font-bold mb-8">추천 여행지 수정</h1>
         {initialData && (
           <RecommendationForm
             initialValues={initialData}
