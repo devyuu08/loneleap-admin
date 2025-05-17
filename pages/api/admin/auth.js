@@ -8,7 +8,9 @@ export default async function checkAdminAuth(req, res) {
     const token = cookies["admin-auth-token"];
 
     if (!token) {
-      throw new Error("No token");
+      console.warn("[auth] 토큰 없음");
+      clearAuthCookie({ res });
+      return res.status(401).json({ error: "unauthenticated" });
     }
 
     const decoded = await adminAuth.verifyIdToken(token);
@@ -20,7 +22,9 @@ export default async function checkAdminAuth(req, res) {
       : [];
 
     if (!adminEmails.includes(decoded.email.toLowerCase())) {
-      throw new Error("Unauthorized admin");
+      console.warn("[auth] 관리자 이메일 아님:", decoded.email);
+      clearAuthCookie({ res });
+      return res.status(401).json({ error: "unauthorized" });
     }
 
     return res.status(200).json({ admin: true, uid: decoded.uid });
@@ -28,6 +32,6 @@ export default async function checkAdminAuth(req, res) {
     console.error("[auth] 인증 실패:", error.message);
 
     clearAuthCookie({ res });
-    return res.status(401).json({ error: "Unauthorized" });
+    return res.status(401).json({ error: "session-expired" });
   }
 }

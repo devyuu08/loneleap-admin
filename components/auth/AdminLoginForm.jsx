@@ -25,8 +25,21 @@ export default function AdminLoginForm({ errorMessage }) {
   useEffect(() => {
     if (errorMessage) {
       setError(errorMessage);
+      return;
     }
-  }, [errorMessage]);
+
+    const errorType = router.query.error;
+
+    if (errorType) {
+      const messages = {
+        "login-required": "로그인이 필요합니다.",
+        "session-expired": "세션이 만료되었습니다. 다시 로그인해 주세요.",
+        unauthorized: "관리자 권한이 없습니다.",
+      };
+
+      setError(messages[errorType] || "로그인이 필요합니다.");
+    }
+  }, [errorMessage, router.query.error]);
 
   const handleAdminLogin = async (e) => {
     e.preventDefault();
