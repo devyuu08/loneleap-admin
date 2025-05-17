@@ -92,7 +92,6 @@ export default function AdminDashboard({
               <th className="py-2">유형</th>
               <th className="py-2">내용</th>
               <th className="py-2">신고자</th>
-              <th className="py-2">상태</th>
               <th className="py-2">시간</th>
             </tr>
           </thead>
@@ -109,17 +108,6 @@ export default function AdminDashboard({
                   <td className="py-2">{report.type}</td>
                   <td className="py-2">{report.reason}</td>
                   <td className="py-2 text-gray-600">{report.reporter}</td>
-                  <td className="py-2">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs ${
-                        report.status === "pending"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-gray-100 text-gray-500"
-                      }`}
-                    >
-                      {report.status}
-                    </span>
-                  </td>
                   <td className="py-2 text-gray-500 text-sm">
                     {report.reportedAt
                       ? new Date(report.reportedAt).toLocaleString("ko-KR", {
