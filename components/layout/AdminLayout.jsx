@@ -10,6 +10,7 @@ import {
   MapPin,
   ChevronLeft,
   ChevronRight,
+  Footprints,
 } from "lucide-react";
 import SessionTimer from "@/components/auth/SessionTimer";
 import InlineSpinner from "@/components/common/InlineSpinner";
@@ -48,12 +49,19 @@ export default function AdminLayout({ children }) {
       >
         {/* 상단 로고 & 토글 */}
         <div className="flex items-center justify-between h-[60px] px-4 border-b">
-          <span className="text-xl font-bold whitespace-nowrap">
-            {isSidebarOpen ? "LoneLeap 관리자" : "LL"}
-          </span>
+          <div className="flex items-center gap-2">
+            <Footprints size={22} className="text-black" />
+            {isSidebarOpen && (
+              <span className="text-xl font-bold whitespace-nowrap">
+                LoneLeap 관리자
+              </span>
+            )}
+          </div>
+
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="text-gray-500 hover:text-black"
+            aria-label="사이드바 토글"
           >
             {isSidebarOpen ? (
               <ChevronLeft size={20} />
