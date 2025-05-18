@@ -5,6 +5,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
+
 import { auth } from "@/lib/firebase";
 import ErrorMessage from "@/components/auth/ErrorMessage";
 import { FcGoogle } from "react-icons/fc";
@@ -21,11 +22,26 @@ export default function AdminLoginForm({ errorMessage }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMatchError, setPasswordMatchError] = useState("");
 
+  const [emailLoginLoading, setEmailLoginLoading] = useState(false);
+  const [googleLoginLoading, setGoogleLoginLoading] = useState(false);
+
   useEffect(() => {
     if (errorMessage) {
       setError(errorMessage);
+      return;
     }
-  }, [errorMessage]);
+
+    const errorType = router.query.error;
+
+    if (errorType) {
+      const messages = {
+        "login-required": "로그인이 필요합니다.",
+        unauthorized: "관리자 권한이 없습니다.",
+      };
+
+      setError(messages[errorType] || "로그인이 필요합니다.");
+    }
+  }, [errorMessage, router.query.error]);
 
   const handleAdminLogin = async (e) => {
     e.preventDefault();
@@ -38,12 +54,27 @@ export default function AdminLoginForm({ errorMessage }) {
       return;
     }
 
-    setLoading(true);
+    setEmailLoginLoading(true);
     setError("");
     setPasswordMatchError("");
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const token = await userCredential.user.getIdToken();
+
+      await fetch("/api/admin/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      });
+
+      localStorage.setItem("sessionStart", new Date().toISOString());
       router.push("/admin");
     } catch (err) {
       // 외부 errorMessage가 없을 때만 setError 실행
@@ -72,12 +103,24 @@ export default function AdminLoginForm({ errorMessage }) {
   };
 
   const handleGoogleLogin = async () => {
-    setLoading(true);
+    setGoogleLoginLoading(true);
     setError("");
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-      router.push("/admin");
+      const result = await signInWithPopup(auth, provider); // 1번만 로그인
+      const token = await result.user.getIdToken(); // 토큰 발급
+
+      await fetch("/api/admin/login", {
+        // 서버에 토큰 전송
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      });
+
+      localStorage.setItem("sessionStart", new Date().toISOString());
+      router.push("/admin"); // 세션 세팅 완료 후 /admin 이동
     } catch (err) {
       const code = err?.code || "";
       switch (code) {
@@ -147,10 +190,10 @@ export default function AdminLoginForm({ errorMessage }) {
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={emailLoginLoading || googleLoginLoading}
           className="w-full h-11 bg-gray-900 text-white py-2 rounded-md font-semibold hover:bg-gray-800 flex items-center justify-center gap-2"
         >
-          {loading ? (
+          {emailLoginLoading ? (
             <>
               로그인 중...
               <InlineSpinner size="sm" color="white" />
@@ -164,11 +207,11 @@ export default function AdminLoginForm({ errorMessage }) {
 
         <button
           onClick={handleGoogleLogin}
-          disabled={loading}
+          disabled={emailLoginLoading || googleLoginLoading}
           className="w-full flex items-center justify-center gap-2 border py-2 rounded-md hover:bg-gray-50 text-sm"
         >
           <FcGoogle className="text-xl" />
-          {loading ? (
+          {googleLoginLoading ? (
             <>
               로그인 중...
               <InlineSpinner size="sm" />

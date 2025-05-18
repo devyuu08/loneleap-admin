@@ -1,5 +1,6 @@
 import { db } from "@/lib/firebaseAdmin";
 import { verifyAdminToken } from "@/lib/auth";
+import admin from "firebase-admin";
 
 export default async function deleteMessageWithReports(req, res) {
   // 메서드 검사
@@ -42,24 +43,40 @@ export default async function deleteMessageWithReports(req, res) {
     // 트랜잭션: 메시지 + 신고 일괄 삭제
     await db.runTransaction(async (transaction) => {
       const messageRef = db.collection("chatMessages").doc(messageId);
-
       const messageSnap = await transaction.get(messageRef);
+
       if (!messageSnap.exists) {
-        const error = new Error("삭제할 메시지가 존재하지 않습니다.");
-        error.code = "not-found";
-        throw error;
+        throw Object.assign(new Error("삭제할 메시지가 존재하지 않습니다."), {
+          code: "not-found",
+        });
       }
 
+      const senderUid = messageSnap.data()?.sender?.uid;
+      if (!senderUid) {
+        throw new Error("메시지 작성자 정보가 없습니다.");
+      }
+
+      // 1. 메시지 삭제
       transaction.delete(messageRef);
 
+      // 2. 관련 신고 문서들 삭제
       snapshot.docs.forEach((doc) => {
         transaction.delete(doc.ref);
       });
+
+      // 3. 해당 유저의 reportedCount 감소
+      const userRef = db.collection("users_private").doc(senderUid);
+      const userSnap = await transaction.get(userRef);
+      const currentCount = userSnap.data()?.reportedCount || 0;
+
+      // 0 이하로 내려가지 않도록 조건 처리
+      if (currentCount > 0) {
+        transaction.update(userRef, {
+          reportedCount: admin.firestore.FieldValue.increment(-1),
+        });
+      }
     });
 
-    console.log(
-      `메시지 ID: ${messageId}, 방 ID: ${roomId}의 메시지 및 관련 신고 ${snapshot.size}개 삭제 완료`
-    );
     return res.status(200).json({ message: "메시지 및 관련 신고 삭제 완료" });
   } catch (err) {
     console.error("채팅 메시지 삭제 오류:", err);

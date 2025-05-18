@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/lib/firebase";
-import { adminEmails } from "@/lib/constants";
+import { clearAuthCookie } from "@/lib/cookies";
+import axios from "axios";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 
 export default function AdminProtectedRoute({ children }) {
@@ -10,36 +9,29 @@ export default function AdminProtectedRoute({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      // 로그인 X
-      if (!user) {
-        router.replace(
-          {
+    const checkAuth = async () => {
+      try {
+        await axios.get("/api/admin/auth");
+        setLoading(false);
+      } catch (error) {
+        const errorCode = error.response?.data?.error;
+        clearAuthCookie();
+
+        if (errorCode === "unauthenticated") {
+          router.replace({
             pathname: "/admin/login",
-            query: { error: "unauthenticated" },
-          },
-          "/admin/login?error=unauthenticated"
-        );
-        return;
-      }
-
-      // 관리자 X
-      if (!adminEmails.includes(user.email)) {
-        router.replace(
-          {
+            query: { error: "login-required" },
+          });
+        } else if (errorCode === "unauthorized") {
+          router.replace({
             pathname: "/admin/login",
-            query: { error: "not-admin" },
-          },
-          "/admin/login?error=not-admin"
-        );
-        return;
+            query: { error: "unauthorized" },
+          });
+        }
       }
+    };
 
-      // 관리자 인증 통과
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
+    checkAuth();
   }, [router]);
 
   if (loading) {
