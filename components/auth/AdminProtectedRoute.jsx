@@ -12,28 +12,22 @@ export default function AdminProtectedRoute({ children }) {
     const checkAuth = async () => {
       try {
         await axios.get("/api/admin/auth");
-        // 정상 인증 → 로딩 해제
         setLoading(false);
       } catch (error) {
         const errorCode = error.response?.data?.error;
-
-        // 인증 실패 시 쿠키 제거
         clearAuthCookie();
 
-        let errorQuery = "session-expired"; // 기본값
         if (errorCode === "unauthenticated") {
-          errorQuery = "login-required";
-        } else if (errorCode === "unauthorized") {
-          errorQuery = "unauthorized";
-        }
-
-        router.replace(
-          {
+          router.replace({
             pathname: "/admin/login",
-            query: { error: errorQuery },
-          },
-          `/admin/login?error=${errorQuery}`
-        );
+            query: { error: "login-required" },
+          });
+        } else if (errorCode === "unauthorized") {
+          router.replace({
+            pathname: "/admin/login",
+            query: { error: "unauthorized" },
+          });
+        }
       }
     };
 
