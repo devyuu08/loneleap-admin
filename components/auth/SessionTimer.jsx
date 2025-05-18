@@ -4,24 +4,30 @@ export default function SessionTimer() {
   const [remainingTime, setRemainingTime] = useState(0);
 
   useEffect(() => {
-    const sessionStart = localStorage.getItem("sessionStart");
+    const SESSION_START_KEY = "sessionStart";
+    const sessionStart = localStorage.getItem(SESSION_START_KEY);
 
-    if (sessionStart) {
-      const sessionStartTime = new Date(sessionStart).getTime();
-      const sessionDuration = 60 * 60 * 1000; // 1시간 = 3600초 = 3600,000ms
-      const sessionEndTime = sessionStartTime + sessionDuration;
+    if (!sessionStart) return;
 
-      const updateRemainingTime = () => {
-        const now = Date.now();
-        const diff = Math.floor((sessionEndTime - now) / 1000);
-        setRemainingTime(diff > 0 ? diff : 0);
-      };
+    const sessionStartTime = new Date(sessionStart).getTime();
+    const sessionDuration = 60 * 60 * 1000; // 1시간
+    const sessionEndTime = sessionStartTime + sessionDuration;
 
-      updateRemainingTime(); // mount되자마자 한번 실행
-      const interval = setInterval(updateRemainingTime, 1000);
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const diff = Math.floor((sessionEndTime - now) / 1000);
+      const clamped = Math.max(diff, 0);
+      setRemainingTime(clamped);
 
-      return () => clearInterval(interval);
-    }
+      if (clamped === 0) {
+        clearInterval(interval);
+        localStorage.removeItem(SESSION_START_KEY);
+        alert("세션이 만료되었습니다. 다시 로그인해 주세요.");
+        window.location.href = "/admin/login";
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const minutes = Math.floor(remainingTime / 60);
