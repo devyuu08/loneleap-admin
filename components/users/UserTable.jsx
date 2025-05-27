@@ -1,23 +1,7 @@
 import UserActionButtons from "@/components/users/UserActionButtons";
+import { formatDateKR } from "@/lib/shared/date";
 
 export default function UserTable({ users, onReload }) {
-  const formatCreatedAt = (createdAt) => {
-    if (!createdAt) return "N/A";
-    const date =
-      typeof createdAt === "string"
-        ? new Date(createdAt)
-        : createdAt.toDate?.() ?? null;
-
-    return date
-      ? date.toLocaleString("ko-KR", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-        })
-      : "N/A";
-  };
   return (
     <div className="bg-white rounded-xl shadow-sm overflow-hidden">
       <table className="min-w-full text-sm">
@@ -68,7 +52,7 @@ export default function UserTable({ users, onReload }) {
 
               {/* 가입일 */}
               <td className="px-4 py-4 text-center text-gray-500">
-                {formatCreatedAt(user.createdAt)}
+                {formatDateKR(user.createdAt)}
               </td>
 
               {/* 작성 일정 수 */}
