@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useRecommendationDetail } from "@/hooks/useRecommendationDetail";
+import { useRecommendationDetail } from "@/hooks/recommendation/useRecommendationDetail";
 import Image from "next/image";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -17,7 +17,7 @@ import {
   Landmark,
   CalendarDays,
 } from "lucide-react";
-import { useDeleteRecommendation } from "@/hooks/useDeleteRecommendation";
+import { useDeleteRecommendation } from "@/hooks/recommendation/useDeleteRecommendation";
 
 export default function AdminRecommendationDetailPage() {
   const router = useRouter();

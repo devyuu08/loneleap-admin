@@ -1,4 +1,4 @@
-import { useFetchRecommendations } from "@/hooks/useFetchRecommendations";
+import { useFetchRecommendations } from "@/hooks/recommendation/useFetchRecommendations";
 import RecommendationList from "@/components/recommendation/RecommendationList";
 import Link from "next/link";
 
