@@ -66,7 +66,7 @@ export default function AdminLoginForm({ errorMessage }) {
       );
       const token = await userCredential.user.getIdToken();
 
-      await fetch("/api/admin/login", {
+      await fetch("/api/admin/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -110,7 +110,7 @@ export default function AdminLoginForm({ errorMessage }) {
       const result = await signInWithPopup(auth, provider); // 1번만 로그인
       const token = await result.user.getIdToken(); // 토큰 발급
 
-      await fetch("/api/admin/login", {
+      await fetch("/api/admin/auth/login", {
         // 서버에 토큰 전송
         method: "POST",
         headers: {

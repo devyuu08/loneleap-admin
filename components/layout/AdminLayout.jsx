@@ -44,7 +44,7 @@ export default function AdminLayout({ children }) {
         setIsLoading(true);
 
         await signOut(auth); // Firebase 클라이언트 로그아웃
-        await fetch("/api/admin/logout", { method: "POST" }); // 서버 쿠키 제거
+        await fetch("/api/admin/auth/logout", { method: "POST" }); // 서버 쿠키 제거
 
         router.push("/admin/login");
       } catch (error) {
