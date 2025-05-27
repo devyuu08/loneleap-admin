@@ -54,7 +54,7 @@ export default function AdminReviewReportsPage() {
     query.append("limit", 50);
     if (isLoadMore && lastDoc) query.append("lastDoc", lastDoc);
 
-    const res = await fetch(`/api/reviewReports/getReviewReports?${query}`, {
+    const res = await fetch(`/api/admin/report/review/get?${query}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 

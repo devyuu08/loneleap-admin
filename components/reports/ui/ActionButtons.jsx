@@ -22,8 +22,8 @@ export default function ActionButtons({ report, onSuccess }) {
 
       const res = await fetch(
         isChat
-          ? "/api/chatReports/deleteMessageWithReports"
-          : "/api/reviewReports/deleteReviewWithReports",
+          ? "/api/admin/report/chat/deleteWithReports"
+          : "/api/admin/report/review/deleteWithReports",
         {
           method: "POST",
           headers: {
@@ -63,8 +63,8 @@ export default function ActionButtons({ report, onSuccess }) {
 
       const res = await fetch(
         isChat
-          ? "/api/chatReports/dismissChatReports"
-          : "/api/reviewReports/dismissReviewReports",
+          ? "/api/admin/report/chat/dismiss"
+          : "/api/admin/report/review/dismiss",
         {
           method: "POST",
           headers: {

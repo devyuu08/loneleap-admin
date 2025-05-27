@@ -57,7 +57,7 @@ export default function AdminChatReportsPage() {
       query.append("lastDocId", lastDocId);
     }
 
-    const res = await fetch(`/api/chatReports/getChatReports?${query}`, {
+    const res = await fetch(`/api/admin/report/chat/get?${query}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
