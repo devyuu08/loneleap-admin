@@ -17,12 +17,18 @@ export default function AdminProtectedRoute({ children }) {
         const errorCode = error.response?.data?.error;
         clearAuthCookie();
 
-        if (errorCode === "unauthenticated") {
+        if (
+          errorCode === "unauthenticated" &&
+          router.pathname !== "/admin/login"
+        ) {
           router.replace({
             pathname: "/admin/login",
             query: { error: "login-required" },
           });
-        } else if (errorCode === "unauthorized") {
+        } else if (
+          errorCode === "unauthorized" &&
+          router.pathname !== "/admin/login"
+        ) {
           router.replace({
             pathname: "/admin/login",
             query: { error: "unauthorized" },
