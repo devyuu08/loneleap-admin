@@ -11,7 +11,7 @@ export default function AdminProtectedRoute({ children }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        await axios.get("/api/admin/auth");
+        await axios.get("/api/admin/auth/check");
         setLoading(false);
       } catch (error) {
         const errorCode = error.response?.data?.error;
