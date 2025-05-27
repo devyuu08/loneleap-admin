@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { fetchUsers } from "@/lib/server/users";
 import UserFilterBar from "@/components/users/UserFilterBar";
 import UserSearchInput from "@/components/users/UserSearchInput";
@@ -19,28 +19,22 @@ export default function UserTableContainer() {
 
   const usersPerPage = 10;
 
-  useEffect(() => {
-    const load = async () => {
+  const loadUsers = useCallback(
+    async (overrideFilters = filters) => {
       try {
-        const data = await fetchUsers(filters);
+        const data = await fetchUsers(overrideFilters);
         setUsers(data);
-      } catch (err) {
-        console.error("사용자 조회 실패", err);
-      } finally {
-        setLoading(false);
+      } catch (error) {
+        console.error("사용자 로딩 실패:", error);
       }
-    };
-    load();
-  }, [filters]);
+    },
+    [filters]
+  );
 
-  const loadUsers = async () => {
-    try {
-      const data = await fetchUsers();
-      setUsers(data);
-    } catch (error) {
-      console.error("사용자 로딩 실패:", error);
-    }
-  };
+  useEffect(() => {
+    setLoading(true);
+    loadUsers().finally(() => setLoading(false));
+  }, [filters.status, filters.date, filters.sort, loadUsers]);
 
   // 필터 상태 변경
   const handleFilterChange = (key, value) => {
