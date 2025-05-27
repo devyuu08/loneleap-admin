@@ -47,7 +47,12 @@ export default function UserActionButtons({ userId, currentStatus }) {
       if (typeof onSuccess === "function") onSuccess();
     } catch (err) {
       console.error("계정 삭제 실패:", err);
-      alert(err.message || "삭제 중 오류가 발생했습니다.");
+
+      if (err.message?.includes("no user record")) {
+        alert("이미 탈퇴된 사용자입니다. 남은 데이터는 정리되었습니다.");
+      } else {
+        alert(err.message || "삭제 중 오류가 발생했습니다.");
+      }
     }
   };
 
