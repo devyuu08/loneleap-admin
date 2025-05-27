@@ -1,6 +1,6 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { getAdminDashboardData } from "@/lib/server/getAdminDashboardData";
+import { getAdminDashboardData } from "@/lib/server/dashboard/getAdminDashboardData";
 
 export const getServerSideProps = getAdminDashboardData;
 
