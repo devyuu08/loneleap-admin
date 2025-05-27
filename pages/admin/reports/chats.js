@@ -4,7 +4,7 @@ import { auth } from "@/lib/firebase/client";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ChatReportTable from "@/components/reports/tables/ChatReportTable";
 import ChatReportDetail from "@/components/reports/details/ChatReportDetail";
-import NoReportSelected from "@/components/reports/ui/NoReportSelected";
+import NoReportSelected from "@/components/common/NoReportSelected";
 
 export default function AdminChatReportsPage() {
   const [authReady, setAuthReady] = useState(false);

@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import ActionButtons from "@/components/reports/ui/ActionButtons";
+import ActionButtons from "@/components/common/ActionButtons";
 import PropTypes from "prop-types";
 
 export default function ChatReportDetail({ report, onSuccess }) {
