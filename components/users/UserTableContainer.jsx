@@ -4,6 +4,7 @@ import UserFilterBar from "@/components/users/UserFilterBar";
 import UserSearchInput from "@/components/users/UserSearchInput";
 import UserTable from "@/components/users/UserTable";
 import { exportToCSV } from "@/utils/exportToCSV";
+import Pagination from "@/components/common/Pagination";
 
 export default function UserTableContainer() {
   const [users, setUsers] = useState([]);
@@ -90,7 +91,6 @@ export default function UserTableContainer() {
 
   // 페이지 버튼 리스트
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
     <>
@@ -120,21 +120,11 @@ export default function UserTableContainer() {
           <UserTable users={currentUsers} onReload={loadUsers} />
 
           {/* 페이지네이션 */}
-          <div className="flex justify-center gap-2 mt-6">
-            {pages.map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`px-3 py-1 rounded-md text-sm border ${
-                  page === currentPage
-                    ? "bg-black text-white"
-                    : "bg-white text-gray-600 hover:bg-gray-100"
-                }`}
-              >
-                {page}
-              </button>
-            ))}
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </>
       )}
     </>
