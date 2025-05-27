@@ -1,20 +1,20 @@
-import { suspendUser, recoverUser } from "@/lib/admin";
-
 import { PauseCircle, Trash2, RotateCcw } from "lucide-react";
+import { changeAdminUserStatus } from "@/lib/admin/userActions";
 import { updateUserStatus } from "@/lib/users";
 import { deleteUserRequest } from "@/lib/client/deleteUserRequest";
 
 export default function UserActionButtons({ userId, currentStatus }) {
+  const isBanned = currentStatus === "banned";
+
   const handleSuspend = async () => {
     const confirm = window.confirm("정말 이 사용자의 계정을 정지하시겠어요?");
     if (!confirm) return;
 
     try {
-      await suspendUser(userId); // Firebase Auth 정지
-      await updateUserStatus(userId, "suspended"); // Firestore 상태 반영
-
+      await changeAdminUserStatus(userId, "banned"); // 서버 측 상태 변경
+      await updateUserStatus(userId, "banned"); // UI 렌더링용 Firestore 상태 변경
       alert("계정이 정지되었습니다.");
-      location.reload(); // 필요 시 상태 새로고침
+      location.reload();
     } catch (err) {
       console.error("계정 정지 실패:", err);
       alert("오류가 발생했습니다.");
@@ -26,9 +26,8 @@ export default function UserActionButtons({ userId, currentStatus }) {
     if (!confirm) return;
 
     try {
-      await recoverUser(userId); // Firebase Auth 복구
-      await updateUserStatus(userId, "active"); // Firestore 상태 업데이트
-
+      await changeAdminUserStatus(userId, "active");
+      await updateUserStatus(userId, "active");
       alert("계정이 복구되었습니다.");
     } catch (err) {
       console.error("계정 복구 실패:", err);
@@ -58,9 +57,9 @@ export default function UserActionButtons({ userId, currentStatus }) {
       <button
         onClick={handleRecover}
         className={`text-gray-400 hover:text-blue-500 ${
-          currentStatus === "suspended" ? "" : "opacity-40 cursor-not-allowed"
+          isBanned ? "" : "opacity-40 cursor-not-allowed"
         }`}
-        disabled={currentStatus !== "suspended"}
+        disabled={!isBanned}
         title="계정 복구"
       >
         <RotateCcw size={16} strokeWidth={1.8} />
@@ -68,9 +67,9 @@ export default function UserActionButtons({ userId, currentStatus }) {
       <button
         onClick={handleSuspend}
         className={`text-gray-400 hover:text-yellow-500 ${
-          currentStatus === "suspended" ? "opacity-40 cursor-not-allowed" : ""
+          isBanned ? "opacity-40 cursor-not-allowed" : ""
         }`}
-        disabled={currentStatus === "suspended"}
+        disabled={isBanned}
         title="계정 정지"
       >
         <PauseCircle size={16} strokeWidth={1.8} />
