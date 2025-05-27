@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import AdminLoginForm from "@/components/auth/AdminLoginForm";
+import AdminLoginFormContainer from "@/components/auth/AdminLoginFormContainer";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -23,7 +23,7 @@ export default function AdminLoginPage() {
   return (
     <main className="flex items-center justify-center min-h-screen bg-gray-100">
       {/* key 부여로 query 바뀔 때마다 리렌더링 강제 */}
-      <AdminLoginForm key={router.asPath} errorMessage={error} />
+      <AdminLoginFormContainer key={router.asPath} errorMessage={error} />
     </main>
   );
 }
