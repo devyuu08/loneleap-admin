@@ -1,67 +1,14 @@
-// 추천 여행지 등록/수정 폼 - 2단+1단 구조 적용
-import { useEffect, useState } from "react";
-
 export default function RecommendationForm({
+  form,
+  onChange,
+  onImageChange,
   onSubmit,
   loading,
-  initialValues,
+  isEdit,
 }) {
-  const [name, setName] = useState("");
-  const [summary, setSummary] = useState("");
-  const [location, setLocation] = useState("");
-  const [description, setDescription] = useState("");
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
-  const [visible, setVisible] = useState(true);
-  const [locationInfo, setLocationInfo] = useState("");
-  const [direction, setDirection] = useState("");
-  const [nearby, setNearby] = useState("");
-
-  useEffect(() => {
-    if (initialValues) {
-      setName(initialValues.name || "");
-      setSummary(initialValues.summary || "");
-      setLocation(initialValues.location || "");
-      setDescription(initialValues.description || "");
-      setImagePreview(initialValues.imageUrl || null);
-      setVisible(initialValues.visible ?? true);
-      setLocationInfo(initialValues.locationInfo || "");
-      setDirection((initialValues.directions || []).join("\n"));
-      setNearby((initialValues.nearbyInfo || []).join("\n"));
-    }
-  }, [initialValues]);
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setImageFile(file);
-    setImagePreview(URL.createObjectURL(file));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!name || !location || !description || (!imageFile && !imagePreview)) {
-      return alert("필수 항목을 모두 입력하세요.");
-    }
-
-    const formData = {
-      name,
-      summary,
-      location,
-      description,
-      imageFile,
-      visible,
-      locationInfo,
-      directions: direction.split("\n").filter((line) => line.trim()),
-      nearbyInfo: nearby.split("\n").filter((line) => line.trim()),
-    };
-
-    await onSubmit(formData);
-  };
-
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
       className="max-w-screen-lg mx-auto px-10 py-16 space-y-16"
     >
       {/* 1. 기본 정보 + 이미지 */}
@@ -73,8 +20,8 @@ export default function RecommendationForm({
             </label>
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={form.name}
+              onChange={(e) => onChange("name", e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg"
               placeholder="예: 성산일출봉"
             />
@@ -86,8 +33,8 @@ export default function RecommendationForm({
             </label>
             <input
               type="text"
-              value={summary}
-              onChange={(e) => setSummary(e.target.value)}
+              value={form.summary}
+              onChange={(e) => onChange("summary", e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg"
               placeholder="예: 붉게 가장 먼저 떠오르는 해"
             />
@@ -98,8 +45,8 @@ export default function RecommendationForm({
               지역
             </label>
             <select
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
+              value={form.location}
+              onChange={(e) => onChange("location", e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg"
             >
               <option value="">지역 선택</option>
@@ -120,10 +67,17 @@ export default function RecommendationForm({
             <label className="block text-base font-semibold text-gray-800 mb-2">
               대표 이미지
             </label>
-            <input type="file" accept="image/*" onChange={handleImageChange} />
-            {imagePreview && (
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) onImageChange(file);
+              }}
+            />
+            {form.imagePreview && (
               <img
-                src={imagePreview}
+                src={form.imagePreview}
                 alt="미리보기"
                 className="w-full h-64 object-cover rounded-xl mt-4"
               />
@@ -136,8 +90,8 @@ export default function RecommendationForm({
             </label>
             <input
               type="checkbox"
-              checked={visible}
-              onChange={(e) => setVisible(e.target.checked)}
+              checked={form.visible}
+              onChange={(e) => onChange("visible", e.target.checked)}
             />
             <span className="text-sm text-gray-500">
               체크 시 사용자에게 노출됩니다
@@ -150,8 +104,8 @@ export default function RecommendationForm({
       <div className="space-y-3">
         <label className="text-lg font-semibold">상세 설명</label>
         <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={form.description}
+          onChange={(e) => onChange("description", e.target.value)}
           rows={12}
           className="w-full px-4 py-4 border border-gray-300 rounded-lg text-base leading-relaxed"
         />
@@ -162,8 +116,8 @@ export default function RecommendationForm({
         <label className="text-lg font-semibold">위치 설명</label>
         <input
           type="text"
-          value={locationInfo}
-          onChange={(e) => setLocationInfo(e.target.value)}
+          value={form.locationInfo}
+          onChange={(e) => onChange("locationInfo", e.target.value)}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg text-base"
         />
       </div>
@@ -173,8 +127,8 @@ export default function RecommendationForm({
         <div className="space-y-3">
           <label className="text-lg font-semibold">찾아가는 방법</label>
           <textarea
-            value={direction}
-            onChange={(e) => setDirection(e.target.value)}
+            value={form.direction}
+            onChange={(e) => onChange("direction", e.target.value)}
             rows={6}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg text-base"
           />
@@ -182,8 +136,8 @@ export default function RecommendationForm({
         <div className="space-y-3">
           <label className="text-lg font-semibold">주변 정보</label>
           <textarea
-            value={nearby}
-            onChange={(e) => setNearby(e.target.value)}
+            value={form.nearby}
+            onChange={(e) => onChange("nearby", e.target.value)}
             rows={6}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg text-base"
           />
@@ -192,7 +146,7 @@ export default function RecommendationForm({
 
       {/* 5. 버튼 */}
       <div className="pt-10 border-t flex justify-end">
-        {initialValues && (
+        {isEdit && (
           <button
             type="button"
             onClick={() => window.history.back()}
@@ -208,7 +162,7 @@ export default function RecommendationForm({
         >
           {loading
             ? "처리 중..."
-            : initialValues
+            : isEdit
             ? "추천 여행지 수정하기"
             : "추천 여행지 등록하기"}
         </button>

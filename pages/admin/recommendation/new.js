@@ -1,6 +1,6 @@
 import React from "react";
-import RecommendationForm from "@/components/recommendation/RecommendationForm";
 import { useAddRecommendation } from "@/hooks/recommendation/useAddRecommendation";
+import RecommendationFormContainer from "@/components/recommendation/RecommendationFormContainer";
 
 export default function NewRecommendationPage() {
   const { addRecommendation, loading } = useAddRecommendation();
@@ -13,7 +13,7 @@ export default function NewRecommendationPage() {
   return (
     <div className="px-6 py-10">
       <h1 className="text-2xl font-bold mb-8">추천 여행지 등록</h1>
-      <RecommendationForm onSubmit={handleSubmit} loading={loading} />
+      <RecommendationFormContainer onSubmit={handleSubmit} loading={loading} />
     </div>
   );
 }

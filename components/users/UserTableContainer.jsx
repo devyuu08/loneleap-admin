@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { fetchUsers } from "@/lib/server/users";
 import UserFilterBar from "@/components/users/UserFilterBar";
 import UserSearchInput from "@/components/users/UserSearchInput";
 import UserTable from "@/components/users/UserTable";
 import { exportToCSV } from "@/utils/exportToCSV";
+import Pagination from "@/components/common/Pagination";
 
 export default function UserTableContainer() {
   const [users, setUsers] = useState([]);
@@ -18,28 +19,22 @@ export default function UserTableContainer() {
 
   const usersPerPage = 10;
 
-  useEffect(() => {
-    const load = async () => {
+  const loadUsers = useCallback(
+    async (overrideFilters = filters) => {
       try {
-        const data = await fetchUsers(filters);
+        const data = await fetchUsers(overrideFilters);
         setUsers(data);
-      } catch (err) {
-        console.error("사용자 조회 실패", err);
-      } finally {
-        setLoading(false);
+      } catch (error) {
+        console.error("사용자 로딩 실패:", error);
       }
-    };
-    load();
-  }, [filters]);
+    },
+    [filters]
+  );
 
-  const loadUsers = async () => {
-    try {
-      const data = await fetchUsers();
-      setUsers(data);
-    } catch (error) {
-      console.error("사용자 로딩 실패:", error);
-    }
-  };
+  useEffect(() => {
+    setLoading(true);
+    loadUsers().finally(() => setLoading(false));
+  }, [filters.status, filters.date, filters.sort, loadUsers]);
 
   // 필터 상태 변경
   const handleFilterChange = (key, value) => {
@@ -90,7 +85,6 @@ export default function UserTableContainer() {
 
   // 페이지 버튼 리스트
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
     <>
@@ -120,21 +114,11 @@ export default function UserTableContainer() {
           <UserTable users={currentUsers} onReload={loadUsers} />
 
           {/* 페이지네이션 */}
-          <div className="flex justify-center gap-2 mt-6">
-            {pages.map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`px-3 py-1 rounded-md text-sm border ${
-                  page === currentPage
-                    ? "bg-black text-white"
-                    : "bg-white text-gray-600 hover:bg-gray-100"
-                }`}
-              >
-                {page}
-              </button>
-            ))}
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </>
       )}
     </>

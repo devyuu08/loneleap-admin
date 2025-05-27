@@ -2,8 +2,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecommendationDetail } from "@/hooks/recommendation/useRecommendationDetail";
 import { useUpdateRecommendation } from "@/hooks/recommendation/useUpdateRecommendation";
-import RecommendationForm from "@/components/recommendation/RecommendationForm";
 import { uploadImage } from "@/lib/firebase/uploadImage";
+import RecommendationFormContainer from "@/components/recommendation/RecommendationFormContainer";
 
 export default function AdminRecommendationEditPage() {
   const router = useRouter();
@@ -64,7 +64,7 @@ export default function AdminRecommendationEditPage() {
     <div className="px-6 py-10">
       <h1 className="text-2xl font-bold mb-8">추천 여행지 수정</h1>
       {initialData && (
-        <RecommendationForm
+        <RecommendationFormContainer
           initialValues={initialData}
           onSubmit={handleUpdate}
           loading={false}
