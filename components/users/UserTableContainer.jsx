@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchUsers } from "@/lib/users";
+import { fetchUsers } from "@/lib/server/users";
 import UserFilterBar from "@/components/users/UserFilterBar";
 import UserSearchInput from "@/components/users/UserSearchInput";
 import UserTable from "@/components/users/UserTable";

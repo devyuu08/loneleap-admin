@@ -1,5 +1,5 @@
 import { deleteDoc, doc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "@/lib/firebase/client";
 import { useState } from "react";
 
 export function useDeleteRecommendation() {

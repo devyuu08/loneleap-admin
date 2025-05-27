@@ -1,5 +1,5 @@
 import { setCookie } from "nookies";
-import { adminAuth } from "@/lib/firebaseAdmin"; // Firebase Admin SDK 세팅
+import { adminAuth } from "@/lib/firebase/admin"; // Firebase Admin SDK 세팅
 
 export default async function createAdminSession(req, res) {
   if (req.method !== "POST") {

@@ -1,4 +1,4 @@
-import ActionButtons from "@/components/reports/ui/ActionButtons";
+import ActionButtons from "@/components/common/ActionButtons";
 
 export default function ReviewReportDetail({ report, onSuccess }) {
   const isValidReport =

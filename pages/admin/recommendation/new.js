@@ -1,6 +1,6 @@
 import React from "react";
 import RecommendationForm from "@/components/recommendation/RecommendationForm";
-import { useAddRecommendation } from "@/hooks/useAddRecommendation";
+import { useAddRecommendation } from "@/hooks/recommendation/useAddRecommendation";
 
 export default function NewRecommendationPage() {
   const { addRecommendation, loading } = useAddRecommendation();

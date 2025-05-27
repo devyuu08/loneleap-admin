@@ -1,5 +1,5 @@
-import { adminAuth } from "@/lib/firebaseAdmin";
-import { clearAuthCookie } from "@/lib/cookies";
+import { adminAuth } from "@/lib/firebase/admin";
+import { clearAuthCookie } from "@/lib/server/cookies";
 import { parseCookies } from "nookies";
 
 export default async function checkAdminAuth(req, res) {

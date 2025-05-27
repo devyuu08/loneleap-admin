@@ -3,8 +3,8 @@ import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ReviewReportTable from "@/components/reports/tables/ReviewReportTable";
 import ReviewReportDetail from "@/components/reports/details/ReviewReportDetail";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/lib/firebase";
-import NoReportSelected from "@/components/reports/ui/NoReportSelected";
+import { auth } from "@/lib/firebase/client";
+import NoReportSelected from "@/components/common/NoReportSelected";
 
 export default function AdminReviewReportsPage() {
   const [authReady, setAuthReady] = useState(false);
@@ -54,7 +54,7 @@ export default function AdminReviewReportsPage() {
     query.append("limit", 50);
     if (isLoadMore && lastDoc) query.append("lastDoc", lastDoc);
 
-    const res = await fetch(`/api/reviewReports/getReviewReports?${query}`, {
+    const res = await fetch(`/api/admin/report/review/get?${query}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 

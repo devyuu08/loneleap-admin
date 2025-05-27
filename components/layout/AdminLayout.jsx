@@ -15,9 +15,9 @@ import {
 import SessionTimer from "@/components/auth/SessionTimer";
 import InlineSpinner from "@/components/common/InlineSpinner";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/shared/utils";
 import { signOut } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth } from "@/lib/firebase/client";
 
 export default function AdminLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -44,7 +44,7 @@ export default function AdminLayout({ children }) {
         setIsLoading(true);
 
         await signOut(auth); // Firebase 클라이언트 로그아웃
-        await fetch("/api/admin/logout", { method: "POST" }); // 서버 쿠키 제거
+        await fetch("/api/admin/auth/logout", { method: "POST" }); // 서버 쿠키 제거
 
         router.push("/admin/login");
       } catch (error) {

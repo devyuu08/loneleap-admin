@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth } from "@/lib/firebase/client";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ChatReportTable from "@/components/reports/tables/ChatReportTable";
 import ChatReportDetail from "@/components/reports/details/ChatReportDetail";
-import NoReportSelected from "@/components/reports/ui/NoReportSelected";
+import NoReportSelected from "@/components/common/NoReportSelected";
 
 export default function AdminChatReportsPage() {
   const [authReady, setAuthReady] = useState(false);
@@ -57,7 +57,7 @@ export default function AdminChatReportsPage() {
       query.append("lastDocId", lastDocId);
     }
 
-    const res = await fetch(`/api/chatReports/getChatReports?${query}`, {
+    const res = await fetch(`/api/admin/report/chat/get?${query}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 

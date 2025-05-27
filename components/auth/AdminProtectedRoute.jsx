@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { clearAuthCookie } from "@/lib/cookies";
+import { clearAuthCookie } from "@/lib/server/cookies";
 import axios from "axios";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 
@@ -11,7 +11,7 @@ export default function AdminProtectedRoute({ children }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        await axios.get("/api/admin/auth");
+        await axios.get("/api/admin/auth/check");
         setLoading(false);
       } catch (error) {
         const errorCode = error.response?.data?.error;

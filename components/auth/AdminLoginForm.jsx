@@ -6,7 +6,7 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 
-import { auth } from "@/lib/firebase";
+import { auth } from "@/lib/firebase/client";
 import ErrorMessage from "@/components/auth/ErrorMessage";
 import { FcGoogle } from "react-icons/fc";
 import { FiMail, FiLock } from "react-icons/fi";
@@ -66,7 +66,7 @@ export default function AdminLoginForm({ errorMessage }) {
       );
       const token = await userCredential.user.getIdToken();
 
-      await fetch("/api/admin/login", {
+      await fetch("/api/admin/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -110,7 +110,7 @@ export default function AdminLoginForm({ errorMessage }) {
       const result = await signInWithPopup(auth, provider); // 1번만 로그인
       const token = await result.user.getIdToken(); // 토큰 발급
 
-      await fetch("/api/admin/login", {
+      await fetch("/api/admin/auth/login", {
         // 서버에 토큰 전송
         method: "POST",
         headers: {

@@ -1,5 +1,5 @@
-import { verifyAdminToken } from "@/lib/auth";
-import { db } from "@/lib/firebaseAdmin";
+import { verifyAdminToken } from "@/lib/server/auth";
+import { db } from "@/lib/firebase/admin";
 import admin from "firebase-admin";
 
 export default async function dismissChatReport(req, res) {
