@@ -1,7 +1,6 @@
 import { PauseCircle, Trash2, RotateCcw } from "lucide-react";
-import { changeAdminUserStatus } from "@/lib/admin/userActions";
+import { changeAdminUserStatus, deleteUser } from "@/lib/admin/userActions";
 import { updateUserStatus } from "@/lib/users";
-import { deleteUserRequest } from "@/lib/client/deleteUserRequest";
 
 export default function UserActionButtons({ userId, currentStatus }) {
   const isBanned = currentStatus === "banned";
@@ -42,7 +41,7 @@ export default function UserActionButtons({ userId, currentStatus }) {
     if (!confirmDelete) return;
 
     try {
-      await deleteUserRequest(userId); // 인증 + DB + 콘텐츠 삭제
+      await deleteUser(userId); // 인증 + DB + 콘텐츠 삭제
       alert("계정이 성공적으로 삭제되었습니다.");
 
       if (typeof onSuccess === "function") onSuccess();
