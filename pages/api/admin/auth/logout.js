@@ -1,4 +1,4 @@
-import { clearAuthCookie } from "@/lib/cookies";
+import { clearAuthCookie } from "@/lib/server/cookies";
 
 export default function logouthandler(req, res) {
   if (req.method !== "POST") {

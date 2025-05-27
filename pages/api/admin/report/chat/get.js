@@ -1,5 +1,5 @@
-import { db } from "@/lib/firebaseAdmin";
-import { verifyAdminToken } from "@/lib/auth";
+import { db } from "@/lib/firebase/admin";
+import { verifyAdminToken } from "@/lib/server/auth";
 
 export default async function getChatReports(req, res) {
   // 관리자 인증

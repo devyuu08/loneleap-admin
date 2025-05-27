@@ -6,7 +6,7 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 
-import { auth } from "@/lib/firebase";
+import { auth } from "@/lib/firebase/client";
 import ErrorMessage from "@/components/auth/ErrorMessage";
 import { FcGoogle } from "react-icons/fc";
 import { FiMail, FiLock } from "react-icons/fi";

@@ -3,7 +3,7 @@ import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ReviewReportTable from "@/components/reports/tables/ReviewReportTable";
 import ReviewReportDetail from "@/components/reports/details/ReviewReportDetail";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth } from "@/lib/firebase/client";
 import NoReportSelected from "@/components/reports/ui/NoReportSelected";
 
 export default function AdminReviewReportsPage() {

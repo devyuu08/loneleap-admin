@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "@/lib/firebase/client";
 import { useUploadImage } from "@/hooks/useUploadImage";
 import { useRouter } from "next/router";
 

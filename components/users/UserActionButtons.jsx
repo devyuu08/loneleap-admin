@@ -1,6 +1,6 @@
 import { PauseCircle, Trash2, RotateCcw } from "lucide-react";
 import { changeAdminUserStatus, deleteUser } from "@/lib/admin/userActions";
-import { updateUserStatus } from "@/lib/users";
+import { updateUserStatus } from "@/lib/server/users";
 
 export default function UserActionButtons({ userId, currentStatus }) {
   const isBanned = currentStatus === "banned";

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRecommendationDetail } from "@/hooks/useRecommendationDetail";
 import { useUpdateRecommendation } from "@/hooks/useUpdateRecommendation";
 import RecommendationForm from "@/components/recommendation/RecommendationForm";
-import { uploadImage } from "@/lib/uploadImage";
+import { uploadImage } from "@/lib/firebase/uploadImage";
 
 export default function AdminRecommendationEditPage() {
   const router = useRouter();

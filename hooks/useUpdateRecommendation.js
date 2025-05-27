@@ -1,5 +1,5 @@
 import { doc, updateDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "@/lib/firebase/client";
 
 export const useUpdateRecommendation = () => {
   const updateRecommendation = async (id, data) => {

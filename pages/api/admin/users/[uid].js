@@ -1,4 +1,4 @@
-import { adminAuth, db } from "@/lib/firebaseAdmin";
+import { adminAuth, db } from "@/lib/firebase/admin";
 import deleteUserData from "@/lib/server/deleteUserData";
 
 export default async function handler(req, res) {

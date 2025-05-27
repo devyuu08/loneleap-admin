@@ -1,4 +1,4 @@
-import { db } from "@/lib/firebaseAdmin";
+import { db } from "@/lib/firebase/admin";
 import admin from "firebase-admin";
 
 export default async function dismissReviewReports(req, res) {

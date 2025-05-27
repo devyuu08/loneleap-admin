@@ -15,9 +15,9 @@ import {
 import SessionTimer from "@/components/auth/SessionTimer";
 import InlineSpinner from "@/components/common/InlineSpinner";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/shared/utils";
 import { signOut } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth } from "@/lib/firebase/client";
 
 export default function AdminLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
