@@ -1,7 +1,8 @@
-import ErrorMessage from "@/components/auth/ErrorMessage";
+import ErrorMessage from "@/components/common/ErrorMessage";
 import { FcGoogle } from "react-icons/fc";
 import { FiMail, FiLock } from "react-icons/fi";
 import ButtonSpinner from "@/components/common/ButtonSpinner";
+import FormInput from "@/components/common/FormInput";
 
 export default function AdminLoginForm({
   email,
@@ -29,37 +30,41 @@ export default function AdminLoginForm({
       </div>
       <div className="space-y-4">
         <div className="relative">
-          <input
+          <FormInput
+            id="email"
+            name="email"
             type="email"
             placeholder="이메일"
-            required
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-600"
             value={email}
             onChange={(e) => onChange("email", e.target.value)}
+            error={error?.includes("이메일") ? error : ""}
+            icon={<FiMail className="w-4 h-4" />}
           />
-          <FiMail className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400" />
         </div>
 
         <div className="relative">
-          <input
+          <FormInput
+            id="password"
+            name="password"
             type="password"
             placeholder="비밀번호"
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-600"
             value={password}
             onChange={(e) => onChange("password", e.target.value)}
+            error={error?.includes("비밀번호") ? error : ""}
+            icon={<FiLock className="w-4 h-4" />}
           />
-          <FiLock className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400" />
         </div>
 
         <div className="relative">
-          <input
+          <FormInput
+            id="confirmPassword"
+            name="confirmPassword"
             type="password"
             placeholder="비밀번호 확인"
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-600"
             value={confirmPassword}
             onChange={(e) => onChange("confirmPassword", e.target.value)}
+            icon={<FiLock className="w-4 h-4" />}
           />
-          <FiLock className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400" />
         </div>
 
         <button
@@ -85,8 +90,10 @@ export default function AdminLoginForm({
           )}
         </button>
 
-        {passwordMatchError && <ErrorMessage message={passwordMatchError} />}
-        {error && <ErrorMessage message={error} />}
+        {passwordMatchError && (
+          <ErrorMessage message={passwordMatchError} align="center" />
+        )}
+        {error && <ErrorMessage message={error} align="center" />}
       </div>
     </form>
   );
