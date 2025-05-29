@@ -1,6 +1,7 @@
 import FormInput from "@/components/common/FormInput";
 import FormTextarea from "@/components/common/FormTextarea";
 import FormSelect from "@/components/common/FormSelect";
+import FormSubmitButton from "@/components/common/FormSubmitButton";
 
 export default function RecommendationForm({
   form,
@@ -134,7 +135,7 @@ export default function RecommendationForm({
       </div>
 
       {/* 5. 버튼 */}
-      <div className="pt-10 border-t flex justify-end">
+      <div className="pt-10 border-t flex justify-end gap-3">
         {isEdit && (
           <button
             type="button"
@@ -144,17 +145,11 @@ export default function RecommendationForm({
             수정 취소
           </button>
         )}
-        <button
-          type="submit"
-          disabled={loading}
-          className="ml-4 px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition"
-        >
-          {loading
-            ? "처리 중..."
-            : isEdit
-            ? "추천 여행지 수정하기"
-            : "추천 여행지 등록하기"}
-        </button>
+        <FormSubmitButton
+          isLoading={loading}
+          label={isEdit ? "추천 여행지 수정하기" : "추천 여행지 등록하기"}
+          variant="dark"
+        />
       </div>
     </form>
   );
