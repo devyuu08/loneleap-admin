@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import {
   LayoutDashboard,
@@ -14,6 +13,7 @@ import {
 } from "lucide-react";
 import SessionTimer from "@/components/auth/SessionTimer";
 import ButtonSpinner from "@/components/common/ButtonSpinner";
+import SidebarMenuItem from "@/components/layout/SidebarMenuItem";
 
 import { cn } from "@/lib/shared/utils";
 import { signOut } from "firebase/auth";
@@ -97,32 +97,17 @@ export default function AdminLayout({ children }) {
         </div>
 
         {/* 메뉴 */}
+
         <nav className="flex-1 flex flex-col gap-2 px-3 py-4 text-sm text-gray-700">
-          {sidebarItems.map(({ href, label, icon: Icon }) => (
-            <Link
+          {sidebarItems.map(({ href, label, icon }) => (
+            <SidebarMenuItem
               key={href}
               href={href}
-              className={cn(
-                "flex items-center px-3 py-2 rounded-md transition-colors duration-200",
-                isActive(href)
-                  ? "bg-gray-900 text-white font-semibold"
-                  : "text-gray-700 hover:bg-gray-100"
-              )}
-            >
-              <Icon size={20} className="shrink-0" />
-
-              {/* 텍스트 */}
-              <div
-                className={cn(
-                  "ml-2 origin-left transition-all duration-200",
-                  isSidebarOpen
-                    ? "scale-x-100 opacity-100 visible"
-                    : "scale-x-0 opacity-0 invisible"
-                )}
-              >
-                <span className="inline-block whitespace-nowrap">{label}</span>
-              </div>
-            </Link>
+              label={label}
+              icon={icon}
+              isActive={isActive(href)}
+              isSidebarOpen={isSidebarOpen}
+            />
           ))}
         </nav>
 
