@@ -17,7 +17,7 @@ export default function UserTableContainer() {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const usersPerPage = 10;
+  const usersPerPage = 5;
 
   const loadUsers = useCallback(
     async (overrideFilters = filters) => {
