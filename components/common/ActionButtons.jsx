@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getAuth } from "firebase/auth";
-import InlineSpinner from "@/components/common/InlineSpinner";
+import ButtonSpinner from "@/components/common/ButtonSpinner";
 
 export default function ActionButtons({ report, onSuccess }) {
   const [deleting, setDeleting] = useState(false);
@@ -95,33 +95,17 @@ export default function ActionButtons({ report, onSuccess }) {
       <button
         onClick={handleDelete}
         disabled={deleting}
-        className="flex items-center justify-center gap-2 px-4 py-2 text-sm rounded bg-red-500 hover:bg-red-600 text-white"
+        className="flex items-center justify-center gap-2 min-w-[96px] px-4 py-2 text-sm rounded bg-red-500 hover:bg-red-600 text-white"
       >
-        {deleting ? (
-          <>
-            삭제 중...
-            <InlineSpinner size="sm" color="white" />
-          </>
-        ) : isChat ? (
-          "메시지 삭제"
-        ) : (
-          "리뷰 삭제"
-        )}
+        {deleting ? <ButtonSpinner /> : isChat ? "메시지 삭제" : "리뷰 삭제"}
       </button>
 
       <button
         onClick={handleDismiss}
         disabled={dismissing}
-        className="flex items-center justify-center gap-2 px-4 py-2 text-sm rounded bg-gray-300 hover:bg-gray-400 text-gray-800"
+        className="flex items-center justify-center gap-2 min-w-[96px] px-4 py-2 text-sm rounded bg-gray-300 hover:bg-gray-400 text-gray-800"
       >
-        {dismissing ? (
-          <>
-            무시 중...
-            <InlineSpinner size="sm" color="gray" />
-          </>
-        ) : (
-          "신고 무시"
-        )}
+        {dismissing ? <ButtonSpinner color="gray" /> : "신고 무시"}
       </button>
     </div>
   );

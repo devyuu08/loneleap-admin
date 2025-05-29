@@ -13,7 +13,7 @@ import {
   LogOut,
 } from "lucide-react";
 import SessionTimer from "@/components/auth/SessionTimer";
-import InlineSpinner from "@/components/common/InlineSpinner";
+import ButtonSpinner from "@/components/common/ButtonSpinner";
 
 import { cn } from "@/lib/shared/utils";
 import { signOut } from "firebase/auth";
@@ -146,8 +146,7 @@ export default function AdminLayout({ children }) {
             title="로그아웃"
           >
             <LogOut size={20} />
-            {isSidebarOpen && (isLoading ? "로그아웃 중..." : "로그아웃")}
-            {isLoading && <InlineSpinner size={18} />}
+            {isSidebarOpen && (isLoading ? <ButtonSpinner /> : "로그아웃")}
           </button>
         </div>
       </aside>
