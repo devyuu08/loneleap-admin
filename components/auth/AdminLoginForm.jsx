@@ -1,7 +1,7 @@
 import ErrorMessage from "@/components/auth/ErrorMessage";
 import { FcGoogle } from "react-icons/fc";
 import { FiMail, FiLock } from "react-icons/fi";
-import InlineSpinner from "@/components/common/InlineSpinner";
+import ButtonSpinner from "@/components/common/ButtonSpinner";
 
 export default function AdminLoginForm({
   email,
@@ -67,14 +67,7 @@ export default function AdminLoginForm({
           disabled={loadingEmail || loadingGoogle}
           className="w-full h-11 bg-gray-900 text-white py-2 rounded-md font-semibold hover:bg-gray-800 flex items-center justify-center gap-2"
         >
-          {loadingEmail ? (
-            <>
-              로그인 중...
-              <InlineSpinner size="sm" color="white" />
-            </>
-          ) : (
-            "로그인"
-          )}
+          {loadingEmail ? <ButtonSpinner /> : "로그인"}
         </button>
 
         <div className="text-center text-sm text-gray-400">또는</div>
@@ -86,10 +79,7 @@ export default function AdminLoginForm({
         >
           <FcGoogle className="text-xl" />
           {loadingGoogle ? (
-            <>
-              로그인 중...
-              <InlineSpinner size="sm" />
-            </>
+            <ButtonSpinner color="black" />
           ) : (
             "Google 계정으로 로그인"
           )}

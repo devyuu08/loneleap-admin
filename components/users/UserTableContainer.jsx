@@ -17,7 +17,7 @@ export default function UserTableContainer() {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const usersPerPage = 10;
+  const usersPerPage = 5;
 
   const loadUsers = useCallback(
     async (overrideFilters = filters) => {
@@ -105,22 +105,22 @@ export default function UserTableContainer() {
       />
 
       {/* 사용자 테이블 */}
-      {loading ? (
-        <p>로딩 중...</p>
-      ) : filteredUsers.length === 0 ? (
-        <p className="text-gray-500">검색 결과가 없습니다.</p>
-      ) : (
-        <>
-          <UserTable users={currentUsers} onReload={loadUsers} />
-
-          {/* 페이지네이션 */}
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        </>
-      )}
+      <div className="flex flex-col justify-between min-h-[70vh]">
+        <div className="flex-1">
+          {loading ? (
+            <p>로딩 중...</p>
+          ) : filteredUsers.length === 0 ? (
+            <p className="text-gray-500">검색 결과가 없습니다.</p>
+          ) : (
+            <UserTable users={currentUsers} onReload={loadUsers} />
+          )}
+        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      </div>
     </>
   );
 }
