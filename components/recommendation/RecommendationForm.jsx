@@ -1,3 +1,6 @@
+import FormInput from "@/components/common/FormInput";
+import FormTextarea from "@/components/common/FormTextarea";
+
 export default function RecommendationForm({
   form,
   onChange,
@@ -14,31 +17,19 @@ export default function RecommendationForm({
       {/* 1. 기본 정보 + 이미지 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div className="space-y-6">
-          <div>
-            <label className="block text-base font-semibold text-gray-800 mb-2">
-              장소명
-            </label>
-            <input
-              type="text"
-              value={form.name}
-              onChange={(e) => onChange("name", e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-              placeholder="예: 성산일출봉"
-            />
-          </div>
+          <FormInput
+            label="장소명"
+            value={form.name}
+            placeholder="예: 성산일출봉"
+            onChange={(e) => onChange("name", e.target.value)}
+          />
 
-          <div>
-            <label className="block text-base font-semibold text-gray-800 mb-2">
-              요약 설명
-            </label>
-            <input
-              type="text"
-              value={form.summary}
-              onChange={(e) => onChange("summary", e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-              placeholder="예: 붉게 가장 먼저 떠오르는 해"
-            />
-          </div>
+          <FormInput
+            label="요약 설명"
+            value={form.summary}
+            placeholder="예: 붉게 가장 먼저 떠오르는 해"
+            onChange={(e) => onChange("summary", e.target.value)}
+          />
 
           <div>
             <label className="block text-base font-semibold text-gray-800 mb-2">
@@ -102,44 +93,45 @@ export default function RecommendationForm({
 
       {/* 2. 상세 설명 */}
       <div className="space-y-3">
-        <label className="text-lg font-semibold">상세 설명</label>
-        <textarea
+        <FormTextarea
+          id="description"
+          label="상세 설명"
           value={form.description}
           onChange={(e) => onChange("description", e.target.value)}
-          rows={12}
-          className="w-full px-4 py-4 border border-gray-300 rounded-lg text-base leading-relaxed"
+          rows={20}
         />
       </div>
 
       {/* 3. 위치 설명 */}
       <div className="space-y-3">
-        <label className="text-lg font-semibold">위치 설명</label>
-        <input
+        <FormInput
+          id="locationInfo"
+          label="위치 설명"
           type="text"
           value={form.locationInfo}
           onChange={(e) => onChange("locationInfo", e.target.value)}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg text-base"
         />
       </div>
 
       {/* 4. 찾아가는 방법 + 주변 정보 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         <div className="space-y-3">
-          <label className="text-lg font-semibold">찾아가는 방법</label>
-          <textarea
+          <FormTextarea
+            id="direction"
+            label="찾아가는 방법"
             value={form.direction}
             onChange={(e) => onChange("direction", e.target.value)}
-            rows={6}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg text-base"
+            placeholder="예: 제주국제공항에서 30분 소요"
+            rows={10}
           />
         </div>
         <div className="space-y-3">
-          <label className="text-lg font-semibold">주변 정보</label>
-          <textarea
+          <FormTextarea
+            id="nearby"
+            label="주변 정보"
             value={form.nearby}
             onChange={(e) => onChange("nearby", e.target.value)}
-            rows={6}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg text-base"
+            rows={10}
           />
         </div>
       </div>
