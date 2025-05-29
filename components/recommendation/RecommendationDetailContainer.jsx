@@ -9,6 +9,10 @@ export default function RecommendationDetailContainer() {
   const { data, loading, notFound } = useRecommendationDetail(id);
   const { deleteRecommendation, loading: deleting } = useDeleteRecommendation();
 
+  const handleEdit = () => {
+    router.push(`/admin/recommendation/${id}/edit`);
+  };
+
   const handleDelete = async () => {
     const confirm = window.confirm("정말 삭제하시겠습니까?");
     if (!confirm) return;
@@ -38,6 +42,7 @@ export default function RecommendationDetailContainer() {
       visible={data.visible}
       createdAt={data.createdAt}
       updatedAt={data.updatedAt}
+      onEdit={handleEdit}
       onDelete={handleDelete}
       loading={deleting}
     />

@@ -15,6 +15,7 @@ import {
   Landmark,
   CalendarDays,
 } from "lucide-react";
+import FormActionButton from "@/components/common/FormActionButton";
 
 export default function RecommendationDetail({
   id,
@@ -29,6 +30,7 @@ export default function RecommendationDetail({
   visible,
   createdAt,
   updatedAt,
+  onEdit,
   onDelete,
   loading,
 }) {
@@ -180,19 +182,21 @@ export default function RecommendationDetail({
       )}
 
       <div className="flex flex-col md:flex-row justify-end items-center gap-4 mt-8">
-        <Link
-          href={`/admin/recommendation/${id}/edit`}
-          className="inline-flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-medium text-white bg-gray-800 hover:bg-black transition"
-        >
-          <Pencil className="w-4 h-4" /> 수정하기
-        </Link>
-        <button
+        <FormActionButton
+          label="수정하기"
+          icon={Pencil}
+          variant="default"
+          onClick={onEdit}
+        />
+
+        <FormActionButton
+          label="삭제하기"
+          icon={Trash2}
+          variant="danger"
           onClick={onDelete}
           disabled={loading}
-          className="inline-flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition disabled:opacity-50"
-        >
-          <Trash2 className="w-4 h-4" /> 삭제하기
-        </button>
+          isLoading={loading}
+        />
       </div>
     </div>
   );
