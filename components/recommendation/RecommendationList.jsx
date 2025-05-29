@@ -1,13 +1,16 @@
-import Link from "next/link"; // ⬅️ 꼭 추가해줘
+import Link from "next/link";
 import Image from "next/image";
 import { format } from "date-fns";
+import EmptyState from "@/components/common/EmptyState";
+import { MapPin } from "lucide-react";
 
 export default function RecommendationList({ recommendations }) {
   if (!recommendations?.length) {
     return (
-      <div className="text-center py-20 text-gray-500">
-        등록된 추천 여행지가 없습니다.
-      </div>
+      <EmptyState
+        message="등록된 추천 여행지가 없습니다."
+        icon={<MapPin className="w-8 h-8 text-gray-300 mb-2" />}
+      />
     );
   }
 
