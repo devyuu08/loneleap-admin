@@ -1,5 +1,6 @@
 import FormInput from "@/components/common/FormInput";
 import FormTextarea from "@/components/common/FormTextarea";
+import FormSelect from "@/components/common/FormSelect";
 
 export default function RecommendationForm({
   form,
@@ -31,26 +32,23 @@ export default function RecommendationForm({
             onChange={(e) => onChange("summary", e.target.value)}
           />
 
-          <div>
-            <label className="block text-base font-semibold text-gray-800 mb-2">
-              지역
-            </label>
-            <select
-              value={form.location}
-              onChange={(e) => onChange("location", e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-            >
-              <option value="">지역 선택</option>
-              <option value="서울">서울</option>
-              <option value="경기도">경기도</option>
-              <option value="인천">인천</option>
-              <option value="충청도">충청도</option>
-              <option value="전라도">전라도</option>
-              <option value="경상도">경상도</option>
-              <option value="강원도">강원도</option>
-              <option value="제주도">제주도</option>
-            </select>
-          </div>
+          <FormSelect
+            id="location"
+            label="지역"
+            value={form.location}
+            onChange={(e) => onChange("location", e.target.value)}
+            options={[
+              { value: "", label: "지역 선택" },
+              { value: "서울", label: "서울" },
+              { value: "경기도", label: "경기도" },
+              { value: "인천", label: "인천" },
+              { value: "충청도", label: "충청도" },
+              { value: "전라도", label: "전라도" },
+              { value: "경상도", label: "경상도" },
+              { value: "강원도", label: "강원도" },
+              { value: "제주도", label: "제주도" },
+            ]}
+          />
         </div>
 
         <div className="space-y-6">
@@ -100,10 +98,9 @@ export default function RecommendationForm({
           onChange={(e) => onChange("description", e.target.value)}
           rows={20}
         />
-      </div>
 
-      {/* 3. 위치 설명 */}
-      <div className="space-y-3">
+        {/* 3. 위치 설명 */}
+
         <FormInput
           id="locationInfo"
           label="위치 설명"
