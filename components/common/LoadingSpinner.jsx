@@ -4,7 +4,7 @@ export default function LoadingSpinner({
   text = "불러오는 중...",
   size = "md",
   showText = true,
-  fullscreen = true,
+  fullscreen = false,
 }) {
   const sizeClasses = {
     sm: "h-4 w-4",
