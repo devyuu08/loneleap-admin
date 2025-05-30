@@ -1,4 +1,6 @@
+import EmptyState from "@/components/common/EmptyState";
 import { format } from "date-fns";
+import { FileWarning } from "lucide-react";
 
 export default function ReviewReportTable({ reports = [], onSelect }) {
   const isEmpty = !Array.isArray(reports) || reports.length === 0;
@@ -6,9 +8,11 @@ export default function ReviewReportTable({ reports = [], onSelect }) {
   return (
     <div className="w-full">
       {isEmpty ? (
-        <div className="p-4 text-center text-gray-500">
-          신고된 리뷰가 없습니다.
-        </div>
+        <EmptyState
+          icon={<FileWarning className="w-8 h-8 text-gray-300 mb-2" />}
+          message="신고된 리뷰가 없습니다."
+          className="py-12"
+        />
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full table-auto text-sm text-gray-800">

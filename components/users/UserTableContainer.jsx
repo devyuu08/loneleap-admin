@@ -117,7 +117,11 @@ export default function UserTableContainer() {
             />
           ) : filteredUsers.length === 0 ? (
             <EmptyState
-              message="조건에 맞는 사용자가 없습니다."
+              message={
+                isInitialEmpty
+                  ? "등록된 사용자가 아직 없습니다."
+                  : "조건에 맞는 사용자가 없습니다."
+              }
               icon={<Inbox className="w-10 h-10 text-gray-300 mb-3" />}
             />
           ) : (

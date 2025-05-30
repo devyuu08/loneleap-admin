@@ -8,12 +8,17 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import EmptyState from "@/components/common/EmptyState";
+import { BarChart3 } from "lucide-react";
 
 export default function ContentActivityBarChart({ data }) {
   if (!Array.isArray(data) || data.length === 0) {
     return (
-      <div className="flex items-center justify-center h-[280px] text-gray-400 text-sm">
-        작성 활동 데이터가 없습니다.
+      <div className="bg-white p-6 rounded-xl shadow min-h-[280px] flex items-center justify-center">
+        <EmptyState
+          message="최근 작성 활동 데이터가 없습니다."
+          icon={<BarChart3 className="w-6 h-6 text-gray-300 mb-2" />}
+        />
       </div>
     );
   }

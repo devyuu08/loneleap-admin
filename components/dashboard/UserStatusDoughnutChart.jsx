@@ -7,14 +7,18 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import EmptyState from "@/components/common/EmptyState";
 
 const COLORS = ["#10B981", "#F59E0B", "#9CA3AF"]; // 초록 / 주황 / 회색
 
 export default function UserStatusDonutChart({ data }) {
   if (!data || data.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-        사용자 데이터가 없습니다.
+      <div className="bg-white p-6 rounded-xl shadow min-h-[280px] flex items-center justify-center">
+        <EmptyState
+          message="사용자 상태 데이터가 없습니다."
+          icon={<PieChart className="w-6 h-6 text-gray-300 mb-2" />}
+        />
       </div>
     );
   }

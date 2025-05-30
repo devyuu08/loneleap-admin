@@ -4,6 +4,8 @@ import ReviewReportLineChart from "@/components/dashboard/ReviewReportLineChart"
 import ChatReportLineChart from "@/components/dashboard/ChatReportLineChart";
 import UserStatusDoughnutChart from "@/components/dashboard/UserStatusDoughnutChart";
 import ContentActivityBarChart from "@/components/dashboard/ContentActivityBarChart";
+import EmptyState from "@/components/common/EmptyState";
+import { Inbox } from "lucide-react";
 
 export default function AdminDashboard({ stats, chartData, recentReports }) {
   const reviewReports = stats?.reviewReports ?? 0;
@@ -65,8 +67,12 @@ export default function AdminDashboard({ stats, chartData, recentReports }) {
           <tbody>
             {recentReports.length === 0 ? (
               <tr>
-                <td colSpan="5" className="py-4 text-center text-gray-500">
-                  신고 내역이 없습니다.
+                <td colSpan="5">
+                  <EmptyState
+                    message="최근 신고 내역이 없습니다."
+                    icon={<Inbox className="w-6 h-6 text-gray-300 mb-2" />}
+                    className="py-10"
+                  />
                 </td>
               </tr>
             ) : (

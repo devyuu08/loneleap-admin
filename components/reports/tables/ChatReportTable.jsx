@@ -1,4 +1,6 @@
+import EmptyState from "@/components/common/EmptyState";
 import { format } from "date-fns";
+import { MessageSquareOff } from "lucide-react";
 import PropTypes from "prop-types";
 
 export default function ChatReportTable({ reports = [], onSelect = () => {} }) {
@@ -7,9 +9,11 @@ export default function ChatReportTable({ reports = [], onSelect = () => {} }) {
   return (
     <div className="w-full">
       {isEmpty ? (
-        <div className="p-4 text-center text-gray-500">
-          신고된 채팅 메시지가 없습니다.
-        </div>
+        <EmptyState
+          icon={<MessageSquareOff className="w-8 h-8 text-gray-300 mb-2" />}
+          message="신고된 채팅 메시지가 없습니다."
+          className="py-12"
+        />
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full table-auto text-sm text-gray-800">
