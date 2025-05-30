@@ -5,6 +5,9 @@ import UserSearchInput from "@/components/users/UserSearchInput";
 import UserTable from "@/components/users/UserTable";
 import { exportToCSV } from "@/utils/exportToCSV";
 import Pagination from "@/components/common/Pagination";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+import EmptyState from "@/components/common/EmptyState";
+import { Inbox } from "lucide-react";
 
 export default function UserTableContainer() {
   const [users, setUsers] = useState([]);
@@ -108,9 +111,15 @@ export default function UserTableContainer() {
       <div className="flex flex-col justify-between min-h-[70vh]">
         <div className="flex-1">
           {loading ? (
-            <p>로딩 중...</p>
+            <LoadingSpinner
+              text="사용자 목록을 불러오는 중입니다..."
+              size="md"
+            />
           ) : filteredUsers.length === 0 ? (
-            <p className="text-gray-500">검색 결과가 없습니다.</p>
+            <EmptyState
+              message="조건에 맞는 사용자가 없습니다."
+              icon={<Inbox className="w-10 h-10 text-gray-300 mb-3" />}
+            />
           ) : (
             <UserTable users={currentUsers} onReload={loadUsers} />
           )}
