@@ -1,6 +1,6 @@
 import UserActionButtons from "@/components/users/UserActionButtons";
 import { formatDateKR } from "@/lib/shared/date";
-import StatusBadge from "@/components/common/StatusBadge";
+import StatusBadge from "@/components/users/StatusBadge";
 
 export default function UserTable({ users, onReload }) {
   return (
