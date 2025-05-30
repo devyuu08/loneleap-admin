@@ -56,18 +56,15 @@ export default async function deleteMessageWithReports(req, res) {
         throw new Error("메시지 작성자 정보가 없습니다.");
       }
 
-      // 1. 메시지 삭제
+      const userRef = db.collection("users_private").doc(senderUid);
+      const userSnap = await transaction.get(userRef); // get 먼저 수행
+      const currentCount = userSnap.data()?.reportedCount || 0;
+
       transaction.delete(messageRef);
 
-      // 2. 관련 신고 문서들 삭제
       snapshot.docs.forEach((doc) => {
         transaction.delete(doc.ref);
       });
-
-      // 3. 해당 유저의 reportedCount 감소
-      const userRef = db.collection("users_private").doc(senderUid);
-      const userSnap = await transaction.get(userRef);
-      const currentCount = userSnap.data()?.reportedCount || 0;
 
       // 0 이하로 내려가지 않도록 조건 처리
       if (currentCount > 0) {

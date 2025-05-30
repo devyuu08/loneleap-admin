@@ -48,15 +48,21 @@ export default async function deleteReviewWithReports(req, res) {
 
     // 5. 트랜잭션: 리뷰 + 신고 삭제 + 작성자 신고카운트 감소
     await db.runTransaction(async (transaction) => {
+      // 1. 먼저 사용자 문서를 읽기
+      const userRef = db.collection("users_private").doc(authorUid);
+      const userSnap = await transaction.get(userRef);
+      const currentCount = userSnap.data()?.reportedCount || 0;
+
+      // 2. 리뷰 신고 문서들도 미리 읽기 (이미 snapshot으로 조회했기 때문에 OK)
+      // 주의: snapshot은 트랜잭션 밖에서 get() 했기 때문에 그냥 사용 가능
+
+      // 3. 리뷰 및 신고 삭제
       transaction.delete(reviewRef);
       snapshot.docs.forEach((doc) => {
         transaction.delete(doc.ref);
       });
 
-      const userRef = db.collection("users_private").doc(authorUid);
-      const userSnap = await transaction.get(userRef);
-      const currentCount = userSnap.data()?.reportedCount || 0;
-
+      // 4. 사용자 카운트 감소
       if (currentCount > 0) {
         transaction.update(userRef, {
           reportedCount: admin.firestore.FieldValue.increment(-1),
