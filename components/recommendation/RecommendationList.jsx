@@ -3,8 +3,17 @@ import Image from "next/image";
 import { format } from "date-fns";
 import EmptyState from "@/components/common/EmptyState";
 import { MapPin } from "lucide-react";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 
-export default function RecommendationList({ recommendations }) {
+export default function RecommendationList({ recommendations, loading }) {
+  if (loading) {
+    return (
+      <div className="py-20">
+        <LoadingSpinner text="추천 여행지를 불러오는 중입니다..." />
+      </div>
+    );
+  }
+
   if (!recommendations?.length) {
     return (
       <EmptyState
