@@ -111,10 +111,7 @@ export default function UserTableContainer() {
       <div className="flex flex-col justify-between min-h-[70vh]">
         <div className="flex-1">
           {loading ? (
-            <LoadingSpinner
-              text="사용자 목록을 불러오는 중입니다..."
-              size="md"
-            />
+            <LoadingSpinner text="사용자 목록을 불러오는 중입니다..." />
           ) : filteredUsers.length === 0 ? (
             <EmptyState
               message={

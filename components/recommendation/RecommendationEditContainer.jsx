@@ -50,7 +50,7 @@ export default function RecommendationEditContainer() {
   if (loading) {
     return (
       <div className="py-20">
-        <LoadingSpinner text="여행지 정보를 불러오는 중입니다..." size="md" />
+        <LoadingSpinner text="여행지 정보를 불러오는 중입니다..." />
       </div>
     );
   }
