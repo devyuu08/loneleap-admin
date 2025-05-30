@@ -2,6 +2,9 @@ import { useRouter } from "next/router";
 import { useRecommendationDetail } from "@/hooks/recommendation/useRecommendationDetail";
 import { useDeleteRecommendation } from "@/hooks/recommendation/useDeleteRecommendation";
 import RecommendationDetail from "@/components/recommendation/RecommendationDetail";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+import EmptyState from "@/components/common/EmptyState";
+import { AlertCircle } from "lucide-react";
 
 export default function RecommendationDetailContainer() {
   const router = useRouter();
@@ -20,13 +23,23 @@ export default function RecommendationDetailContainer() {
     router.push("/admin/recommendation");
   };
 
-  if (loading) return <div className="p-10 text-center">불러오는 중...</div>;
-  if (notFound)
+  if (loading) {
     return (
-      <div className="p-10 text-center text-gray-500">
-        존재하지 않는 여행지입니다.
+      <div className="py-20">
+        <LoadingSpinner text="여행지 정보를 불러오는 중입니다..." size="md" />
       </div>
     );
+  }
+
+  if (notFound) {
+    return (
+      <EmptyState
+        icon={<AlertCircle className="w-10 h-10 text-gray-300 mb-3" />}
+        message="존재하지 않는 여행지입니다."
+        className="py-20"
+      />
+    );
+  }
 
   return (
     <RecommendationDetail
