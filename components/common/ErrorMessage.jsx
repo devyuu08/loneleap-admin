@@ -12,6 +12,7 @@ export default function ErrorMessage({
 
   return (
     <div
+      role="alert"
       className={`flex items-start gap-1 text-sm text-red-500 ${alignmentClass} ${className}`}
     >
       <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />

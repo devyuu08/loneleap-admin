@@ -4,6 +4,9 @@ import { useRecommendationDetail } from "@/hooks/recommendation/useRecommendatio
 import { useUpdateRecommendation } from "@/hooks/recommendation/useUpdateRecommendation";
 import { uploadImage } from "@/lib/firebase/uploadImage";
 import RecommendationFormContainer from "@/components/recommendation/RecommendationFormContainer";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+import EmptyState from "@/components/common/EmptyState";
+import { AlertCircle } from "lucide-react";
 
 export default function RecommendationEditContainer() {
   const router = useRouter();
@@ -44,13 +47,23 @@ export default function RecommendationEditContainer() {
     }
   };
 
-  if (loading) return <div className="p-10 text-center">불러오는 중...</div>;
-  if (notFound)
+  if (loading) {
     return (
-      <div className="p-10 text-center text-gray-500">
-        존재하지 않는 여행지입니다.
+      <div className="py-20">
+        <LoadingSpinner text="여행지 정보를 불러오는 중입니다..." />
       </div>
     );
+  }
+
+  if (notFound) {
+    return (
+      <EmptyState
+        icon={<AlertCircle className="w-10 h-10 text-gray-300 mb-3" />}
+        message="존재하지 않는 여행지입니다."
+        className="py-20"
+      />
+    );
+  }
 
   return (
     <div className="px-6 py-10">

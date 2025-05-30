@@ -9,12 +9,16 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import EmptyState from "@/components/common/EmptyState";
 
 export default function ReviewReportLineChart({ data }) {
   if (!Array.isArray(data) || data.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-        신고 데이터가 없습니다.
+      <div className="bg-white p-6 rounded-xl shadow min-h-[280px] flex items-center justify-center">
+        <EmptyState
+          message="최근 리뷰 신고 데이터가 없습니다."
+          icon={<LineChart className="w-6 h-6 text-gray-300 mb-2" />}
+        />
       </div>
     );
   }

@@ -17,11 +17,7 @@ export default function AdminSpotsPage() {
         </Link>
       </div>
 
-      {loading ? (
-        <p className="text-gray-500">불러오는 중...</p>
-      ) : (
-        <RecommendationList recommendations={recommendations} />
-      )}
+      <RecommendationList recommendations={recommendations} loading={loading} />
     </div>
   );
 }
