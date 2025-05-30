@@ -50,13 +50,12 @@ export default async function dismissChatReport(req, res) {
 
     // 트랜잭션 처리
     await db.runTransaction(async (transaction) => {
-      // 신고 문서 삭제
-      transaction.delete(reportRef);
-
-      // 유저 신고 카운트 감소
       const userRef = db.collection("users_private").doc(senderUid);
       const userSnap = await transaction.get(userRef);
       const currentCount = userSnap.data()?.reportedCount || 0;
+
+      // 신고 문서 삭제
+      transaction.delete(reportRef);
 
       // 0 이하로 내려가지 않도록 방어
       if (currentCount > 0) {
