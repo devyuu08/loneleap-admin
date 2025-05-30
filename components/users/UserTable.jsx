@@ -1,5 +1,6 @@
 import UserActionButtons from "@/components/users/UserActionButtons";
 import { formatDateKR } from "@/lib/shared/date";
+import StatusBadge from "@/components/common/StatusBadge";
 
 export default function UserTable({ users, onReload }) {
   return (
@@ -74,21 +75,7 @@ export default function UserTable({ users, onReload }) {
 
               {/* 상태 */}
               <td className="px-4 py-4 text-center">
-                <span
-                  className={`text-xs px-2 py-1 rounded-full ${
-                    user.status === "active"
-                      ? "bg-green-100 text-green-800"
-                      : user.status === "warned"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : "bg-gray-100 text-gray-600"
-                  }`}
-                >
-                  {user.status === "active"
-                    ? "활성"
-                    : user.status === "warned"
-                    ? "경고"
-                    : "휴면"}
-                </span>
+                <StatusBadge status={user.status} />
               </td>
 
               {/* 액션 버튼 */}
