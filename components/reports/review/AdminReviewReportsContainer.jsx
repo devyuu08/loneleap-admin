@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+import ReviewReportTable from "@/components/reports/review/ReviewReportTable";
+import ReviewReportDetail from "@/components/reports/review/ReviewReportDetail";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase/client";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
-import ChatReportTable from "@/components/reports/tables/ChatReportTable";
-import ChatReportDetail from "@/components/reports/details/ChatReportDetail";
 import NoReportSelected from "@/components/common/NoReportSelected";
 
-export default function AdminChatReportsContainer() {
+export default function AdminReviewReportsContainer() {
   const [authReady, setAuthReady] = useState(false);
   const [authUser, setAuthUser] = useState(null);
 
@@ -14,11 +14,10 @@ export default function AdminChatReportsContainer() {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [lastDocId, setLastDocId] = useState(null);
+  const [lastDoc, setLastDoc] = useState(null);
   const [selectedReport, setSelectedReport] = useState(null);
   const [error, setError] = useState(null);
 
-  // 인증 준비
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setAuthUser(user);
@@ -27,17 +26,16 @@ export default function AdminChatReportsContainer() {
     return () => unsubscribe();
   }, []);
 
-  // 인증 후 데이터 가져오기
   useEffect(() => {
     if (!authReady || !authUser) return;
 
     const fetchInitialReports = async () => {
       try {
+        setError(null);
         setLoading(true);
         await fetchReports();
       } catch (err) {
-        console.error("신고 채팅 불러오기 실패:", err);
-        setError("데이터를 불러오는 중 문제가 발생했습니다.");
+        setError(err.message);
       } finally {
         setLoading(false);
       }
@@ -46,26 +44,26 @@ export default function AdminChatReportsContainer() {
     fetchInitialReports();
   }, [authReady, authUser]);
 
-  // 신고 목록 가져오기
   const fetchReports = async (isLoadMore = false) => {
     if (!authUser) return;
-
     const token = await authUser.getIdToken();
+
     const query = new URLSearchParams();
     query.append("limit", 50);
-    if (isLoadMore && lastDocId) {
-      query.append("lastDocId", lastDocId);
-    }
+    if (isLoadMore && lastDoc) query.append("lastDoc", lastDoc);
 
-    const res = await fetch(`/api/admin/report/chat/get?${query}`, {
+    const res = await fetch(`/api/admin/report/review/get?${query}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    if (!res.ok) throw new Error("데이터 불러오기 실패");
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || "데이터를 불러오는데 실패했습니다");
+    }
 
     const data = await res.json();
     if (data.length < 50) setHasMore(false);
-    if (data.length > 0) setLastDocId(data[data.length - 1].id);
+    if (data.length > 0) setLastDoc(data[data.length - 1].id);
 
     if (isLoadMore) {
       setReports((prev) => [...prev, ...data]);
@@ -90,35 +88,29 @@ export default function AdminChatReportsContainer() {
     setSelectedReport(null);
   };
 
-  if (!authReady || loading) {
-    return <LoadingSpinner text="신고된 채팅 메시지를 불러오는 중..." />;
+  if (loading || !authReady) {
+    return <LoadingSpinner text="신고된 리뷰를 불러오는 중..." />;
   }
 
   return (
     <>
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold">채팅 신고 목록</h2>
+        <h2 className="text-2xl font-semibold">리뷰 신고 목록</h2>
         <p className="text-gray-600 text-sm mt-1">
           총 <strong>{reports.length}</strong>개의 신고가 접수되었습니다.
         </p>
       </div>
 
-      {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
-
-      {/* 신고 목록 */}
       <div className="bg-white p-6 rounded-xl shadow mb-6">
-        {reports.length === 0 ? (
-          <div className="text-center text-gray-500">
-            신고된 채팅이 없습니다.
-          </div>
+        {error ? (
+          <div className="text-red-500 text-center">{error}</div>
         ) : (
           <>
-            <ChatReportTable
+            <ReviewReportTable
               reports={reports}
               onSelect={setSelectedReport}
               selectedReportId={selectedReport?.id}
             />
-
             {hasMore && reports.length > 0 && (
               <div className="mt-4 text-center">
                 <button
@@ -134,10 +126,9 @@ export default function AdminChatReportsContainer() {
         )}
       </div>
 
-      {/* 상세 정보 */}
       {selectedReport ? (
         <div className="bg-white p-6 rounded-xl shadow min-h-[300px]">
-          <ChatReportDetail
+          <ReviewReportDetail
             report={selectedReport}
             onSuccess={handleReportSuccess}
           />

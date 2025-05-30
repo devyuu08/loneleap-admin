@@ -1,1 +1,1 @@
-export { default } from "@/components/reports/AdminReviewReportsContainer";
+export { default } from "@/components/reports/review/AdminReviewReportsContainer";
