@@ -2,10 +2,11 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getRecommendationDetail } from "@/services/getRecommendationDetail";
+import { RECOMMENDATION } from "@/constants/queryKeys";
 
 export function useRecommendationDetail(id) {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["recommendation", id],
+    queryKey: RECOMMENDATION(id),
     queryFn: () => getRecommendationDetail(id),
     enabled: !!id,
   });

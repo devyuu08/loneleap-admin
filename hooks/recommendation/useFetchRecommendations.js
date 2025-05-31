@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { fetchRecommendationsFromFirestore } from "@/services/fetchRecommendations";
+import { RECOMMENDATIONS } from "@/constants/queryKeys";
 
 export function useFetchRecommendations() {
   const {
@@ -10,7 +11,7 @@ export function useFetchRecommendations() {
     isError,
     error,
   } = useQuery({
-    queryKey: ["recommendations"],
+    queryKey: [RECOMMENDATIONS],
     queryFn: fetchRecommendationsFromFirestore,
   });
 
