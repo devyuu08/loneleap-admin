@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getAdminReports } from "@/services/adminReports";
