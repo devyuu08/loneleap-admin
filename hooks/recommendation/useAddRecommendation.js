@@ -3,7 +3,7 @@
 import { useUploadImage } from "@/hooks/useUploadImage";
 import { useRouter } from "next/router";
 import { useMutation } from "@tanstack/react-query";
-import { addRecommendationToFirestore } from "@/services/recommendationService";
+import { addRecommendationToFirestore } from "@/services/addRecommendation";
 
 export function useAddRecommendation() {
   const { uploadImage } = useUploadImage();
