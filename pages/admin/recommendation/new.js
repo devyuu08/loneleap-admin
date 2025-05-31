@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+
 import { useAddRecommendation } from "@/hooks/recommendation/useAddRecommendation";
 import RecommendationFormContainer from "@/components/recommendation/RecommendationFormContainer";
 
