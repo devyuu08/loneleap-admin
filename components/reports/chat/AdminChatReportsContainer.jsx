@@ -1,25 +1,44 @@
+import { useState } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { getAdminReports } from "@/services/adminReports";
+import { useAdminAuth } from "@/hooks/auth/useAdminAuth";
+
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ChatReportView from "@/components/reports/chat/ChatReportView";
-import { useAdminReports } from "@/hooks/reports/useAdminReports";
 
 export default function AdminChatReportsContainer() {
+  const { authReady, authUser, getToken } = useAdminAuth();
+  const [selectedReport, setSelectedReport] = useState(null);
+
   const {
-    authReady,
-    loading,
-    reports,
-    selectedReport,
-    setSelectedReport,
-    hasMore,
-    loadingMore,
+    data,
+    isLoading,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
     error,
-    handleLoadMore,
-    handleReportSuccess,
-  } = useAdminReports({
-    endpoint: "/api/admin/report/chat/get",
-    queryKey: "lastDocId",
+  } = useInfiniteQuery({
+    queryKey: ["adminReports", "chat"],
+    enabled: authReady && !!authUser,
+    queryFn: async ({ pageParam }) => {
+      const token = await getToken();
+      return await getAdminReports({
+        endpoint: "/api/admin/report/chat/get",
+        token,
+        query: pageParam ? { lastDoc: pageParam } : {},
+      });
+    },
+    getNextPageParam: (lastPage) =>
+      lastPage?.length === 50 ? lastPage[lastPage.length - 1]?.id : undefined,
   });
 
-  if (!authReady || loading) {
+  const reports = data?.pages.flat() || [];
+
+  const handleReportSuccess = () => {
+    setSelectedReport(null);
+  };
+
+  if (isLoading || !authReady) {
     return <LoadingSpinner text="신고된 채팅 메시지를 불러오는 중..." />;
   }
 
@@ -28,9 +47,9 @@ export default function AdminChatReportsContainer() {
       reports={reports}
       selectedReport={selectedReport}
       onSelect={setSelectedReport}
-      onLoadMore={handleLoadMore}
-      hasMore={hasMore}
-      loadingMore={loadingMore}
+      onLoadMore={fetchNextPage}
+      hasMore={hasNextPage}
+      loadingMore={isFetchingNextPage}
       error={error}
       onSuccess={handleReportSuccess}
     />
