@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "next/router";
 import { useRecommendationDetail } from "@/hooks/recommendation/useRecommendationDetail";
 import { useDeleteRecommendation } from "@/hooks/recommendation/useDeleteRecommendation";
