@@ -7,6 +7,7 @@ import { useAdminAuth } from "@/hooks/auth/useAdminAuth";
 
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ChatReportView from "@/components/reports/chat/ChatReportView";
+import { ADMIN_REPORTS } from "@/constants/queryKeys";
 
 export default function AdminChatReportsContainer() {
   const { authReady, authUser, getToken } = useAdminAuth();
@@ -20,7 +21,7 @@ export default function AdminChatReportsContainer() {
     fetchNextPage,
     error,
   } = useInfiniteQuery({
-    queryKey: ["adminReports", "chat"],
+    queryKey: ADMIN_REPORTS.CHAT,
     enabled: authReady && !!authUser,
     queryFn: async ({ pageParam }) => {
       const token = await getToken();

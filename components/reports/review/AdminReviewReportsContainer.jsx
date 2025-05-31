@@ -6,6 +6,7 @@ import { getAdminReports } from "@/services/adminReports";
 import { useAdminAuth } from "@/hooks/auth/useAdminAuth";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ReviewReportView from "@/components/reports/review/ReviewReportView";
+import { ADMIN_REPORTS } from "@/constants/queryKeys";
 
 export default function AdminReviewReportsContainer() {
   const { authReady, authUser, getToken } = useAdminAuth();
@@ -19,7 +20,7 @@ export default function AdminReviewReportsContainer() {
     fetchNextPage,
     error,
   } = useInfiniteQuery({
-    queryKey: ["adminReports", "review"],
+    queryKey: ADMIN_REPORTS.REVIEW,
     enabled: authReady && !!authUser,
     queryFn: async ({ pageParam }) => {
       const token = await getToken();
