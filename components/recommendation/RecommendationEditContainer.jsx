@@ -1,8 +1,10 @@
+"use client";
+
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecommendationDetail } from "@/hooks/recommendation/useRecommendationDetail";
 import { useUpdateRecommendation } from "@/hooks/recommendation/useUpdateRecommendation";
-import { uploadImage } from "@/lib/firebase/uploadImage";
+import { useUploadImage } from "@/hooks/useUploadImage";
 import RecommendationFormContainer from "@/components/recommendation/RecommendationFormContainer";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import EmptyState from "@/components/common/EmptyState";
@@ -12,7 +14,8 @@ export default function RecommendationEditContainer() {
   const router = useRouter();
   const { id } = router.query;
   const { data, loading, notFound } = useRecommendationDetail(id);
-  const { updateRecommendation } = useUpdateRecommendation();
+  const { updateRecommendation, isLoading } = useUpdateRecommendation();
+  const { uploadImage } = useUploadImage();
   const [initialData, setInitialData] = useState(null);
 
   useEffect(() => {
@@ -32,19 +35,16 @@ export default function RecommendationEditContainer() {
   }, [data]);
 
   const handleUpdate = async (formData) => {
-    try {
-      let imageUrl = initialData.imageUrl;
-      if (formData.imageFile) {
-        imageUrl = await uploadImage(formData.imageFile, "recommendations");
-      }
-      const { imageFile, ...rest } = formData;
-      await updateRecommendation(id, { ...rest, imageUrl });
-      alert("수정이 완료되었습니다.");
-      router.push("/admin/recommendation");
-    } catch (err) {
-      console.error("추천 여행지 수정 실패:", err);
-      alert("수정 중 오류 발생");
+    let imageUrl = initialData.imageUrl;
+    if (formData.imageFile) {
+      imageUrl = await uploadImage(formData.imageFile, "recommendations");
     }
+    const { imageFile, ...rest } = formData;
+
+    updateRecommendation({
+      id,
+      data: { ...rest, imageUrl },
+    });
   };
 
   if (loading) {
@@ -72,7 +72,7 @@ export default function RecommendationEditContainer() {
         <RecommendationFormContainer
           initialValues={initialData}
           onSubmit={handleUpdate}
-          loading={false}
+          loading={isLoading}
         />
       )}
     </div>

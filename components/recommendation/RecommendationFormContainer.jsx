@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import RecommendationForm from "@/components/recommendation/RecommendationForm";
+import { useFeedback } from "@/hooks/common/useFeedback";
 
 export default function RecommendationFormContainer({
   onSubmit,
@@ -20,6 +21,7 @@ export default function RecommendationFormContainer({
   });
 
   const [isInitialized, setIsInitialized] = useState(false);
+  const { error } = useFeedback();
 
   useEffect(() => {
     if (initialValues) {
@@ -41,6 +43,14 @@ export default function RecommendationFormContainer({
     }
   }, [initialValues]);
 
+  useEffect(() => {
+    return () => {
+      if (form.imagePreview?.startsWith("blob:")) {
+        URL.revokeObjectURL(form.imagePreview);
+      }
+    };
+  }, [form.imagePreview]);
+
   if (!isInitialized) return null;
 
   const handleChange = (key, value) => {
@@ -60,7 +70,7 @@ export default function RecommendationFormContainer({
     const { name, location, description, imageFile, imagePreview } = form;
 
     if (!name || !location || !description || (!imageFile && !imagePreview)) {
-      return alert("필수 항목을 모두 입력하세요.");
+      return error("필수 항목을 모두 입력하세요.");
     }
 
     await onSubmit({

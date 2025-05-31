@@ -1,23 +1,23 @@
-import { deleteDoc, doc } from "firebase/firestore";
-import { db } from "@/lib/firebase/client";
-import { useState } from "react";
+"use client";
+
+import { useMutation } from "@tanstack/react-query";
+import { deleteRecommendationFromFirestore } from "@/services/deleteRecommendation";
+import { useFeedback } from "@/hooks/common/useFeedback";
 
 export function useDeleteRecommendation() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { success, error } = useFeedback();
 
-  const deleteRecommendation = async (id) => {
-    setLoading(true);
-    setError(null);
-    try {
-      await deleteDoc(doc(db, "recommended_places", id));
-    } catch (err) {
-      console.error("삭제 실패:", err);
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { mutate: deleteRecommendation, isLoading } = useMutation({
+    mutationFn: async (id) => {
+      await deleteRecommendationFromFirestore(id);
+    },
+    onSuccess: () => {
+      success("삭제되었습니다.");
+    },
+    onError: (err) => {
+      error(err, "삭제 중 오류가 발생했습니다.");
+    },
+  });
 
-  return { deleteRecommendation, loading, error };
+  return { deleteRecommendation, isLoading };
 }

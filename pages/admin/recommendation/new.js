@@ -1,13 +1,13 @@
-import React from "react";
+"use client";
+
 import { useAddRecommendation } from "@/hooks/recommendation/useAddRecommendation";
 import RecommendationFormContainer from "@/components/recommendation/RecommendationFormContainer";
 
 export default function NewRecommendationPage() {
   const { addRecommendation, loading } = useAddRecommendation();
 
-  const handleSubmit = async (formData) => {
-    await addRecommendation(formData);
-    // 성공 후 이동 또는 알림
+  const handleSubmit = (formData) => {
+    addRecommendation(formData);
   };
 
   return (

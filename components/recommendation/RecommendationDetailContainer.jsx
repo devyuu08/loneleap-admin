@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "next/router";
 import { useRecommendationDetail } from "@/hooks/recommendation/useRecommendationDetail";
 import { useDeleteRecommendation } from "@/hooks/recommendation/useDeleteRecommendation";
@@ -19,8 +21,7 @@ export default function RecommendationDetailContainer() {
   const handleDelete = async () => {
     const confirm = window.confirm("정말 삭제하시겠습니까?");
     if (!confirm) return;
-    await deleteRecommendation(id);
-    router.push("/admin/recommendation");
+    deleteRecommendation(id);
   };
 
   if (loading) {
