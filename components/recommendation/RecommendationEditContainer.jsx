@@ -35,21 +35,16 @@ export default function RecommendationEditContainer() {
   }, [data]);
 
   const handleUpdate = async (formData) => {
-    try {
-      let imageUrl = initialData.imageUrl;
-      if (formData.imageFile) {
-        imageUrl = await uploadImage(formData.imageFile, "recommendations");
-      }
-      const { imageFile, ...rest } = formData;
-
-      updateRecommendation({
-        id,
-        data: { ...rest, imageUrl },
-      });
-    } catch (err) {
-      console.error("추천 여행지 수정 실패:", err);
-      alert("수정 중 오류 발생");
+    let imageUrl = initialData.imageUrl;
+    if (formData.imageFile) {
+      imageUrl = await uploadImage(formData.imageFile, "recommendations");
     }
+    const { imageFile, ...rest } = formData;
+
+    updateRecommendation({
+      id,
+      data: { ...rest, imageUrl },
+    });
   };
 
   if (loading) {

@@ -6,9 +6,8 @@ import RecommendationFormContainer from "@/components/recommendation/Recommendat
 export default function NewRecommendationPage() {
   const { addRecommendation, loading } = useAddRecommendation();
 
-  const handleSubmit = async (formData) => {
-    await addRecommendation(formData);
-    // 성공 후 이동 또는 알림
+  const handleSubmit = (formData) => {
+    addRecommendation(formData);
   };
 
   return (
