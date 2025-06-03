@@ -1,8 +1,9 @@
+import React from "react";
 import UserActionButtons from "@/components/users/UserActionButtons";
 import { formatDateKR } from "@/lib/shared/date";
 import StatusBadge from "@/components/users/StatusBadge";
 
-export default function UserTable({ users, onReload }) {
+function UserTable({ users, onReload }) {
   return (
     <div className="bg-white rounded-xl shadow-sm overflow-hidden">
       <table className="min-w-full text-sm">
@@ -29,6 +30,7 @@ export default function UserTable({ users, onReload }) {
                   3. <img> + onError를 사용하면 이미지 로드 실패 시 기본 이미지로 확실하게 대체 가능
                   */}
                   <img
+                    loading="lazy"
                     src={user.photoURL || "/images/default-profile.png"}
                     alt="사용자 프로필"
                     width={32}
@@ -93,3 +95,5 @@ export default function UserTable({ users, onReload }) {
     </div>
   );
 }
+
+export default React.memo(UserTable);
