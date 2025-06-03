@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRecommendationDetail } from "@/hooks/recommendation/useRecommendationDetail";
 import { useUpdateRecommendation } from "@/hooks/recommendation/useUpdateRecommendation";
 import { useUploadImage } from "@/hooks/useUploadImage";

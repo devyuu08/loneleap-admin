@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import { useRouter } from "next/router";
 import { useRecommendationDetail } from "@/hooks/recommendation/useRecommendationDetail";
 import { useDeleteRecommendation } from "@/hooks/recommendation/useDeleteRecommendation";
@@ -14,15 +15,15 @@ export default function RecommendationDetailContainer() {
   const { data, loading, notFound } = useRecommendationDetail(id);
   const { deleteRecommendation, loading: deleting } = useDeleteRecommendation();
 
-  const handleEdit = () => {
+  const handleEdit = useCallback(() => {
     router.push(`/admin/recommendation/${id}/edit`);
-  };
+  }, [id, router]);
 
-  const handleDelete = async () => {
+  const handleDelete = useCallback(async () => {
     const confirm = window.confirm("정말 삭제하시겠습니까?");
     if (!confirm) return;
     deleteRecommendation(id);
-  };
+  }, [id, deleteRecommendation]);
 
   if (loading) {
     return (
