@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateRecommendationInFirestore } from "@/services/updateRecommendation";
 import { useRouter } from "next/router";
 import { useFeedback } from "@/hooks/common/useFeedback";
+import { RECOMMENDATIONS } from "@/constants/queryKeys";
 
 export function useUpdateRecommendation() {
   const router = useRouter();
