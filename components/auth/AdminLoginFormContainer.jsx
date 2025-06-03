@@ -22,6 +22,14 @@ export default function AdminLoginFormContainer({ errorMessage }) {
   const [loadingEmail, setLoadingEmail] = useState(false);
   const [loadingGoogle, setLoadingGoogle] = useState(false);
 
+  const emailErrorId = error?.includes("이메일") ? "email-error" : undefined;
+  const passwordErrorId = error?.includes("비밀번호")
+    ? "password-error"
+    : undefined;
+  const passwordMatchErrorId = passwordMatchError
+    ? "confirm-password-error"
+    : undefined;
+
   useEffect(() => {
     if (errorMessage) {
       setError(errorMessage);
@@ -156,6 +164,9 @@ export default function AdminLoginFormContainer({ errorMessage }) {
       loadingGoogle={loadingGoogle}
       error={error}
       passwordMatchError={passwordMatchError}
+      emailErrorId={emailErrorId}
+      passwordErrorId={passwordErrorId}
+      passwordMatchErrorId={passwordMatchErrorId}
     />
   );
 }

@@ -15,6 +15,9 @@ export default function AdminLoginForm({
   loadingGoogle,
   error,
   passwordMatchError,
+  emailErrorId,
+  passwordErrorId,
+  passwordMatchErrorId,
 }) {
   return (
     <form
@@ -39,6 +42,7 @@ export default function AdminLoginForm({
             onChange={(e) => onChange("email", e.target.value)}
             error={error?.includes("이메일") ? error : ""}
             icon={<FiMail className="w-4 h-4" />}
+            ariaDescribedBy={emailErrorId}
           />
         </div>
 
@@ -52,6 +56,7 @@ export default function AdminLoginForm({
             onChange={(e) => onChange("password", e.target.value)}
             error={error?.includes("비밀번호") ? error : ""}
             icon={<FiLock className="w-4 h-4" />}
+            ariaDescribedBy={passwordErrorId}
           />
         </div>
 
@@ -64,6 +69,7 @@ export default function AdminLoginForm({
             value={confirmPassword}
             onChange={(e) => onChange("confirmPassword", e.target.value)}
             icon={<FiLock className="w-4 h-4" />}
+            ariaDescribedBy={passwordMatchErrorId}
           />
         </div>
 
