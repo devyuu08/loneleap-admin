@@ -7,7 +7,7 @@ import { MapPin } from "lucide-react";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 
 function RecommendationList({ recommendations, loading }) {
-  if (loading) {
+  if (loading || !recommendations) {
     return (
       <div className="py-20">
         <LoadingSpinner text="추천 여행지를 불러오는 중입니다..." />
@@ -15,7 +15,7 @@ function RecommendationList({ recommendations, loading }) {
     );
   }
 
-  if (!recommendations?.length) {
+  if (recommendations.length === 0) {
     return (
       <EmptyState
         message="등록된 추천 여행지가 없습니다."

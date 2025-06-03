@@ -12,5 +12,5 @@ export function useFetchRecommendations() {
     retry: 1,
   });
 
-  return { recommendations: data ?? [], isLoading, isError, error };
+  return { recommendations: data, isLoading, isError, error };
 }
