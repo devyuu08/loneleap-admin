@@ -1,9 +1,10 @@
+import React from "react";
 import FormInput from "@/components/common/FormInput";
 import FormTextarea from "@/components/common/FormTextarea";
 import FormSelect from "@/components/common/FormSelect";
 import FormSubmitButton from "@/components/common/FormSubmitButton";
 
-export default function RecommendationForm({
+function RecommendationForm({
   form,
   onChange,
   onImageChange,
@@ -154,3 +155,5 @@ export default function RecommendationForm({
     </form>
   );
 }
+
+export default React.memo(RecommendationForm);
