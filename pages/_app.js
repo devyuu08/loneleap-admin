@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AdminLayout from "@/components/layout/AdminLayout";
 import AdminProtectedRoute from "@/components/auth/AdminProtectedRoute";
 import "@/styles/globals.css";
-import { AdminAuthProvider } from "@/context/auth/AdminAuthProvider";
+import { AdminAuthProvider } from "@/context/auth/useAdminAuth";
 
 export default function App({ Component, pageProps, router }) {
   const [queryClient] = useState(() => new QueryClient());

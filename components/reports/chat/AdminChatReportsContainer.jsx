@@ -3,13 +3,13 @@
 import { useCallback, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getAdminReports } from "@/services/adminReports";
-import { AdminAuthProvider } from "@/context/auth/AdminAuthProvider";
+import { useAdminAuth } from "@/context/auth/useAdminAuth";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ChatReportView from "@/components/reports/chat/ChatReportView";
 import { ADMIN_REPORTS } from "@/constants/queryKeys";
 
 export default function AdminChatReportsContainer() {
-  const { authReady, authUser, getToken } = AdminAuthProvider();
+  const { authReady, authUser, getToken } = useAdminAuth();
   const [selectedReport, setSelectedReport] = useState(null);
 
   const {
