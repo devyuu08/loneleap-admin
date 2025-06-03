@@ -1,6 +1,7 @@
+import React from "react";
 import { Search } from "lucide-react";
 
-export default function UserSearchInput({ value, onChange }) {
+function UserSearchInput({ value, onChange }) {
   return (
     <div className="relative w-full sm:w-auto">
       {/* 아이콘 */}
@@ -20,3 +21,5 @@ export default function UserSearchInput({ value, onChange }) {
     </div>
   );
 }
+
+export default React.memo(UserSearchInput);
