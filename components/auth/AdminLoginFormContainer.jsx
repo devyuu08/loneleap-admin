@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import {
   signInWithEmailAndPassword,
@@ -40,9 +40,9 @@ export default function AdminLoginFormContainer({ errorMessage }) {
     }
   }, [errorMessage, router.query.error]);
 
-  const handleChange = (key, value) => {
+  const handleChange = useCallback((key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
-  };
+  }, []);
 
   const handleEmailLogin = async (e) => {
     e.preventDefault();
