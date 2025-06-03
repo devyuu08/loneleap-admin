@@ -1,6 +1,7 @@
+import React from "react";
 import ErrorMessage from "@/components/common/ErrorMessage";
 
-export default function FormInput({
+function FormInput({
   label,
   id,
   name,
@@ -48,3 +49,5 @@ export default function FormInput({
     </div>
   );
 }
+
+export default React.memo(FormInput);
