@@ -5,17 +5,12 @@ import { fetchRecommendationsFromFirestore } from "@/services/fetchRecommendatio
 import { RECOMMENDATIONS } from "@/constants/queryKeys";
 
 export function useFetchRecommendations() {
-  const {
-    data: [],
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: [RECOMMENDATIONS.LIST],
     queryFn: fetchRecommendationsFromFirestore,
     staleTime: 1000 * 60 * 5, // 5분간 fresh 상태 유지
-    retry: 1, // 네트워크 에러 발생 시 1회만 재시도
+    retry: 1,
   });
 
-  return { recommendations: data, isLoading, isError, error };
+  return { recommendations: data ?? [], isLoading, isError, error };
 }
