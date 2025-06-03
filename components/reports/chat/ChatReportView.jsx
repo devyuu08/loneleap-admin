@@ -1,8 +1,9 @@
+import React from "react";
 import ChatReportTable from "@/components/reports/chat/ChatReportTable";
 import ChatReportDetail from "@/components/reports/chat/ChatReportDetail";
 import NoReportSelected from "@/components/common/NoReportSelected";
 
-export default function ChatReportView({
+function ChatReportView({
   reports,
   selectedReport,
   onSelect,
@@ -65,3 +66,5 @@ export default function ChatReportView({
     </>
   );
 }
+
+export default React.memo(ChatReportView);
