@@ -1,12 +1,9 @@
+import React from "react";
 import { PauseCircle, Trash2, RotateCcw } from "lucide-react";
 import { changeAdminUserStatus, deleteUser } from "@/lib/admin/userActions";
 import { updateUserStatus } from "@/lib/server/users";
 
-export default function UserActionButtons({
-  userId,
-  currentStatus,
-  onSuccess,
-}) {
+function UserActionButtons({ userId, currentStatus, onSuccess }) {
   const isBanned = currentStatus === "banned";
 
   const handleAction = async ({ message, action }) => {
@@ -88,3 +85,5 @@ export default function UserActionButtons({
     </div>
   );
 }
+
+export default React.memo(UserActionButtons);
