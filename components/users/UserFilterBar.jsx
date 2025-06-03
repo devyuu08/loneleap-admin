@@ -1,11 +1,7 @@
+import React from "react";
 import { Download, Filter } from "lucide-react";
 
-export default function UserFilterBar({
-  filters,
-  onChange,
-  onReset,
-  onExport,
-}) {
+function UserFilterBar({ filters, onChange, onReset, onExport }) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-4 mb-6 flex flex-wrap justify-between items-center gap-4">
       {/* 왼쪽: 드롭다운 */}
@@ -69,3 +65,5 @@ export default function UserFilterBar({
     </div>
   );
 }
+
+export default React.memo(UserFilterBar);
