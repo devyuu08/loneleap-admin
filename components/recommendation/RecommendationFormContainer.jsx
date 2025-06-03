@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import RecommendationForm from "@/components/recommendation/RecommendationForm";
 import { useFeedback } from "@/hooks/common/useFeedback";
 
@@ -51,34 +51,38 @@ export default function RecommendationFormContainer({
     };
   }, [form.imagePreview]);
 
-  if (!isInitialized) return null;
-
-  const handleChange = (key, value) => {
+  const handleChange = useCallback((key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
-  };
+  }, []);
 
-  const handleImageChange = (file) => {
+  const handleImageChange = useCallback((file) => {
     setForm((prev) => ({
       ...prev,
       imageFile: file,
       imagePreview: URL.createObjectURL(file),
     }));
-  };
+  }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { name, location, description, imageFile, imagePreview } = form;
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      const { name, location, description, imageFile, imagePreview } = form;
 
-    if (!name || !location || !description || (!imageFile && !imagePreview)) {
-      return error("필수 항목을 모두 입력하세요.");
-    }
+      if (!name || !location || !description || (!imageFile && !imagePreview)) {
+        return error("필수 항목을 모두 입력하세요.");
+      }
 
-    await onSubmit({
-      ...form,
-      directions: form.direction.split("\n").filter((l) => l.trim()),
-      nearbyInfo: form.nearby.split("\n").filter((l) => l.trim()),
-    });
-  };
+      await onSubmit({
+        ...form,
+        directions: form.direction.split("\n").filter((l) => l.trim()),
+        nearbyInfo: form.nearby.split("\n").filter((l) => l.trim()),
+      });
+    },
+    [form, onSubmit, error]
+  );
+
+  if (!isInitialized) return null;
+
   return (
     <RecommendationForm
       form={form}
