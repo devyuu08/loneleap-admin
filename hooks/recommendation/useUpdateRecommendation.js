@@ -14,7 +14,8 @@ export function useUpdateRecommendation() {
   const { mutate: updateRecommendation, isLoading } = useMutation({
     mutationKey: RECOMMENDATIONS.MUTATION,
     mutationFn: ({ id, data }) => updateRecommendationInFirestore(id, data),
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
+      const { id } = variables;
       success("추천 여행지가 수정되었습니다.");
       queryClient.invalidateQueries(RECOMMENDATIONS.LIST);
       queryClient.invalidateQueries(RECOMMENDATIONS.DETAIL(id));
