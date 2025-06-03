@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase/client";
 
-export function useAdminAuth() {
+const AdminAuthContext = createContext();
+
+export function AdminAuthProvider({ children }) {
   const [authReady, setAuthReady] = useState(false);
   const [authUser, setAuthUser] = useState(null);
 
@@ -19,5 +21,13 @@ export function useAdminAuth() {
     return await authUser.getIdToken();
   };
 
-  return { authReady, authUser, getToken };
+  return (
+    <AdminAuthContext.Provider value={{ authReady, authUser, getToken }}>
+      {children}
+    </AdminAuthContext.Provider>
+  );
+}
+
+export function useAdminAuth() {
+  return useContext(AdminAuthContext);
 }

@@ -3,8 +3,7 @@
 import { useCallback, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getAdminReports } from "@/services/adminReports";
-import { useAdminAuth } from "@/hooks/auth/useAdminAuth";
-
+import { useAdminAuth } from "@/context/auth/useAdminAuth";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ChatReportView from "@/components/reports/chat/ChatReportView";
 import { ADMIN_REPORTS } from "@/constants/queryKeys";

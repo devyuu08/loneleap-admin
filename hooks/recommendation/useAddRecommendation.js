@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import { useUploadImage } from "@/hooks/useUploadImage";
 import { useRouter } from "next/router";
 import { useMutation } from "@tanstack/react-query";
@@ -11,13 +12,18 @@ export function useAddRecommendation() {
   const router = useRouter();
   const { success, error } = useFeedback();
 
-  const { mutate: addRecommendation, isLoading } = useMutation({
-    mutationFn: async (formData) => {
+  const handleSubmit = useCallback(
+    async (formData) => {
       const { imageFile } = formData;
       const imageUrl = await uploadImage(imageFile, "recommendations");
       if (!imageUrl) throw new Error("이미지 업로드 실패");
       return await addRecommendationToFirestore(formData, imageUrl);
     },
+    [uploadImage]
+  );
+
+  const { mutate: addRecommendation, isLoading } = useMutation({
+    mutationFn: handleSubmit,
     onSuccess: () => {
       success("추천 여행지가 등록되었습니다.");
       router.push("/admin/recommendation");
