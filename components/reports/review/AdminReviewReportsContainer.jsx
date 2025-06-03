@@ -3,13 +3,13 @@
 import { useCallback, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getAdminReports } from "@/services/adminReports";
-import { useAdminAuth } from "@/hooks/auth/useAdminAuth";
+import { AdminAuthProvider } from "@/context/auth/AdminAuthProvider";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ReviewReportView from "@/components/reports/review/ReviewReportView";
 import { ADMIN_REPORTS } from "@/constants/queryKeys";
 
 export default function AdminReviewReportsContainer() {
-  const { authReady, authUser, getToken } = useAdminAuth();
+  const { authReady, authUser, getToken } = AdminAuthProvider();
   const [selectedReport, setSelectedReport] = useState(null);
 
   const {
