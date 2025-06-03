@@ -1,8 +1,9 @@
+import React from "react";
 import ReviewReportTable from "@/components/reports/review/ReviewReportTable";
 import ReviewReportDetail from "@/components/reports/review/ReviewReportDetail";
 import NoReportSelected from "@/components/common/NoReportSelected";
 
-export default function ReviewReportView({
+function ReviewReportView({
   reports,
   selectedReport,
   onSelect,
@@ -58,3 +59,5 @@ export default function ReviewReportView({
     </>
   );
 }
+
+export default React.memo(ReviewReportView);

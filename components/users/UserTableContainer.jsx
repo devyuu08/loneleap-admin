@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { fetchUsers } from "@/lib/server/users";
 import UserFilterBar from "@/components/users/UserFilterBar";
 import UserSearchInput from "@/components/users/UserSearchInput";
@@ -21,34 +21,40 @@ export default function UserTableContainer() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const usersPerPage = 5;
+  const isInitialEmpty = users.length === 0;
 
-  const loadUsers = useCallback(
-    async (overrideFilters = filters) => {
-      try {
-        const data = await fetchUsers(overrideFilters);
-        setUsers(data);
-      } catch (error) {
-        console.error("사용자 로딩 실패:", error);
-      }
-    },
-    [filters]
-  );
+  const loadUsers = useCallback(async (customFilters) => {
+    try {
+      const data = await fetchUsers(customFilters);
+      setUsers(data);
+    } catch (error) {
+      console.error("사용자 로딩 실패:", error);
+    }
+  }, []);
 
   useEffect(() => {
     setLoading(true);
-    loadUsers().finally(() => setLoading(false));
-  }, [filters.status, filters.date, filters.sort, loadUsers]);
+    loadUsers(filters).finally(() => setLoading(false));
+  }, [filters, loadUsers]);
 
   // 필터 상태 변경
-  const handleFilterChange = (key, value) => {
+  const handleFilterChange = useCallback((key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
-  };
+  }, []);
 
-  const handleFilterReset = () => {
+  const handleFilterReset = useCallback(() => {
     setFilters({ status: "all", date: "all", sort: "recent" });
-  };
+  }, []);
 
-  const handleExport = () => {
+  const filteredUsers = useMemo(() => {
+    return users.filter((user) =>
+      `${user.displayName ?? ""} ${user.email ?? ""}`
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    );
+  }, [users, search]);
+
+  const handleExport = useCallback(() => {
     if (!filteredUsers || filteredUsers.length === 0) return;
 
     const exportData = filteredUsers.map((user) => ({
@@ -67,19 +73,16 @@ export default function UserTableContainer() {
     }));
 
     exportToCSV("loneleap_users", exportData);
-  };
+  }, [filteredUsers]);
 
   // 필터링 + 검색
-  const filteredUsers = users.filter((user) =>
-    `${user.displayName ?? ""} ${user.email ?? ""}`
-      .toLowerCase()
-      .includes(search.toLowerCase())
-  );
 
   // 현재 페이지 데이터
-  const startIndex = (currentPage - 1) * usersPerPage;
-  const endIndex = startIndex + usersPerPage;
-  const currentUsers = filteredUsers.slice(startIndex, endIndex);
+  const currentUsers = useMemo(() => {
+    const startIndex = (currentPage - 1) * usersPerPage;
+    const endIndex = startIndex + usersPerPage;
+    return filteredUsers.slice(startIndex, endIndex);
+  }, [filteredUsers, currentPage, usersPerPage]);
 
   // 필터/검색 변경 시 페이지 초기화
   useEffect(() => {

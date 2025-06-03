@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRecommendationDetail } from "@/hooks/recommendation/useRecommendationDetail";
 import { useUpdateRecommendation } from "@/hooks/recommendation/useUpdateRecommendation";
 import { useUploadImage } from "@/hooks/useUploadImage";
@@ -34,18 +34,21 @@ export default function RecommendationEditContainer() {
     }
   }, [data]);
 
-  const handleUpdate = async (formData) => {
-    let imageUrl = initialData.imageUrl;
-    if (formData.imageFile) {
-      imageUrl = await uploadImage(formData.imageFile, "recommendations");
-    }
-    const { imageFile, ...rest } = formData;
+  const handleUpdate = useCallback(
+    async (formData) => {
+      let imageUrl = initialData.imageUrl;
+      if (formData.imageFile) {
+        imageUrl = await uploadImage(formData.imageFile, "recommendations");
+      }
+      const { imageFile, ...rest } = formData;
 
-    updateRecommendation({
-      id,
-      data: { ...rest, imageUrl },
-    });
-  };
+      updateRecommendation({
+        id,
+        data: { ...rest, imageUrl },
+      });
+    },
+    [initialData, id, uploadImage, updateRecommendation]
+  );
 
   if (loading) {
     return (

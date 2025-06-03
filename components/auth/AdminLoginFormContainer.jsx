@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import {
   signInWithEmailAndPassword,
@@ -22,6 +22,14 @@ export default function AdminLoginFormContainer({ errorMessage }) {
   const [loadingEmail, setLoadingEmail] = useState(false);
   const [loadingGoogle, setLoadingGoogle] = useState(false);
 
+  const emailErrorId = error?.includes("이메일") ? "email-error" : undefined;
+  const passwordErrorId = error?.includes("비밀번호")
+    ? "password-error"
+    : undefined;
+  const passwordMatchErrorId = passwordMatchError
+    ? "confirm-password-error"
+    : undefined;
+
   useEffect(() => {
     if (errorMessage) {
       setError(errorMessage);
@@ -40,9 +48,9 @@ export default function AdminLoginFormContainer({ errorMessage }) {
     }
   }, [errorMessage, router.query.error]);
 
-  const handleChange = (key, value) => {
+  const handleChange = useCallback((key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
-  };
+  }, []);
 
   const handleEmailLogin = async (e) => {
     e.preventDefault();
@@ -105,7 +113,7 @@ export default function AdminLoginFormContainer({ errorMessage }) {
   };
 
   const handleGoogleLogin = async () => {
-    setGoogleLoginLoading(true);
+    setLoadingGoogle(true);
     setError("");
 
     try {
@@ -156,6 +164,9 @@ export default function AdminLoginFormContainer({ errorMessage }) {
       loadingGoogle={loadingGoogle}
       error={error}
       passwordMatchError={passwordMatchError}
+      emailErrorId={emailErrorId}
+      passwordErrorId={passwordErrorId}
+      passwordMatchErrorId={passwordMatchErrorId}
     />
   );
 }

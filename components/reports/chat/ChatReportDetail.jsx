@@ -1,8 +1,9 @@
+import React from "react";
 import { format } from "date-fns";
 import ActionButtons from "@/components/common/ActionButtons";
 import PropTypes from "prop-types";
 
-export default function ChatReportDetail({ report, onSuccess }) {
+function ChatReportDetail({ report, onSuccess }) {
   const isValidReport =
     typeof report === "object" &&
     report !== null &&
@@ -101,3 +102,5 @@ ChatReportDetail.propTypes = {
   }),
   onSuccess: PropTypes.func,
 };
+
+export default React.memo(ChatReportDetail);

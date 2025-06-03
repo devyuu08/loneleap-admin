@@ -1,4 +1,6 @@
 "use client";
+
+import React, { useMemo } from "react";
 import {
   PieChart,
   Pie,
@@ -11,8 +13,10 @@ import EmptyState from "@/components/common/EmptyState";
 
 const COLORS = ["#10B981", "#F59E0B", "#9CA3AF"]; // 초록 / 주황 / 회색
 
-export default function UserStatusDonutChart({ data }) {
-  if (!data || data.length === 0) {
+function UserStatusDonutChart({ data }) {
+  const hasData = useMemo(() => Array.isArray(data) && data.length > 0, [data]);
+
+  if (!hasData) {
     return (
       <div className="bg-white p-6 rounded-xl shadow min-h-[280px] flex items-center justify-center">
         <EmptyState
@@ -24,8 +28,14 @@ export default function UserStatusDonutChart({ data }) {
   }
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow min-h-[280px] flex flex-col">
-      <h3 className="text-base font-semibold mb-4">🧑‍💼 사용자 활동 분포</h3>
+    <div
+      className="bg-white p-6 rounded-xl shadow min-h-[280px] flex flex-col"
+      role="region"
+      aria-labelledby="user-status-chart"
+    >
+      <h3 className="text-base font-semibold mb-4" id="user-status-chart">
+        🧑‍💼 사용자 활동 분포
+      </h3>
       <div className="flex-1">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
@@ -55,3 +65,5 @@ export default function UserStatusDonutChart({ data }) {
     </div>
   );
 }
+
+export default React.memo(UserStatusDonutChart);

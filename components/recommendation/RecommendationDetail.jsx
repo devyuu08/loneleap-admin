@@ -1,3 +1,4 @@
+import React from "react";
 import Image from "next/image";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -17,8 +18,7 @@ import {
 } from "lucide-react";
 import FormActionButton from "@/components/common/FormActionButton";
 
-export default function RecommendationDetail({
-  id,
+function RecommendationDetail({
   name,
   summary,
   location,
@@ -201,3 +201,5 @@ export default function RecommendationDetail({
     </div>
   );
 }
+
+export default React.memo(RecommendationDetail);

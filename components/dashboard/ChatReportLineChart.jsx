@@ -1,3 +1,6 @@
+"use client";
+
+import React, { useMemo } from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -10,8 +13,13 @@ import {
 import EmptyState from "@/components/common/EmptyState";
 import { MessageSquareOff } from "lucide-react";
 
-export default function ChatReportLineChart({ data }) {
-  if (!Array.isArray(data) || data.length === 0) {
+const chartMargin = { top: 10, right: 20, bottom: 0, left: 10 };
+const dotStyle = { r: 3 };
+
+function ChatReportLineChart({ data }) {
+  const hasData = useMemo(() => Array.isArray(data) && data.length > 0, [data]);
+
+  if (!hasData) {
     return (
       <div className="bg-white p-6 rounded-xl shadow min-h-[280px] flex items-center justify-center">
         <EmptyState
@@ -23,16 +31,17 @@ export default function ChatReportLineChart({ data }) {
   }
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow min-h-[280px] flex flex-col">
-      <h3 className="text-base font-semibold mb-4">
+    <div
+      className="bg-white p-6 rounded-xl shadow min-h-[280px] flex flex-col"
+      role="region"
+      aria-labelledby="chat-report-chart"
+    >
+      <h3 className="text-base font-semibold mb-4" id="chat-report-chart">
         💬 최근 7일 채팅 신고 추이
       </h3>
       <div className="flex-1">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={data}
-            margin={{ top: 10, right: 20, bottom: 0, left: 10 }}
-          >
+          <LineChart data={data} margin={chartMargin}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" fontSize={12} />
             <YAxis allowDecimals={false} fontSize={12} width={30} />
@@ -42,7 +51,7 @@ export default function ChatReportLineChart({ data }) {
               dataKey="count"
               stroke="#F97316" // orange-500
               strokeWidth={2}
-              dot={{ r: 3 }}
+              dot={dotStyle}
             />
           </LineChart>
         </ResponsiveContainer>
@@ -50,3 +59,5 @@ export default function ChatReportLineChart({ data }) {
     </div>
   );
 }
+
+export default React.memo(ChatReportLineChart);

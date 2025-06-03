@@ -1,7 +1,8 @@
+import React from "react";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import PropTypes from "prop-types";
 
-export default function FormTextarea({
+function FormTextarea({
   label,
   id,
   name,
@@ -51,3 +52,5 @@ FormTextarea.propTypes = {
   error: PropTypes.string,
   rows: PropTypes.number,
 };
+
+export default React.memo(FormTextarea);

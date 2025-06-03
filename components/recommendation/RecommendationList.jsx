@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { format } from "date-fns";
@@ -5,7 +6,7 @@ import EmptyState from "@/components/common/EmptyState";
 import { MapPin } from "lucide-react";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 
-export default function RecommendationList({ recommendations, loading }) {
+function RecommendationList({ recommendations, loading }) {
   if (loading) {
     return (
       <div className="py-20">
@@ -68,3 +69,5 @@ export default function RecommendationList({ recommendations, loading }) {
     </div>
   );
 }
+
+export default React.memo(RecommendationList);

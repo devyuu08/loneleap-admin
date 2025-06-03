@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getAdminReports } from "@/services/adminReports";
 import { useAdminAuth } from "@/hooks/auth/useAdminAuth";
@@ -36,9 +36,9 @@ export default function AdminReviewReportsContainer() {
 
   const reports = data?.pages.flat() || [];
 
-  const handleReportSuccess = () => {
+  const handleReportSuccess = useCallback(() => {
     setSelectedReport(null);
-  };
+  }, []);
 
   if (isLoading || !authReady) {
     return <LoadingSpinner text="신고된 리뷰를 불러오는 중..." />;

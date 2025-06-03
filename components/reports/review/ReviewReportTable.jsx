@@ -1,8 +1,9 @@
+import React from "react";
 import EmptyState from "@/components/common/EmptyState";
 import { format } from "date-fns";
 import { FileWarning } from "lucide-react";
 
-export default function ReviewReportTable({ reports = [], onSelect }) {
+function ReviewReportTable({ reports = [], onSelect }) {
   const isEmpty = !Array.isArray(reports) || reports.length === 0;
 
   return (
@@ -65,3 +66,5 @@ export default function ReviewReportTable({ reports = [], onSelect }) {
     </div>
   );
 }
+
+export default React.memo(ReviewReportTable);

@@ -1,4 +1,6 @@
-export default function StatusBadge({ status }) {
+import React from "react";
+
+function StatusBadge({ status }) {
   const variant = {
     active: "bg-green-100 text-green-800",
     banned: "bg-yellow-100 text-yellow-800",
@@ -17,3 +19,5 @@ export default function StatusBadge({ status }) {
     </span>
   );
 }
+
+export default React.memo(StatusBadge);

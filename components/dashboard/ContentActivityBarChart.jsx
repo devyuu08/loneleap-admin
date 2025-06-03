@@ -1,3 +1,6 @@
+"use client";
+
+import React, { useMemo } from "react";
 import {
   BarChart,
   Bar,
@@ -11,8 +14,21 @@ import {
 import EmptyState from "@/components/common/EmptyState";
 import { BarChart3 } from "lucide-react";
 
-export default function ContentActivityBarChart({ data }) {
-  if (!Array.isArray(data) || data.length === 0) {
+const chartMargin = { top: 10, right: 20, bottom: 0, left: 0 };
+
+function ContentActivityBarChart({ data }) {
+  const hasData = useMemo(() => Array.isArray(data) && data.length > 0, [data]);
+
+  const formattedData = useMemo(
+    () =>
+      data?.map((item) => ({
+        ...item,
+        month: item.month.slice(5) + "월", // "2025-05" → "05월"
+      })) || [],
+    [data]
+  );
+
+  if (!hasData) {
     return (
       <div className="bg-white p-6 rounded-xl shadow min-h-[280px] flex items-center justify-center">
         <EmptyState
@@ -23,23 +39,18 @@ export default function ContentActivityBarChart({ data }) {
     );
   }
 
-  // MM월 형식으로 변환한 데이터
-  const formattedData = data.map((item) => ({
-    ...item,
-    month: item.month.slice(5) + "월", // "2025-05" -> "05월"
-  }));
-
   return (
-    <div className="bg-white p-6 rounded-xl shadow min-h-[280px] flex flex-col">
-      <h3 className="text-base font-semibold mb-4">
+    <div
+      className="bg-white p-6 rounded-xl shadow min-h-[280px] flex flex-col"
+      role="region"
+      aria-labelledby="activity-bar-chart"
+    >
+      <h3 className="text-base font-semibold mb-4" id="activity-bar-chart">
         🗓️ 최근 6개월 사용자 작성 활동
       </h3>
       <div className="flex-1">
         <ResponsiveContainer width="100%" height={260}>
-          <BarChart
-            data={formattedData}
-            margin={{ top: 10, right: 20, bottom: 0, left: 0 }}
-          >
+          <BarChart data={formattedData} margin={chartMargin}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" fontSize={12} />
             <YAxis allowDecimals={false} fontSize={12} interval={0} />
@@ -63,3 +74,5 @@ export default function ContentActivityBarChart({ data }) {
     </div>
   );
 }
+
+export default React.memo(ContentActivityBarChart);

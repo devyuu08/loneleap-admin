@@ -1,6 +1,7 @@
+import React from "react";
 import ErrorMessage from "@/components/common/ErrorMessage";
 
-export default function FormInput({
+function FormInput({
   label,
   id,
   name,
@@ -40,11 +41,15 @@ export default function FormInput({
         onChange={onChange}
         placeholder={placeholder}
         required
+        aria-invalid={!!error}
+        aria-describedby={error ? `${id}-error` : undefined}
         className={`${inputBaseStyle} ${borderColor} ${visualStyle} ${
           icon ? "pl-10" : ""
         }`}
       />
-      {error && <ErrorMessage message={error} />}
+      {error && <ErrorMessage id={`${id}-error`} message={error} />}
     </div>
   );
 }
+
+export default React.memo(FormInput);

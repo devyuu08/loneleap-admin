@@ -4,6 +4,7 @@ export default function ErrorMessage({
   message,
   className = "",
   align = "left", // "left" or "center"
+  id,
 }) {
   if (!message) return null;
 
@@ -13,6 +14,7 @@ export default function ErrorMessage({
   return (
     <div
       role="alert"
+      id={id}
       className={`flex items-start gap-1 text-sm text-red-500 ${alignmentClass} ${className}`}
     >
       <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />

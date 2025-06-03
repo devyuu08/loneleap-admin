@@ -1,13 +1,8 @@
+import React from "react";
 import PropTypes from "prop-types";
 import { ChevronDown } from "lucide-react";
 
-export default function FormSelect({
-  label,
-  id,
-  value,
-  onChange,
-  options = [],
-}) {
+function FormSelect({ label, id, value, onChange, options = [] }) {
   return (
     <div className="relative">
       {label && (
@@ -44,3 +39,5 @@ FormSelect.propTypes = {
   onChange: PropTypes.func.isRequired,
   options: PropTypes.array.isRequired,
 };
+
+export default React.memo(FormSelect);

@@ -1,8 +1,16 @@
+import React, { useMemo } from "react";
 import ActionButtons from "@/components/common/ActionButtons";
 
-export default function ReviewReportDetail({ report, onSuccess }) {
+function ReviewReportDetail({ report, onSuccess }) {
   const isValidReport =
     typeof report === "object" && typeof report.reason === "string";
+
+  const { review, reason, reporterId } = report;
+
+  const interviewList = useMemo(() => {
+    if (!review?.interviewAnswers) return null;
+    return Object.entries(review.interviewAnswers);
+  }, [review]);
 
   if (!isValidReport) {
     return (
@@ -11,8 +19,6 @@ export default function ReviewReportDetail({ report, onSuccess }) {
       </div>
     );
   }
-
-  const { review, reason, reporterId } = report;
 
   return (
     <div className="p-6">
@@ -42,9 +48,9 @@ export default function ReviewReportDetail({ report, onSuccess }) {
           <h4 className="text-base font-semibold text-gray-700 mb-3">
             리뷰 원문
           </h4>
-          {review?.interviewAnswers ? (
+          {interviewList ? (
             <ul className="space-y-2">
-              {Object.entries(review.interviewAnswers).map(([key, value]) => (
+              {interviewList.map(([key, value]) => (
                 <li key={key}>
                   <strong className="text-gray-600">Q{key}.</strong>{" "}
                   <span className="text-gray-800">{value}</span>
@@ -63,3 +69,5 @@ export default function ReviewReportDetail({ report, onSuccess }) {
     </div>
   );
 }
+
+export default React.memo(ReviewReportDetail);
