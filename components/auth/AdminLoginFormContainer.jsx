@@ -105,7 +105,7 @@ export default function AdminLoginFormContainer({ errorMessage }) {
   };
 
   const handleGoogleLogin = async () => {
-    setGoogleLoginLoading(true);
+    setLoadingGoogle(true);
     setError("");
 
     try {
