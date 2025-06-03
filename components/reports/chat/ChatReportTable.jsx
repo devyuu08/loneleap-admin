@@ -1,9 +1,10 @@
+import React from "react";
 import EmptyState from "@/components/common/EmptyState";
 import { format } from "date-fns";
 import { MessageSquareOff } from "lucide-react";
 import PropTypes from "prop-types";
 
-export default function ChatReportTable({ reports = [], onSelect = () => {} }) {
+function ChatReportTable({ reports = [], onSelect = () => {} }) {
   const isEmpty = !Array.isArray(reports) || reports.length === 0;
 
   return (
@@ -73,3 +74,5 @@ ChatReportTable.propTypes = {
   reports: PropTypes.array,
   onSelect: PropTypes.func.isRequired,
 };
+
+export default React.memo(ChatReportTable);
