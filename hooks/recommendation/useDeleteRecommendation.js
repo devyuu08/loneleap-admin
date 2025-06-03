@@ -7,10 +7,11 @@ import { useFeedback } from "@/hooks/common/useFeedback";
 export function useDeleteRecommendation() {
   const { success, error } = useFeedback();
 
-  const { mutate: deleteRecommendation, isLoading } = useMutation({
-    mutationFn: async (id) => {
-      await deleteRecommendationFromFirestore(id);
-    },
+  const {
+    mutate: deleteRecommendation,
+    isLoading: isDeleting, // 의미 명확하게 변경
+  } = useMutation({
+    mutationFn: deleteRecommendationFromFirestore,
     onSuccess: () => {
       success("삭제되었습니다.");
     },
@@ -19,5 +20,5 @@ export function useDeleteRecommendation() {
     },
   });
 
-  return { deleteRecommendation, isLoading };
+  return { deleteRecommendation, isDeleting };
 }
