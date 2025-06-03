@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { uploadImage } from "@/lib/firebase/uploadImage";
 
 export function useUploadImage() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
 
-  const upload = async (file, folder = "recommendations") => {
+  const upload = useCallback(async (file, folder = "recommendations") => {
     setUploading(true);
     setError(null);
     try {
@@ -17,7 +17,7 @@ export function useUploadImage() {
     } finally {
       setUploading(false);
     }
-  };
+  }, []);
 
   return { uploadImage: upload, uploading, error };
 }
