@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { ChevronDown } from "lucide-react";
+import { cn } from "@/lib/shared/utils";
 
 function FormSelect({ label, id, value, onChange, options = [] }) {
   return (
@@ -27,7 +28,12 @@ function FormSelect({ label, id, value, onChange, options = [] }) {
       </select>
 
       {/* 사용자 정의 화살표 아이콘 */}
-      <ChevronDown className="pointer-events-none absolute right-3 top-[40px] w-4 h-4 text-gray-400" />
+      <ChevronDown
+        className={cn(
+          "pointer-events-none absolute right-3 w-4 h-4 text-gray-400",
+          label ? "top-[42px]" : "top-1/2 -translate-y-1/2"
+        )}
+      />
     </div>
   );
 }
