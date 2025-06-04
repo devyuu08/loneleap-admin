@@ -1,5 +1,6 @@
 import React from "react";
 import { Download, Filter } from "lucide-react";
+import FormSelect from "@/components/common/FormSelect";
 
 function UserFilterBar({ filters, onChange, onReset, onExport }) {
   return (
@@ -7,39 +8,42 @@ function UserFilterBar({ filters, onChange, onReset, onExport }) {
       {/* 왼쪽: 드롭다운 */}
       <div className="flex flex-wrap items-center gap-3">
         {/* 상태 */}
-        <select
-          className="border border-gray-300 rounded-md px-3 py-2 text-sm h-10"
+        <FormSelect
+          id="status"
           value={filters.status}
           onChange={(e) => onChange("status", e.target.value)}
-        >
-          <option value="all">전체 사용자</option>
-          <option value="active">활성</option>
-          <option value="dormant">휴면</option>
-          <option value="warned">경고</option>
-        </select>
+          options={[
+            { value: "all", label: "전체 사용자" },
+            { value: "active", label: "활성" },
+            { value: "banned", label: "정지" },
+            { value: "dormant", label: "휴면" },
+          ]}
+        />
 
         {/* 가입일 */}
-        <select
-          className="border border-gray-300 rounded-md px-3 py-2 text-sm h-10"
+        <FormSelect
+          id="date"
           value={filters.date}
           onChange={(e) => onChange("date", e.target.value)}
-        >
-          <option value="all">전체 기간</option>
-          <option value="7days">최근 7일</option>
-          <option value="30days">최근 30일</option>
-        </select>
+          options={[
+            { value: "all", label: "전체 기간" },
+            { value: "7days", label: "최근 7일" },
+            { value: "30days", label: "최근 30일" },
+          ]}
+        />
 
         {/* 정렬 */}
-        <select
-          className="border border-gray-300 rounded-md px-3 py-2 text-sm h-10"
+        <FormSelect
+          id="sort"
           value={filters.sort}
           onChange={(e) => onChange("sort", e.target.value)}
-        >
-          <option value="recent">최근 가입순</option>
-          <option value="oldest">오래된 가입순</option>
-          <option value="review">리뷰 많은 순</option>
-          <option value="itinerary">일정 많은 순</option>
-        </select>
+          options={[
+            { value: "recent", label: "최근 가입순" },
+            { value: "oldest", label: "오래된 가입순" },
+            { value: "review", label: "리뷰 많은 순" },
+            { value: "itinerary", label: "일정 많은 순" },
+          ]}
+        />
       </div>
 
       {/* 오른쪽: 버튼 그룹 */}
