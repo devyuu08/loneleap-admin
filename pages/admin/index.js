@@ -3,4 +3,10 @@ import AdminDashboardContainer from "@/components/dashboard/AdminDashboardContai
 
 export const getServerSideProps = getAdminDashboardData;
 
-export default AdminDashboardContainer;
+function AdminDashboardPage(props) {
+  return <AdminDashboardContainer {...props} />;
+}
+
+AdminDashboardPage.title = "LoneLeap Admin | 대시보드";
+
+export default AdminDashboardPage;
