@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Head from "next/head";
 
 import AdminLayout from "@/components/layout/AdminLayout";
 import AdminProtectedRoute from "@/components/auth/AdminProtectedRoute";
@@ -13,20 +14,21 @@ export default function App({ Component, pageProps, router }) {
 
   const isAdminPage = router.pathname.startsWith("/admin");
   const isLoginPage = router.pathname === "/admin/login";
+  const title = Component.title || "LoneLeap Admin";
 
-  if (isLoginPage) {
-    return (
-      <QueryClientProvider client={queryClient}>
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{title}</title>
+      </Head>
+
+      {isLoginPage ? (
         <AdminAuthProvider>
           <Component {...pageProps} />
         </AdminAuthProvider>
-      </QueryClientProvider>
-    );
-  }
-
-  if (isAdminPage) {
-    return (
-      <QueryClientProvider client={queryClient}>
+      ) : isAdminPage ? (
         <AdminAuthProvider>
           <AdminLayout>
             <AdminProtectedRoute>
@@ -34,13 +36,9 @@ export default function App({ Component, pageProps, router }) {
             </AdminProtectedRoute>
           </AdminLayout>
         </AdminAuthProvider>
-      </QueryClientProvider>
-    );
-  }
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Component {...pageProps} />
+      ) : (
+        <Component {...pageProps} />
+      )}
     </QueryClientProvider>
   );
 }

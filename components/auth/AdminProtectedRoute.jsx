@@ -7,12 +7,13 @@ import LoadingSpinner from "@/components/common/LoadingSpinner";
 export default function AdminProtectedRoute({ children }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
         await axios.get("/api/admin/auth/check");
-        setLoading(false);
+        setAuthorized(true);
       } catch (error) {
         const errorCode = error.response?.data?.error;
         clearAuthCookie();
@@ -34,19 +35,24 @@ export default function AdminProtectedRoute({ children }) {
             query: { error: "unauthorized" },
           });
         }
+      } finally {
+        setLoading(false);
       }
     };
 
     checkAuth();
   }, [router]);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <LoadingSpinner text="관리자 인증 중..." />
-      </div>
-    );
-  }
-
-  return <>{children}</>;
+  return (
+    <>
+      {/* title이 정의된 페이지에서는 여기까지 항상 렌더됨 */}
+      {loading ? (
+        <div className="flex justify-center items-center h-screen">
+          <LoadingSpinner text="관리자 인증 중..." />
+        </div>
+      ) : authorized ? (
+        children
+      ) : null}
+    </>
+  );
 }

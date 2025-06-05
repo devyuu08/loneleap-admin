@@ -4,7 +4,7 @@ import { useFetchRecommendations } from "@/hooks/recommendation/useFetchRecommen
 import RecommendationList from "@/components/recommendation/RecommendationList";
 import Link from "next/link";
 
-export default function AdminSpotsPage() {
+function AdminSpotsPage() {
   const { recommendations, loading } = useFetchRecommendations();
 
   return (
@@ -23,3 +23,7 @@ export default function AdminSpotsPage() {
     </div>
   );
 }
+
+AdminSpotsPage.title = "LoneLeap Admin | 추천 여행지";
+
+export default AdminSpotsPage;
