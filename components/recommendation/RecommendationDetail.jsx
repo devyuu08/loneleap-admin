@@ -63,7 +63,7 @@ function RecommendationDetail({
 
       {/* 기본 정보 */}
       <div className="bg-white rounded-xl shadow p-6">
-        <div className="relative w-full h-[320px] rounded-lg overflow-hidden">
+        <div className="relative w-full h-[240px] sm:h-[280px] md:h-[320px] rounded-lg overflow-hidden">
           <Image
             src={imageUrl}
             alt={name}
@@ -74,14 +74,14 @@ function RecommendationDetail({
           />
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mt-6 gap-6">
-          <div className="space-y-2">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 mt-6">
+          <div className="flex-1 min-w-0 space-y-2">
             <h1 className="text-3xl font-bold text-gray-900">{name}</h1>
-            <p className="text-gray-500 flex items-center gap-1">
+            <p className="text-gray-500 flex items-center gap-1 break-words">
               <MapPin className="w-4 h-4" />
               {location}
             </p>
-            <p className="text-gray-700">{summary}</p>
+            <p className="text-gray-700 break-words">{summary}</p>
           </div>
 
           <div className="flex flex-col items-end gap-2">
@@ -181,7 +181,7 @@ function RecommendationDetail({
         </div>
       )}
 
-      <div className="flex flex-col md:flex-row justify-end items-center gap-4 mt-8">
+      <div className="flex flex-row flex-wrap justify-end items-center gap-3 mt-8">
         <FormActionButton
           label="수정하기"
           icon={Pencil}
