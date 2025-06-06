@@ -32,7 +32,7 @@ function RecommendationList({ recommendations, loading }) {
           href={`/admin/recommendation/${item.id}`}
           className="bg-white rounded-xl shadow hover:bg-gray-50 transition overflow-hidden"
         >
-          <div className="relative w-full h-48">
+          <div className="relative w-full h-40 sm:h-48">
             <Image
               src={item.imageUrl}
               alt={item.name}
@@ -45,7 +45,7 @@ function RecommendationList({ recommendations, loading }) {
           <div className="p-4 space-y-1">
             <h2 className="text-lg font-semibold">{item.name}</h2>
             <p className="text-sm text-gray-500">{item.location}</p>
-            <p className="text-sm text-gray-700 line-clamp-1">{item.summary}</p>
+            <p className="text-sm text-gray-700 line-clamp-2">{item.summary}</p>
 
             <div className="flex items-center justify-between pt-2">
               <span
