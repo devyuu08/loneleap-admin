@@ -12,7 +12,7 @@ export default function AdminDashboard({ stats, chartData, recentReports }) {
   const chatReports = stats?.chatReports ?? 0;
   const activeUsers = stats?.activeUsers ?? 0;
   return (
-    <div className="p-6">
+    <div className="p-6 max-w-screen-xl mx-auto">
       <h1 className="text-2xl font-bold mb-2">안녕하세요, 관리자님</h1>
       <p className="text-gray-500 mb-6">
         {new Date().toLocaleDateString("ko-KR", {
@@ -24,14 +24,14 @@ export default function AdminDashboard({ stats, chartData, recentReports }) {
       </p>
 
       {/* 통계 카드 */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white p-4 rounded-xl shadow">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <div className="bg-white p-4 rounded-xl shadow text-center">
           신고된 리뷰: <strong>{reviewReports}</strong>
         </div>
-        <div className="bg-white p-4 rounded-xl shadow">
+        <div className="bg-white p-4 rounded-xl shadow text-center">
           신고된 채팅: <strong>{chatReports}</strong>
         </div>
-        <div className="bg-white p-4 rounded-xl shadow">
+        <div className="bg-white p-4 rounded-xl shadow text-center">
           활성 사용자: <strong>{activeUsers.toLocaleString()}명</strong>
         </div>
       </div>
@@ -48,14 +48,14 @@ export default function AdminDashboard({ stats, chartData, recentReports }) {
       </div>
 
       {/* 최근 신고 내역 */}
-      <div className="bg-white p-6 rounded-xl shadow">
+      <div className="bg-white p-6 rounded-xl shadow overflow-x-auto">
         <div className="flex justify-between mb-4">
           <h2 className="text-lg font-semibold">최근 신고 내역</h2>
           <Link href="/admin/reports/reviews" className="text-sm text-blue-500">
             전체보기 →
           </Link>
         </div>
-        <table className="w-full text-sm text-left">
+        <table className="min-w-[600px] w-full text-sm text-left">
           <thead>
             <tr className="text-gray-500 border-b">
               <th className="py-2">유형</th>

@@ -36,12 +36,12 @@ function ChatReportDetail({ report, onSuccess }) {
 
           <div>
             <div className="text-gray-500 font-medium mb-1">신고자</div>
-            <div>{reporterId || "-"}</div>
+            <div className="truncate">{reporterId || "-"}</div>
           </div>
 
           <div>
             <div className="text-gray-500 font-medium mb-1">채팅 작성자</div>
-            <div>
+            <div className="truncate">
               {messageSender?.displayName ||
                 messageSender?.uid ||
                 "(알 수 없음)"}
@@ -69,7 +69,7 @@ function ChatReportDetail({ report, onSuccess }) {
             채팅 메시지
           </h4>
           {messageText ? (
-            <p className="leading-relaxed">{messageText}</p>
+            <p className="leading-relaxed break-words">{messageText}</p>
           ) : (
             <p className="text-gray-400 italic">삭제된 메시지입니다.</p>
           )}

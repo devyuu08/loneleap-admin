@@ -32,7 +32,7 @@ function ReviewReportDetail({ report, onSuccess }) {
 
           <div>
             <div className="text-gray-500 font-medium mb-1">신고자</div>
-            <div>{reporterId || "-"}</div>
+            <div className="truncate">{reporterId || "-"}</div>
           </div>
 
           <div>
@@ -49,7 +49,7 @@ function ReviewReportDetail({ report, onSuccess }) {
             리뷰 원문
           </h4>
           {interviewList ? (
-            <ul className="space-y-2">
+            <ul className="space-y-2 max-h-[300px] overflow-auto pr-2">
               {interviewList.map(([key, value]) => (
                 <li key={key}>
                   <strong className="text-gray-600">Q{key}.</strong>{" "}

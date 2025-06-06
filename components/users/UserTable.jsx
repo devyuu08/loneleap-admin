@@ -6,8 +6,8 @@ import SkeletonImage from "@/components/common/SkeletonImage";
 
 function UserTable({ users, onReload }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-      <table className="min-w-full text-sm">
+    <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
+      <table className="min-w-[800px] w-full text-sm">
         <thead className="bg-gray-50 text-xs text-gray-500 uppercase">
           <tr>
             <th className="px-4 py-3 text-left">사용자 정보</th>
@@ -40,7 +40,9 @@ function UserTable({ users, onReload }) {
                     <p className="font-medium text-gray-800">
                       {user.displayName || "탈퇴한 사용자"}
                     </p>
-                    <p className="text-xs text-gray-500">{user.email}</p>
+                    <p className="text-xs text-gray-500 truncate max-w-[160px]">
+                      {user.email}
+                    </p>
                   </div>
                 </div>
               </td>
@@ -73,7 +75,7 @@ function UserTable({ users, onReload }) {
               </td>
 
               {/* 액션 버튼 */}
-              <td className="px-4 py-4 text-center space-x-2">
+              <td className="px-4 py-4 text-center space-x-2 whitespace-nowrap">
                 <UserActionButtons
                   userId={user.id}
                   currentStatus={user.status}
