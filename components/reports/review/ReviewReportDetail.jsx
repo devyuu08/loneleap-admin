@@ -1,6 +1,13 @@
 import React, { useMemo } from "react";
 import ActionButtons from "@/components/common/ActionButtons";
 import ReportDetailLayout from "@/components/common/ReportDetailLayout";
+import {
+  infoBoxClass,
+  contentBoxClass,
+  sectionTitleClass,
+  labelClass,
+  mutedTextClass,
+} from "@/styles/reportStyles";
 
 function ReviewReportDetail({ report, onSuccess }) {
   const isValidReport =
@@ -24,19 +31,19 @@ function ReviewReportDetail({ report, onSuccess }) {
   return (
     <ReportDetailLayout
       left={
-        <div className="bg-gray-50 p-4 rounded-xl border space-y-4 text-sm text-gray-800">
+        <div className={infoBoxClass}>
           <div>
-            <div className="text-gray-500 font-medium mb-1">신고 사유</div>
+            <div className={labelClass}>신고 사유</div>
             <div>{reason}</div>
           </div>
 
           <div>
-            <div className="text-gray-500 font-medium mb-1">신고자</div>
+            <div className={labelClass}>신고자</div>
             <div className="truncate">{reporterId || "-"}</div>
           </div>
 
           <div>
-            <div className="text-gray-500 font-medium mb-1">리뷰 작성자</div>
+            <div className={labelClass}>리뷰 작성자</div>
             <div>
               {review?.createdBy?.displayName || review?.createdBy?.uid || "-"}
             </div>
@@ -44,10 +51,8 @@ function ReviewReportDetail({ report, onSuccess }) {
         </div>
       }
       right={
-        <div className="bg-white p-4 rounded-xl border text-sm text-gray-800">
-          <h4 className="text-base font-semibold text-gray-700 mb-3">
-            리뷰 원문
-          </h4>
+        <div className={contentBoxClass}>
+          <h4 className={sectionTitleClass}>리뷰 원문</h4>
           {interviewList ? (
             <ul className="space-y-2 max-h-[300px] overflow-auto pr-2">
               {interviewList.map(([key, value]) => (
@@ -58,7 +63,7 @@ function ReviewReportDetail({ report, onSuccess }) {
               ))}
             </ul>
           ) : (
-            <p className="text-gray-400 italic">삭제된 리뷰입니다.</p>
+            <p className={mutedTextClass}>삭제된 리뷰입니다.</p>
           )}
         </div>
       }

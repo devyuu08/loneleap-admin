@@ -3,6 +3,13 @@ import { format } from "date-fns";
 import ActionButtons from "@/components/common/ActionButtons";
 import PropTypes from "prop-types";
 import ReportDetailLayout from "@/components/common/ReportDetailLayout";
+import {
+  infoBoxClass,
+  contentBoxClass,
+  sectionTitleClass,
+  labelClass,
+  mutedTextClass,
+} from "@/styles/reportStyles";
 
 function ChatReportDetail({ report, onSuccess }) {
   const isValidReport =
@@ -28,19 +35,19 @@ function ChatReportDetail({ report, onSuccess }) {
   return (
     <ReportDetailLayout
       left={
-        <div className="bg-gray-50 p-4 rounded-xl border space-y-4 text-sm text-gray-800">
+        <div className={infoBoxClass}>
           <div>
-            <div className="text-gray-500 font-medium mb-1">신고 사유</div>
+            <div className={labelClass}>신고 사유</div>
             <div>{reason}</div>
           </div>
 
           <div>
-            <div className="text-gray-500 font-medium mb-1">신고자</div>
+            <div className={labelClass}>신고자</div>
             <div className="truncate">{reporterId || "-"}</div>
           </div>
 
           <div>
-            <div className="text-gray-500 font-medium mb-1">채팅 작성자</div>
+            <div className={labelClass}>채팅 작성자</div>
             <div className="truncate">
               {messageSender?.displayName ||
                 messageSender?.uid ||
@@ -49,7 +56,7 @@ function ChatReportDetail({ report, onSuccess }) {
           </div>
 
           <div>
-            <div className="text-gray-500 font-medium mb-1">신고일자</div>
+            <div className={labelClass}>신고일자</div>
             <div>
               {reportedAt
                 ? (() => {
@@ -64,14 +71,12 @@ function ChatReportDetail({ report, onSuccess }) {
         </div>
       }
       right={
-        <div className="bg-white p-4 rounded-xl border text-sm text-gray-800">
-          <h4 className="text-base font-semibold text-gray-700 mb-3">
-            채팅 메시지
-          </h4>
+        <div className={contentBoxClass}>
+          <h4 className={sectionTitleClass}>채팅 메시지</h4>
           {messageText ? (
             <p className="leading-relaxed break-words">{messageText}</p>
           ) : (
-            <p className="text-gray-400 italic">삭제된 메시지입니다.</p>
+            <p className={mutedTextClass}>삭제된 메시지입니다.</p>
           )}
         </div>
       }
