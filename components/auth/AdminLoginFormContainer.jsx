@@ -8,6 +8,13 @@ import {
 import { auth } from "@/lib/firebase/client";
 import AdminLoginForm from "@/components/auth/AdminLoginForm";
 
+/**
+ * AdminLoginFormContainer
+ * - LoneLeap 관리자 로그인 컨테이너 컴포넌트
+ * - 입력 상태 관리, 유효성 검사, Firebase 인증 로직 처리
+ * - AdminLoginForm 컴포넌트에 props로 전달
+ */
+
 export default function AdminLoginFormContainer({ errorMessage }) {
   const router = useRouter();
 
@@ -22,6 +29,7 @@ export default function AdminLoginFormContainer({ errorMessage }) {
   const [loadingEmail, setLoadingEmail] = useState(false);
   const [loadingGoogle, setLoadingGoogle] = useState(false);
 
+  // 접근성용 오류 ID
   const emailErrorId = error?.includes("이메일") ? "email-error" : undefined;
   const passwordErrorId = error?.includes("비밀번호")
     ? "password-error"
@@ -30,6 +38,7 @@ export default function AdminLoginFormContainer({ errorMessage }) {
     ? "confirm-password-error"
     : undefined;
 
+  // URL 쿼리 기반 에러 메시지 처리
   useEffect(() => {
     if (errorMessage) {
       setError(errorMessage);
@@ -48,16 +57,18 @@ export default function AdminLoginFormContainer({ errorMessage }) {
     }
   }, [errorMessage, router.query.error]);
 
+  // 입력 값 변경 핸들러
   const handleChange = useCallback((key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   }, []);
 
+  // 이메일 로그인 처리
   const handleEmailLogin = async (e) => {
     e.preventDefault();
 
     const { email, password, confirmPassword } = form;
 
-    // 기본 유효성 검사
+    // 유효성 검사
     if (!email.trim()) return setError("이메일을 입력해주세요.");
     if (!password) return setError("비밀번호를 입력해주세요.");
     if (password !== confirmPassword) {
@@ -70,6 +81,7 @@ export default function AdminLoginFormContainer({ errorMessage }) {
     setPasswordMatchError("");
 
     try {
+      // Firebase 인증 → 토큰 발급 → 서버에 로그인 요청
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
@@ -112,6 +124,7 @@ export default function AdminLoginFormContainer({ errorMessage }) {
     }
   };
 
+  // 구글 로그인 처리
   const handleGoogleLogin = async () => {
     setLoadingGoogle(true);
     setError("");
