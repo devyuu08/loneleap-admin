@@ -54,7 +54,7 @@ function ChatReportLineChart({ data }) {
       <h3 className={chartHeading} id="chat-report-chart">
         💬 최근 7일 채팅 신고 추이
       </h3>
-      <div className="flex-1">
+      <div className="h-[260px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={chartMargin}>
             <CartesianGrid strokeDasharray="3 3" />
