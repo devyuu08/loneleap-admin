@@ -10,6 +10,11 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import EmptyState from "@/components/common/EmptyState";
+import {
+  chartContainerBox,
+  chartEmptyBox,
+  chartHeading,
+} from "@/styles/chartStyles";
 
 const COLORS = ["#10B981", "#F59E0B", "#9CA3AF"]; // 초록 / 주황 / 회색
 
@@ -18,7 +23,7 @@ function UserStatusDonutChart({ data }) {
 
   if (!hasData) {
     return (
-      <div className="bg-white p-6 rounded-xl shadow min-h-[280px] flex items-center justify-center">
+      <div className={chartEmptyBox}>
         <EmptyState
           message="사용자 상태 데이터가 없습니다."
           icon={<PieChart className="w-6 h-6 text-gray-300 mb-2" />}
@@ -29,11 +34,11 @@ function UserStatusDonutChart({ data }) {
 
   return (
     <div
-      className="bg-white p-6 rounded-xl shadow min-h-[280px] flex flex-col"
+      className={chartContainerBox}
       role="region"
       aria-labelledby="user-status-chart"
     >
-      <h3 className="text-base font-semibold mb-4" id="user-status-chart">
+      <h3 className={chartHeading} id="user-status-chart">
         🧑‍💼 사용자 활동 분포
       </h3>
       <div className="flex-1">

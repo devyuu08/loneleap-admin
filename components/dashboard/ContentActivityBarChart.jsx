@@ -13,6 +13,11 @@ import {
 } from "recharts";
 import EmptyState from "@/components/common/EmptyState";
 import { BarChart3 } from "lucide-react";
+import {
+  chartContainerBox,
+  chartEmptyBox,
+  chartHeading,
+} from "@/styles/chartStyles";
 
 const chartMargin = { top: 10, right: 20, bottom: 0, left: 0 };
 
@@ -30,7 +35,7 @@ function ContentActivityBarChart({ data }) {
 
   if (!hasData) {
     return (
-      <div className="bg-white p-6 rounded-xl shadow min-h-[280px] flex items-center justify-center">
+      <div className={chartEmptyBox}>
         <EmptyState
           message="최근 작성 활동 데이터가 없습니다."
           icon={<BarChart3 className="w-6 h-6 text-gray-300 mb-2" />}
@@ -41,11 +46,11 @@ function ContentActivityBarChart({ data }) {
 
   return (
     <div
-      className="bg-white p-6 rounded-xl shadow min-h-[280px] flex flex-col"
+      className={chartContainerBox}
       role="region"
       aria-labelledby="activity-bar-chart"
     >
-      <h3 className="text-base font-semibold mb-4" id="activity-bar-chart">
+      <h3 className={chartHeading} id="activity-bar-chart">
         🗓️ 최근 6개월 사용자 작성 활동
       </h3>
       <div className="flex-1">
