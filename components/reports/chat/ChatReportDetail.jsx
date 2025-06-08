@@ -2,6 +2,7 @@ import React from "react";
 import { format } from "date-fns";
 import ActionButtons from "@/components/common/ActionButtons";
 import PropTypes from "prop-types";
+import ReportDetailLayout from "@/components/common/ReportDetailLayout";
 
 function ChatReportDetail({ report, onSuccess }) {
   const isValidReport =
@@ -25,9 +26,8 @@ function ChatReportDetail({ report, onSuccess }) {
   const { messageText, reason, reporterId, reportedAt, messageSender } = report;
 
   return (
-    <div className="p-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* 왼쪽: 신고 정보 */}
+    <ReportDetailLayout
+      left={
         <div className="bg-gray-50 p-4 rounded-xl border space-y-4 text-sm text-gray-800">
           <div>
             <div className="text-gray-500 font-medium mb-1">신고 사유</div>
@@ -62,8 +62,8 @@ function ChatReportDetail({ report, onSuccess }) {
             </div>
           </div>
         </div>
-
-        {/* 오른쪽: 채팅 메시지 내용 */}
+      }
+      right={
         <div className="bg-white p-4 rounded-xl border text-sm text-gray-800">
           <h4 className="text-base font-semibold text-gray-700 mb-3">
             채팅 메시지
@@ -74,16 +74,13 @@ function ChatReportDetail({ report, onSuccess }) {
             <p className="text-gray-400 italic">삭제된 메시지입니다.</p>
           )}
         </div>
-      </div>
-
-      {/* 버튼 */}
-      <div className="pt-6 mt-6 border-t">
-        <ActionButtons
-          report={report}
-          onSuccess={typeof onSuccess === "function" ? onSuccess : () => {}}
-        />
-      </div>
-    </div>
+      }
+    >
+      <ActionButtons
+        report={report}
+        onSuccess={typeof onSuccess === "function" ? onSuccess : () => {}}
+      />
+    </ReportDetailLayout>
   );
 }
 
