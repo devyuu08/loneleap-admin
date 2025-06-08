@@ -17,6 +17,13 @@ import {
   chartHeading,
 } from "@/styles/chartStyles";
 
+/**
+ * ReviewReportLineChart
+ * - 최근 7일 리뷰 신고 수 데이터를 선 그래프로 시각화
+ * - 신고 수의 일별 추이를 확인할 수 있음
+ * - 데이터가 없을 경우 EmptyState 표시
+ */
+
 const chartMargin = { top: 10, right: 20, bottom: 0, left: 10 };
 const dotStyle = { r: 3 };
 
@@ -25,17 +32,17 @@ function ReviewReportLineChart({ data }) {
 
   if (!hasData) {
     return (
-      <div className={chartEmptyBox}>
+      <section className={chartEmptyBox}>
         <EmptyState
           message="최근 리뷰 신고 데이터가 없습니다."
           icon={<LineChart className="w-6 h-6 text-gray-300 mb-2" />}
         />
-      </div>
+      </section>
     );
   }
 
   return (
-    <div
+    <section
       className={chartContainerBox}
       role="region"
       aria-labelledby="review-report-chart"
@@ -60,7 +67,7 @@ function ReviewReportLineChart({ data }) {
           </LineChart>
         </ResponsiveContainer>
       </div>
-    </div>
+    </section>
   );
 }
 
