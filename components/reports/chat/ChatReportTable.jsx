@@ -3,7 +3,15 @@ import { format } from "date-fns";
 import { MessageSquareOff } from "lucide-react";
 import ReportTableLayout from "@/components/common/reports/ReportTableLayout";
 
+/**
+ * ChatReportTable
+ * - 신고된 채팅 메시지 목록을 테이블 형태로 표시하는 컴포넌트
+ * - ReportTableLayout을 기반으로 렌더링
+ * - 클릭 시 상세 정보 열람 가능 (onSelect)
+ */
+
 function ChatReportTable({ reports = [], onSelect }) {
+  // 테이블 행 구성: 각 신고 건에 대해 셀 배열 생성
   const rows = reports.map((report) => ({
     key: report.id,
     onClick: () => onSelect(report),
@@ -27,6 +35,7 @@ function ChatReportTable({ reports = [], onSelect }) {
     ],
   }));
 
+  // 테이블 헤더 정의
   const columns = [
     { header: "메시지 내용" },
     { header: "신고 사유" },

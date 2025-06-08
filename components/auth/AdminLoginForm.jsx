@@ -4,6 +4,13 @@ import { FiMail, FiLock } from "react-icons/fi";
 import ButtonSpinner from "@/components/common/loading/ButtonSpinner";
 import FormInput from "@/components/common/form/FormInput";
 
+/**
+ * AdminLoginForm
+ * - LoneLeap 관리자 페이지 로그인 폼
+ * - 이메일/비밀번호 로그인 + 구글 로그인 지원
+ * - 입력 오류 및 로딩 상태 처리 포함
+ */
+
 export default function AdminLoginForm({
   email,
   password,
@@ -24,14 +31,18 @@ export default function AdminLoginForm({
       onSubmit={onSubmit}
       className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg"
     >
-      <div className="flex flex-col items-center mb-6">
+      {/* 로그인 설명 영역 */}
+      <header className="flex flex-col items-center mb-6 text-center">
         <div className="text-3xl">🔐</div>
-        <h2 className="text-xl font-bold mt-2">관리자 로그인</h2>
+        <h1 className="text-xl font-bold mt-2">관리자 로그인</h1>
         <p className="text-sm text-gray-500 mt-1">
           리뷰와 오픈채팅, LoneLeap의 소중한 공간을 지켜주세요.
         </p>
-      </div>
-      <div className="space-y-4">
+      </header>
+
+      {/* 입력 필드 영역 */}
+      <fieldset className="space-y-4">
+        {/* 이메일 입력 */}
         <div className="relative">
           <FormInput
             id="email"
@@ -46,6 +57,7 @@ export default function AdminLoginForm({
           />
         </div>
 
+        {/* 비밀번호 입력 */}
         <div className="relative">
           <FormInput
             id="password"
@@ -60,6 +72,7 @@ export default function AdminLoginForm({
           />
         </div>
 
+        {/* 비밀번호 확인 입력 */}
         <div className="relative">
           <FormInput
             id="confirmPassword"
@@ -72,7 +85,10 @@ export default function AdminLoginForm({
             ariaDescribedBy={passwordMatchErrorId}
           />
         </div>
+      </fieldset>
 
+      {/* 로그인 버튼 */}
+      <div className="mt-6">
         <button
           type="submit"
           disabled={loadingEmail || loadingGoogle}
@@ -80,10 +96,14 @@ export default function AdminLoginForm({
         >
           {loadingEmail ? <ButtonSpinner /> : "로그인"}
         </button>
+      </div>
 
-        <div className="text-center text-sm text-gray-400">또는</div>
+      {/* 또는 구글 로그인 */}
+      <div className="text-center text-sm text-gray-400">또는</div>
 
+      <div className="mt-2">
         <button
+          type="button"
           onClick={onGoogleLogin}
           disabled={loadingEmail || loadingGoogle}
           className="w-full flex items-center justify-center gap-2 border py-2 rounded-md hover:bg-gray-50 text-sm"
@@ -95,7 +115,10 @@ export default function AdminLoginForm({
             "Google 계정으로 로그인"
           )}
         </button>
+      </div>
 
+      {/* 오류 메시지 */}
+      <div className="mt-4 space-y-2">
         {passwordMatchError && (
           <ErrorMessage message={passwordMatchError} align="center" />
         )}

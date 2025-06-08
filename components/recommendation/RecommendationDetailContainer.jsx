@@ -9,6 +9,14 @@ import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
 import EmptyState from "@/components/common/feedback/EmptyState";
 import { AlertCircle } from "lucide-react";
 
+/**
+ * RecommendationDetailContainer
+ * - 추천 여행지 상세 정보를 가져와 <RecommendationDetail />에 전달하는 컨테이너 컴포넌트
+ * - id 쿼리 파라미터를 기준으로 여행지 데이터 fetch
+ * - 로딩/에러/삭제 핸들링 처리 포함
+ * - 수정 및 삭제 핸들러 정의 및 전달
+ */
+
 export default function RecommendationDetailContainer() {
   const router = useRouter();
   const { id } = router.query;

@@ -7,6 +7,12 @@ import { useMutation } from "@tanstack/react-query";
 import { addRecommendationToFirestore } from "@/services/addRecommendation";
 import { useFeedback } from "@/hooks/common/useFeedback";
 
+/**
+ * 추천 여행지 등록 훅
+ * - 이미지 업로드 후 Firestore에 추천 여행지 데이터 저장
+ * - 성공 시 알림 후 추천 목록 페이지로 이동
+ */
+
 export function useAddRecommendation() {
   const { uploadImage } = useUploadImage();
   const router = useRouter();

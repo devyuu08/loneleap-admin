@@ -10,6 +10,14 @@ import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
 import EmptyState from "@/components/common/feedback/EmptyState";
 import { AlertCircle } from "lucide-react";
 
+/**
+ * RecommendationEditContainer
+ * - 추천 여행지 수정 페이지의 컨테이너 컴포넌트
+ * - URL의 id를 기준으로 여행지 데이터를 조회하여 폼에 초기값으로 전달
+ * - 이미지가 새로 업로드되면 스토리지에 업로드 후 해당 URL을 포함하여 수정 요청
+ * - 로딩, 데이터 없음, 폼 표시의 조건부 렌더링 처리 포함
+ */
+
 export default function RecommendationEditContainer() {
   const router = useRouter();
   const { id } = router.query;

@@ -6,6 +6,13 @@ import { useRouter } from "next/router";
 import { useFeedback } from "@/hooks/common/useFeedback";
 import { RECOMMENDATIONS } from "@/constants/queryKeys";
 
+/**
+ * 추천 여행지 수정 훅
+ * - Firestore의 특정 추천 항목 수정
+ * - 성공 시 목록 및 상세 쿼리 무효화 → 데이터 최신화
+ * - 수정 완료 후 목록 페이지로 이동
+ */
+
 export function useUpdateRecommendation() {
   const router = useRouter();
   const queryClient = useQueryClient();

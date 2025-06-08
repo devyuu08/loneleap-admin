@@ -2,6 +2,13 @@ import React from "react";
 import { Download, Filter } from "lucide-react";
 import FormSelect from "@/components/common/form/FormSelect";
 
+/**
+ * UserFilterBar
+ * - 사용자 목록 페이지에서 필터링, 정렬, 내보내기 등의 UI 제어 바
+ * - 상태 / 가입일 / 정렬 기준 필터 제공
+ * - 필터 초기화 및 사용자 목록 내보내기 기능 포함
+ */
+
 function UserFilterBar({ filters, onChange, onReset, onExport }) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-4 mb-6 flex flex-wrap justify-between items-center gap-4">
@@ -48,7 +55,7 @@ function UserFilterBar({ filters, onChange, onReset, onExport }) {
 
       {/* 오른쪽: 버튼 그룹 */}
       <div className="flex items-center gap-2">
-        {/* 필터 초기화 */}
+        {/* 필터 초기화 버튼 */}
         <button
           onClick={onReset}
           className="flex items-center gap-1 bg-gray-100 border border-gray-300 text-gray-600 rounded-md px-3 py-2 text-sm h-10 hover:bg-gray-200"
@@ -57,7 +64,7 @@ function UserFilterBar({ filters, onChange, onReset, onExport }) {
           <span>필터 초기화</span>
         </button>
 
-        {/* 사용자 목록 내보내기 */}
+        {/* 사용자 목록 내보내기 버튼 */}
         <button
           onClick={onExport}
           className="flex items-center gap-1 bg-black text-white rounded-md px-4 py-2 text-sm h-10 hover:opacity-80"

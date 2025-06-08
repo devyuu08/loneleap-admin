@@ -19,11 +19,20 @@ import {
   chartHeading,
 } from "@/styles/chartStyles";
 
+/**
+ * ContentActivityBarChart
+ * - 최근 6개월간 사용자 작성 활동(리뷰/일정 수)을 시각화
+ * - BarChart 구성, 월 기준으로 포맷된 데이터 사용
+ * - 데이터가 없을 경우 EmptyState 렌더링
+ */
+
 const chartMargin = { top: 10, right: 20, bottom: 0, left: 0 };
 
 function ContentActivityBarChart({ data }) {
+  // 데이터 유효성 확인
   const hasData = useMemo(() => Array.isArray(data) && data.length > 0, [data]);
 
+  // 월 포맷 정리 ("2025-05" → "05월")
   const formattedData = useMemo(
     () =>
       data?.map((item) => ({
@@ -33,19 +42,20 @@ function ContentActivityBarChart({ data }) {
     [data]
   );
 
+  // 데이터 없을 경우
   if (!hasData) {
     return (
-      <div className={chartEmptyBox}>
+      <section className={chartEmptyBox}>
         <EmptyState
           message="최근 작성 활동 데이터가 없습니다."
           icon={<BarChart3 className="w-6 h-6 text-gray-300 mb-2" />}
         />
-      </div>
+      </section>
     );
   }
 
   return (
-    <div
+    <section
       className={chartContainerBox}
       role="region"
       aria-labelledby="activity-bar-chart"
@@ -76,7 +86,7 @@ function ContentActivityBarChart({ data }) {
           </BarChart>
         </ResponsiveContainer>
       </div>
-    </div>
+    </section>
   );
 }
 

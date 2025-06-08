@@ -3,7 +3,15 @@ import { format } from "date-fns";
 import { FileWarning } from "lucide-react";
 import ReportTableLayout from "@/components/common/reports/ReportTableLayout";
 
+/**
+ * ReviewReportTable
+ * - 리뷰 신고 목록 테이블 컴포넌트
+ * - 각 신고 항목을 테이블 형식으로 렌더링
+ * - 클릭 시 상세보기로 이동 (onSelect)
+ */
+
 function ReviewReportTable({ reports = [], onSelect }) {
+  // 테이블 각 행(row) 구성
   const rows = reports.map((report) => ({
     key: report.id,
     onClick: () => onSelect(report),
@@ -27,6 +35,7 @@ function ReviewReportTable({ reports = [], onSelect }) {
     ],
   }));
 
+  // 테이블 컬럼 정의
   const columns = [
     { header: "리뷰 제목" },
     { header: "신고 사유" },

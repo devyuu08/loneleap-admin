@@ -2,6 +2,13 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import AdminLoginFormContainer from "@/components/auth/AdminLoginFormContainer";
 
+/**
+ * AdminLoginPage
+ * - 관리자 로그인 폼 페이지
+ * - 쿼리 파라미터에 따라 에러 메시지 처리
+ * - router.asPath를 key로 사용해 리렌더링 유도
+ */
+
 export default function AdminLoginPage() {
   const router = useRouter();
   const [error, setError] = useState("");

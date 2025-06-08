@@ -2,12 +2,19 @@ import AdminDashboard from "@/components/dashboard/AdminDashboard";
 import EmptyState from "@/components/common/feedback/EmptyState";
 import { AlertTriangle } from "lucide-react";
 
+/**
+ * AdminDashboardContainer
+ * - 관리자 대시보드의 SSR 데이터를 받아 UI 컴포넌트에 전달
+ * - 에러 발생 시 EmptyState 렌더링
+ */
+
 export default function AdminDashboardContainer({
   stats,
   chartData,
   recentReports,
   error,
 }) {
+  // 데이터 로딩 에러 시
   if (error) {
     return (
       <EmptyState

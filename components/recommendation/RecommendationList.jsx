@@ -6,26 +6,35 @@ import EmptyState from "@/components/common/feedback/EmptyState";
 import { MapPin } from "lucide-react";
 import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
 
+/**
+ * RecommendationList
+ * - 추천 여행지 목록을 카드 형태로 렌더링
+ * - 로딩 중에는 스피너 표시, 데이터 없을 경우 Empty 상태 출력
+ * - 각 아이템은 관리자 상세 페이지로 이동 가능한 링크 형태
+ */
+
 function RecommendationList({ recommendations, loading }) {
   if (loading || !recommendations) {
     return (
-      <div className="py-20">
+      <section className="py-20">
         <LoadingSpinner text="추천 여행지를 불러오는 중입니다..." />
-      </div>
+      </section>
     );
   }
 
   if (recommendations.length === 0) {
     return (
-      <EmptyState
-        message="등록된 추천 여행지가 없습니다."
-        icon={<MapPin className="w-8 h-8 text-gray-300 mb-2" />}
-      />
+      <section className="py-20">
+        <EmptyState
+          message="등록된 추천 여행지가 없습니다."
+          icon={<MapPin className="w-8 h-8 text-gray-300 mb-2" />}
+        />
+      </section>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {recommendations.map((item) => (
         <Link
           key={item.id}
@@ -66,7 +75,7 @@ function RecommendationList({ recommendations, loading }) {
           </div>
         </Link>
       ))}
-    </div>
+    </section>
   );
 }
 

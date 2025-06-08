@@ -4,6 +4,13 @@ import ChatReportDetail from "@/components/reports/chat/ChatReportDetail";
 import NoReportSelected from "@/components/common/feedback/NoReportSelected";
 import ReportListViewLayout from "@/components/common/reports/ReportListViewLayout";
 
+/**
+ * ChatReportView
+ * - 채팅 신고 목록 전체 뷰 컨테이너
+ * - 좌측: 신고 테이블, 우측: 선택된 신고 상세 보기
+ * - ReportListViewLayout을 사용하여 목록 + 상세 구조 구성
+ */
+
 function ChatReportView(props) {
   const {
     reports,

@@ -4,6 +4,14 @@ import FormTextarea from "@/components/common/form/FormTextarea";
 import FormSelect from "@/components/common/form/FormSelect";
 import FormSubmitButton from "@/components/common/button/FormSubmitButton";
 
+/**
+ * RecommendationForm
+ * - 추천 여행지 생성/수정 폼
+ * - 입력 상태(form), 이미지 변경, 제출 핸들러를 props로 받아 처리
+ * - 생성과 수정은 isEdit 여부로 분기 렌더링
+ * - 시맨틱 구조를 고려해 섹션 및 필드셋을 명확히 구분함
+ */
+
 function RecommendationForm({
   form,
   onChange,
@@ -18,8 +26,10 @@ function RecommendationForm({
       className="max-w-screen-lg mx-auto px-10 py-16 space-y-16"
     >
       {/* 1. 기본 정보 + 이미지 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <div className="space-y-6">
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <fieldset className="space-y-6">
+          <legend className="sr-only">기본 정보 입력</legend>
+
           <FormInput
             label="장소명"
             value={form.name}
@@ -51,9 +61,11 @@ function RecommendationForm({
               { value: "제주도", label: "제주도" },
             ]}
           />
-        </div>
+        </fieldset>
 
-        <div className="space-y-6">
+        <fieldset className="space-y-6">
+          <legend className="sr-only">이미지 및 공개 여부</legend>
+
           <div>
             <label className="block text-base font-semibold text-gray-800 mb-2">
               대표 이미지
@@ -88,33 +100,38 @@ function RecommendationForm({
               체크 시 사용자에게 노출됩니다
             </span>
           </div>
-        </div>
-      </div>
+        </fieldset>
+      </section>
 
-      {/* 2. 상세 설명 */}
-      <div className="space-y-3">
-        <FormTextarea
-          id="description"
-          label="상세 설명"
-          value={form.description}
-          onChange={(e) => onChange("description", e.target.value)}
-          rows={20}
-        />
+      {/* 2. 상세 설명 및 위치 설명 */}
+      <section className="space-y-3">
+        <fieldset>
+          <legend className="sr-only">상세 설명</legend>
+          <FormTextarea
+            id="description"
+            label="상세 설명"
+            value={form.description}
+            onChange={(e) => onChange("description", e.target.value)}
+            rows={20}
+          />
+        </fieldset>
 
-        {/* 3. 위치 설명 */}
+        <fieldset>
+          <legend className="sr-only">위치 설명</legend>
+          <FormInput
+            id="locationInfo"
+            label="위치 설명"
+            type="text"
+            value={form.locationInfo}
+            onChange={(e) => onChange("locationInfo", e.target.value)}
+          />
+        </fieldset>
+      </section>
 
-        <FormInput
-          id="locationInfo"
-          label="위치 설명"
-          type="text"
-          value={form.locationInfo}
-          onChange={(e) => onChange("locationInfo", e.target.value)}
-        />
-      </div>
-
-      {/* 4. 찾아가는 방법 + 주변 정보 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div className="space-y-3">
+      {/* 3. 찾아가는 방법 + 주변 정보 */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <fieldset className="space-y-3">
+          <legend className="sr-only">찾아가는 방법</legend>
           <FormTextarea
             id="direction"
             label="찾아가는 방법"
@@ -123,8 +140,10 @@ function RecommendationForm({
             placeholder="예: 제주국제공항에서 30분 소요"
             rows={10}
           />
-        </div>
-        <div className="space-y-3">
+        </fieldset>
+
+        <fieldset className="space-y-3">
+          <legend className="sr-only">주변 정보</legend>
           <FormTextarea
             id="nearby"
             label="주변 정보"
@@ -132,10 +151,10 @@ function RecommendationForm({
             onChange={(e) => onChange("nearby", e.target.value)}
             rows={10}
           />
-        </div>
-      </div>
+        </fieldset>
+      </section>
 
-      {/* 5. 버튼 */}
+      {/* 4. 제출 버튼 */}
       <div className="pt-10 border-t flex justify-end gap-3">
         {isEdit && (
           <button

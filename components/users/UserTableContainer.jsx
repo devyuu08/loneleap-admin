@@ -9,6 +9,13 @@ import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
 import EmptyState from "@/components/common/feedback/EmptyState";
 import { Inbox } from "lucide-react";
 
+/**
+ * UserTableContainer
+ * - 관리자 페이지 사용자 관리의 컨테이너 컴포넌트
+ * - 사용자 목록 조회, 필터링, 검색, CSV 내보내기, 페이징 처리 포함
+ * - 상태는 local state로 관리하며 비동기 fetchUsers 기반으로 데이터 로딩
+ */
+
 export default function UserTableContainer() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,6 +30,7 @@ export default function UserTableContainer() {
   const usersPerPage = 5;
   const isInitialEmpty = users.length === 0;
 
+  // 사용자 데이터 fetch 함수
   const loadUsers = useCallback(async (customFilters) => {
     try {
       const data = await fetchUsers(customFilters);
@@ -32,6 +40,7 @@ export default function UserTableContainer() {
     }
   }, []);
 
+  // 필터 변경 시 사용자 데이터 로드
   useEffect(() => {
     setLoading(true);
     loadUsers(filters).finally(() => setLoading(false));
@@ -42,6 +51,7 @@ export default function UserTableContainer() {
     setFilters((prev) => ({ ...prev, [key]: value }));
   }, []);
 
+  // 필터 초기화
   const handleFilterReset = useCallback(() => {
     setFilters({ status: "all", date: "all", sort: "recent" });
   }, []);
@@ -54,6 +64,7 @@ export default function UserTableContainer() {
     );
   }, [users, search]);
 
+  // CSV 내보내기 처리
   const handleExport = useCallback(() => {
     if (!filteredUsers || filteredUsers.length === 0) return;
 
@@ -75,16 +86,14 @@ export default function UserTableContainer() {
     exportToCSV("loneleap_users", exportData);
   }, [filteredUsers]);
 
-  // 필터링 + 검색
-
-  // 현재 페이지 데이터
+  // 현재 페이지의 사용자 데이터 추출
   const currentUsers = useMemo(() => {
     const startIndex = (currentPage - 1) * usersPerPage;
     const endIndex = startIndex + usersPerPage;
     return filteredUsers.slice(startIndex, endIndex);
   }, [filteredUsers, currentPage, usersPerPage]);
 
-  // 필터/검색 변경 시 페이지 초기화
+  // 필터 또는 검색 변경 시 페이지 초기화
   useEffect(() => {
     setCurrentPage(1);
   }, [filters, search]);

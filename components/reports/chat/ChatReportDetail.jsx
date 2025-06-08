@@ -11,7 +11,16 @@ import {
   mutedTextClass,
 } from "@/styles/reportStyles";
 
+/**
+ * ChatReportDetail
+ * - 신고된 채팅 메시지의 상세 정보를 보여주는 컴포넌트
+ * - 좌측: 신고 정보 (사유, 신고자, 작성자, 신고일자)
+ * - 우측: 채팅 메시지 본문 표시
+ * - ActionButtons 포함: 처리 버튼 제공
+ */
+
 function ChatReportDetail({ report, onSuccess }) {
+  // 유효성 검사: 필수 필드 존재 여부 확인
   const isValidReport =
     typeof report === "object" &&
     report !== null &&

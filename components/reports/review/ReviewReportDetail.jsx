@@ -9,17 +9,26 @@ import {
   mutedTextClass,
 } from "@/styles/reportStyles";
 
+/**
+ * ReviewReportDetail
+ * - 관리자 리뷰 신고 상세 뷰 컴포넌트
+ * - 신고 정보 및 연결된 리뷰 데이터를 표시
+ * - 삭제된 리뷰인 경우 예외 처리
+ */
+
 function ReviewReportDetail({ report, onSuccess }) {
   const isValidReport =
     typeof report === "object" && typeof report.reason === "string";
 
   const { review, reason, reporterId } = report;
 
+  // 인터뷰 Q&A 리스트 생성 (Object.entries)
   const interviewList = useMemo(() => {
     if (!review?.interviewAnswers) return null;
     return Object.entries(review.interviewAnswers);
   }, [review]);
 
+  // 유효하지 않은 신고 데이터 처리
   if (!isValidReport) {
     return (
       <div className="p-6 text-sm text-red-400 text-center" role="alert">
