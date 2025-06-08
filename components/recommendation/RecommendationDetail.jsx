@@ -49,6 +49,10 @@ function RecommendationDetail({
     li: ({ children }) => <li className="mb-1">{children}</li>,
   };
 
+  const boxSection = "bg-white rounded-xl shadow p-6 space-y-4";
+  const sectionHeading =
+    "text-lg font-semibold text-gray-900 flex items-center gap-2";
+
   return (
     <div className="w-full max-w-4xl mx-auto px-6 py-10 space-y-10">
       <div>
@@ -123,8 +127,8 @@ function RecommendationDetail({
 
       {/* 상세 설명 */}
       {description && (
-        <div className="bg-white rounded-xl shadow p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+        <div className={boxSection}>
+          <h2 className={sectionHeading}>
             <BookText className="w-5 h-5" /> 상세 설명
           </h2>
           <ReactMarkdown
@@ -138,8 +142,8 @@ function RecommendationDetail({
 
       {/* 위치 설명 */}
       {locationInfo && (
-        <div className="bg-white rounded-xl shadow p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+        <div className={boxSection}>
+          <h2 className={sectionHeading}>
             <MapPin className="w-5 h-5" /> 위치 설명
           </h2>
           <ReactMarkdown
@@ -153,8 +157,8 @@ function RecommendationDetail({
 
       {/* 찾아가는 방법 */}
       {directions?.length > 0 && (
-        <div className="bg-white rounded-xl shadow p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+        <div className={boxSection}>
+          <h2 className={sectionHeading}>
             <Navigation className="w-5 h-5" /> 찾아가는 방법
           </h2>
           <ReactMarkdown
@@ -168,8 +172,8 @@ function RecommendationDetail({
 
       {/* 주변 정보 */}
       {nearbyInfo?.length > 0 && (
-        <div className="bg-white rounded-xl shadow p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+        <div className={boxSection}>
+          <h2 className={sectionHeading}>
             <Landmark className="w-5 h-5" /> 주변 정보
           </h2>
           <ReactMarkdown
