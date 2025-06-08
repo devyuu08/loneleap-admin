@@ -3,6 +3,12 @@
 import { useAddRecommendation } from "@/hooks/recommendation/useAddRecommendation";
 import RecommendationFormContainer from "@/components/recommendation/RecommendationFormContainer";
 
+/**
+ * NewRecommendationPage
+ * - 추천 여행지 등록 폼 페이지
+ * - 여행지 정보 입력 후 등록 처리
+ */
+
 export default function NewRecommendationPage() {
   const { addRecommendation, loading } = useAddRecommendation();
 

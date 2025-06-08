@@ -4,6 +4,12 @@ import { useFetchRecommendations } from "@/hooks/recommendation/useFetchRecommen
 import RecommendationList from "@/components/recommendation/RecommendationList";
 import Link from "next/link";
 
+/**
+ * AdminSpotsPage
+ * - 추천 여행지 목록 페이지
+ * - 여행지 리스트 조회 및 새 여행지 등록 버튼 제공
+ */
+
 function AdminSpotsPage() {
   const { recommendations, loading } = useFetchRecommendations();
 
