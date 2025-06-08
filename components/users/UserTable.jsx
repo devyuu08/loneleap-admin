@@ -5,24 +5,31 @@ import StatusBadge from "@/components/users/StatusBadge";
 import SkeletonImage from "@/components/common/SkeletonImage";
 
 function UserTable({ users, onReload }) {
+  const headerBase = "px-4 py-3";
+  const headerLeft = `${headerBase} text-left`;
+  const headerCenter = `${headerBase} text-center`;
+
+  const cellBase = "px-4 py-4";
+  const cellCenter = `${cellBase} text-center`;
+
   return (
     <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
       <table className="min-w-[800px] w-full text-sm">
         <thead className="bg-gray-50 text-xs text-gray-500 uppercase">
           <tr>
-            <th className="px-4 py-3 text-left">사용자 정보</th>
-            <th className="px-4 py-3 text-center">가입일</th>
-            <th className="px-4 py-3 text-center">작성 일정</th>
-            <th className="px-4 py-3 text-center">리뷰 수</th>
-            <th className="px-4 py-3 text-center">신고 이력</th>
-            <th className="px-4 py-3 text-center">상태</th>
-            <th className="px-4 py-3 text-center">액션</th>
+            <th className={headerLeft}>사용자 정보</th>
+            <th className={headerCenter}>가입일</th>
+            <th className={headerCenter}>작성 일정</th>
+            <th className={headerCenter}>리뷰 수</th>
+            <th className={headerCenter}>신고 이력</th>
+            <th className={headerCenter}>상태</th>
+            <th className={headerCenter}>액션</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
           {users.map((user) => (
             <tr key={user.id} className="hover:bg-gray-50 transition">
-              <td className="px-4 py-4">
+              <td className={cellBase}>
                 <div className="flex items-center gap-3">
                   {/* 
                   next/image 대신 <img>를 사용하는 이유:
@@ -48,34 +55,34 @@ function UserTable({ users, onReload }) {
               </td>
 
               {/* 가입일 */}
-              <td className="px-4 py-4 text-center text-gray-500">
+              <td className={`${cellCenter} text-gray-500`}>
                 {formatDateKR(user.createdAt)}
               </td>
 
               {/* 작성 일정 수 */}
-              <td className="px-4 py-4 text-center text-gray-800">
+              <td className={`${cellCenter} text-gray-800`}>
                 {user.itineraryCount ?? 0}
               </td>
 
               {/* 리뷰 수 */}
-              <td className="px-4 py-4 text-center text-gray-800">
+              <td className={`${cellCenter} text-gray-800`}>
                 {user.reviewCount ?? 0}
               </td>
 
               {/* 신고 이력 */}
-              <td className="px-4 py-4 text-center">
+              <td className={cellCenter}>
                 <span className="text-sm text-red-500 font-semibold">
                   {user.reportedCount ?? 0}회
                 </span>
               </td>
 
               {/* 상태 */}
-              <td className="px-4 py-4 text-center">
+              <td className={cellCenter}>
                 <StatusBadge status={user.status} />
               </td>
 
               {/* 액션 버튼 */}
-              <td className="px-4 py-4 text-center space-x-2 whitespace-nowrap">
+              <td className={`${cellCenter} space-x-2 whitespace-nowrap`}>
                 <UserActionButtons
                   userId={user.id}
                   currentStatus={user.status}
