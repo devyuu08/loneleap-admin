@@ -10,7 +10,12 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import EmptyState from "@/components/common/EmptyState";
+import EmptyState from "@/components/common/feedback/EmptyState";
+import {
+  chartContainerBox,
+  chartEmptyBox,
+  chartHeading,
+} from "@/styles/chartStyles";
 
 const chartMargin = { top: 10, right: 20, bottom: 0, left: 10 };
 const dotStyle = { r: 3 };
@@ -20,7 +25,7 @@ function ReviewReportLineChart({ data }) {
 
   if (!hasData) {
     return (
-      <div className="bg-white p-6 rounded-xl shadow min-h-[280px] flex items-center justify-center">
+      <div className={chartEmptyBox}>
         <EmptyState
           message="최근 리뷰 신고 데이터가 없습니다."
           icon={<LineChart className="w-6 h-6 text-gray-300 mb-2" />}
@@ -31,11 +36,11 @@ function ReviewReportLineChart({ data }) {
 
   return (
     <div
-      className="bg-white p-6 rounded-xl shadow min-h-[280px] flex flex-col"
+      className={chartContainerBox}
       role="region"
       aria-labelledby="review-report-chart"
     >
-      <h3 className="text-base font-semibold mb-4" id="review-report-chart">
+      <h3 className={chartHeading} id="review-report-chart">
         📈 최근 7일 리뷰 신고 추이
       </h3>
       <div className="flex-1">

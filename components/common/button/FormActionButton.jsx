@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import clsx from "clsx";
-import ButtonSpinner from "@/components/common/ButtonSpinner";
+import ButtonSpinner from "@/components/common/loading/ButtonSpinner";
+import { btnBaseBox, btnSpinnerBox } from "@/styles/buttonStyles";
 
 export default function FormActionButton({
   type = "button",
@@ -12,9 +13,6 @@ export default function FormActionButton({
   variant = "default",
   fullWidth = false,
 }) {
-  const baseClasses =
-    "px-6 py-3 text-sm font-semibold rounded-full shadow-md backdrop-blur-sm transition-all flex items-center justify-center gap-2";
-
   const variants = {
     default: "bg-black/80 text-white hover:bg-black hover:shadow-xl",
     danger: "bg-red-600 text-white hover:bg-red-700",
@@ -32,12 +30,12 @@ export default function FormActionButton({
       aria-busy={isLoading}
       className={clsx(
         fullWidth ? "w-full" : "w-auto",
-        baseClasses,
+        btnBaseBox,
         variants[variant],
         (disabled || isLoading) && "opacity-50 cursor-not-allowed"
       )}
     >
-      <div className="flex items-center justify-center min-w-[4rem] gap-2">
+      <div className={btnSpinnerBox}>
         {isLoading ? (
           <ButtonSpinner size={16} color={spinnerColor} />
         ) : (

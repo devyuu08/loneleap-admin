@@ -12,7 +12,7 @@ import {
   LogOut,
 } from "lucide-react";
 import SessionTimer from "@/components/auth/SessionTimer";
-import ButtonSpinner from "@/components/common/ButtonSpinner";
+import ButtonSpinner from "@/components/common/loading/ButtonSpinner";
 import SidebarMenuItem from "@/components/layout/SidebarMenuItem";
 
 import { cn } from "@/lib/shared/utils";

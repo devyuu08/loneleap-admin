@@ -1,6 +1,6 @@
 import React from "react";
 import { Download, Filter } from "lucide-react";
-import FormSelect from "@/components/common/FormSelect";
+import FormSelect from "@/components/common/form/FormSelect";
 
 function UserFilterBar({ filters, onChange, onReset, onExport }) {
   return (

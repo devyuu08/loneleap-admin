@@ -4,13 +4,17 @@ import ReviewReportLineChart from "@/components/dashboard/ReviewReportLineChart"
 import ChatReportLineChart from "@/components/dashboard/ChatReportLineChart";
 import UserStatusDoughnutChart from "@/components/dashboard/UserStatusDoughnutChart";
 import ContentActivityBarChart from "@/components/dashboard/ContentActivityBarChart";
-import EmptyState from "@/components/common/EmptyState";
+import EmptyState from "@/components/common/feedback/EmptyState";
 import { Inbox } from "lucide-react";
 
 export default function AdminDashboard({ stats, chartData, recentReports }) {
   const reviewReports = stats?.reviewReports ?? 0;
   const chatReports = stats?.chatReports ?? 0;
   const activeUsers = stats?.activeUsers ?? 0;
+
+  const cardStatBox = "bg-white p-4 rounded-xl shadow text-center";
+  const tableCell = "py-2";
+
   return (
     <div className="p-6 max-w-screen-xl mx-auto">
       <h1 className="text-2xl font-bold mb-2">안녕하세요, 관리자님</h1>
@@ -25,13 +29,13 @@ export default function AdminDashboard({ stats, chartData, recentReports }) {
 
       {/* 통계 카드 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white p-4 rounded-xl shadow text-center">
+        <div className={cardStatBox}>
           신고된 리뷰: <strong>{reviewReports}</strong>
         </div>
-        <div className="bg-white p-4 rounded-xl shadow text-center">
+        <div className={cardStatBox}>
           신고된 채팅: <strong>{chatReports}</strong>
         </div>
-        <div className="bg-white p-4 rounded-xl shadow text-center">
+        <div className={cardStatBox}>
           활성 사용자: <strong>{activeUsers.toLocaleString()}명</strong>
         </div>
       </div>
@@ -58,10 +62,10 @@ export default function AdminDashboard({ stats, chartData, recentReports }) {
         <table className="min-w-[600px] w-full text-sm text-left">
           <thead>
             <tr className="text-gray-500 border-b">
-              <th className="py-2">유형</th>
-              <th className="py-2">내용</th>
-              <th className="py-2">신고자</th>
-              <th className="py-2">시간</th>
+              <th className={tableCell}>유형</th>
+              <th className={tableCell}>내용</th>
+              <th className={tableCell}>신고자</th>
+              <th className={tableCell}>시간</th>
             </tr>
           </thead>
           <tbody>
@@ -78,10 +82,12 @@ export default function AdminDashboard({ stats, chartData, recentReports }) {
             ) : (
               recentReports.map((report) => (
                 <tr key={report.id} className="border-b last:border-0">
-                  <td className="py-2">{report.type}</td>
-                  <td className="py-2">{report.reason}</td>
-                  <td className="py-2 text-gray-600">{report.reporter}</td>
-                  <td className="py-2 text-gray-500 text-sm">
+                  <td className={tableCell}>{report.type}</td>
+                  <td className={tableCell}>{report.reason}</td>
+                  <td className={`${tableCell} text-gray-600`}>
+                    {report.reporter}
+                  </td>
+                  <td className={`${tableCell} text-gray-500 text-sm`}>
                     {report.reportedAt
                       ? new Date(report.reportedAt).toLocaleString("ko-KR", {
                           month: "short",

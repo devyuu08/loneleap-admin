@@ -4,9 +4,9 @@ import UserFilterBar from "@/components/users/UserFilterBar";
 import UserSearchInput from "@/components/users/UserSearchInput";
 import UserTable from "@/components/users/UserTable";
 import { exportToCSV } from "@/utils/exportToCSV";
-import Pagination from "@/components/common/Pagination";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
-import EmptyState from "@/components/common/EmptyState";
+import Pagination from "@/components/common/navigation/Pagination";
+import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
+import EmptyState from "@/components/common/feedback/EmptyState";
 import { Inbox } from "lucide-react";
 
 export default function UserTableContainer() {

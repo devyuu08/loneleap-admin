@@ -2,15 +2,17 @@ import React from "react";
 import PropTypes from "prop-types";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/shared/utils";
+import {
+  inputBaseBox,
+  inputNormalBorder,
+  formLabelStyle,
+} from "@/styles/inputStyles";
 
 function FormSelect({ label, id, value, onChange, options = [] }) {
   return (
     <div className="relative">
       {label && (
-        <label
-          htmlFor={id}
-          className="block mb-1 text-sm font-bold text-gray-700"
-        >
+        <label htmlFor={id} className={formLabelStyle}>
           {label}
         </label>
       )}
@@ -18,7 +20,7 @@ function FormSelect({ label, id, value, onChange, options = [] }) {
         id={id}
         value={value}
         onChange={onChange}
-        className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-md bg-white text-sm appearance-none"
+        className={`${inputBaseBox} pr-10 appearance-none ${inputNormalBorder} bg-white text-gray-800`}
       >
         {options.map(({ value, label }) => (
           <option key={value} value={value}>

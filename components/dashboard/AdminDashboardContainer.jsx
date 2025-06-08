@@ -1,5 +1,5 @@
 import AdminDashboard from "@/components/dashboard/AdminDashboard";
-import EmptyState from "@/components/common/EmptyState";
+import EmptyState from "@/components/common/feedback/EmptyState";
 import { AlertTriangle } from "lucide-react";
 
 export default function AdminDashboardContainer({
