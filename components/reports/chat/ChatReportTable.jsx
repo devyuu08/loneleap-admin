@@ -1,7 +1,7 @@
 import React from "react";
 import { format } from "date-fns";
 import { MessageSquareOff } from "lucide-react";
-import ReportTableLayout from "@/components/common/ReportTableLayout";
+import ReportTableLayout from "@/components/common/reports/ReportTableLayout";
 
 function ChatReportTable({ reports = [], onSelect }) {
   const rows = reports.map((report) => ({

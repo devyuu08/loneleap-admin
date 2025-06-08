@@ -1,8 +1,8 @@
-import ErrorMessage from "@/components/common/ErrorMessage";
+import ErrorMessage from "@/components/common/feedback/ErrorMessage";
 import { FcGoogle } from "react-icons/fc";
 import { FiMail, FiLock } from "react-icons/fi";
-import ButtonSpinner from "@/components/common/ButtonSpinner";
-import FormInput from "@/components/common/FormInput";
+import ButtonSpinner from "@/components/common/loading/ButtonSpinner";
+import FormInput from "@/components/common/form/FormInput";
 
 export default function AdminLoginForm({
   email,

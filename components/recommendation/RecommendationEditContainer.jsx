@@ -6,8 +6,8 @@ import { useRecommendationDetail } from "@/hooks/recommendation/useRecommendatio
 import { useUpdateRecommendation } from "@/hooks/recommendation/useUpdateRecommendation";
 import { useUploadImage } from "@/hooks/useUploadImage";
 import RecommendationFormContainer from "@/components/recommendation/RecommendationFormContainer";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
-import EmptyState from "@/components/common/EmptyState";
+import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
+import EmptyState from "@/components/common/feedback/EmptyState";
 import { AlertCircle } from "lucide-react";
 
 export default function RecommendationEditContainer() {

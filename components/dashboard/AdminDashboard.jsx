@@ -4,7 +4,7 @@ import ReviewReportLineChart from "@/components/dashboard/ReviewReportLineChart"
 import ChatReportLineChart from "@/components/dashboard/ChatReportLineChart";
 import UserStatusDoughnutChart from "@/components/dashboard/UserStatusDoughnutChart";
 import ContentActivityBarChart from "@/components/dashboard/ContentActivityBarChart";
-import EmptyState from "@/components/common/EmptyState";
+import EmptyState from "@/components/common/feedback/EmptyState";
 import { Inbox } from "lucide-react";
 
 export default function AdminDashboard({ stats, chartData, recentReports }) {

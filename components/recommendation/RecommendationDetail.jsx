@@ -16,7 +16,7 @@ import {
   Landmark,
   CalendarDays,
 } from "lucide-react";
-import FormActionButton from "@/components/common/FormActionButton";
+import FormActionButton from "@/components/common/button/FormActionButton";
 
 function RecommendationDetail({
   name,

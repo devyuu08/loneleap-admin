@@ -1,8 +1,8 @@
 import React from "react";
 import { format } from "date-fns";
-import ActionButtons from "@/components/common/ActionButtons";
+import ActionButtons from "@/components/common/button/ActionButtons";
 import PropTypes from "prop-types";
-import ReportDetailLayout from "@/components/common/ReportDetailLayout";
+import ReportDetailLayout from "@/components/common/reports/ReportDetailLayout";
 import {
   infoBoxClass,
   contentBoxClass,

@@ -2,7 +2,7 @@ import React from "react";
 import UserActionButtons from "@/components/users/UserActionButtons";
 import { formatDateKR } from "@/lib/shared/date";
 import StatusBadge from "@/components/users/StatusBadge";
-import SkeletonImage from "@/components/common/SkeletonImage";
+import SkeletonImage from "@/components/common/loading/SkeletonImage";
 
 function UserTable({ users, onReload }) {
   const headerBase = "px-4 py-3";

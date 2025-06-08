@@ -1,8 +1,8 @@
 import React from "react";
-import FormInput from "@/components/common/FormInput";
-import FormTextarea from "@/components/common/FormTextarea";
-import FormSelect from "@/components/common/FormSelect";
-import FormSubmitButton from "@/components/common/FormSubmitButton";
+import FormInput from "@/components/common/form/FormInput";
+import FormTextarea from "@/components/common/form/FormTextarea";
+import FormSelect from "@/components/common/form/FormSelect";
+import FormSubmitButton from "@/components/common/button/FormSubmitButton";
 
 function RecommendationForm({
   form,

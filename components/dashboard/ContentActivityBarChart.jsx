@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import EmptyState from "@/components/common/EmptyState";
+import EmptyState from "@/components/common/feedback/EmptyState";
 import { BarChart3 } from "lucide-react";
 import {
   chartContainerBox,

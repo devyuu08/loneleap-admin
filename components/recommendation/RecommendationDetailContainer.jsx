@@ -5,8 +5,8 @@ import { useRouter } from "next/router";
 import { useRecommendationDetail } from "@/hooks/recommendation/useRecommendationDetail";
 import { useDeleteRecommendation } from "@/hooks/recommendation/useDeleteRecommendation";
 import RecommendationDetail from "@/components/recommendation/RecommendationDetail";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
-import EmptyState from "@/components/common/EmptyState";
+import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
+import EmptyState from "@/components/common/feedback/EmptyState";
 import { AlertCircle } from "lucide-react";
 
 export default function RecommendationDetailContainer() {

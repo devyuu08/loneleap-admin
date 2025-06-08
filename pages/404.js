@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import EmptyState from "@/components/common/EmptyState";
+import EmptyState from "@/components/common/feedback/EmptyState";
 import { CircleAlert } from "lucide-react";
-import FormActionButton from "@/components/common/FormActionButton";
+import FormActionButton from "@/components/common/button/FormActionButton";
 
 export default function Custom404() {
   const router = useRouter();

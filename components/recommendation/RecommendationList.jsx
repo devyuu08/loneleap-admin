@@ -2,9 +2,9 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { format } from "date-fns";
-import EmptyState from "@/components/common/EmptyState";
+import EmptyState from "@/components/common/feedback/EmptyState";
 import { MapPin } from "lucide-react";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
+import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
 
 function RecommendationList({ recommendations, loading }) {
   if (loading || !recommendations) {

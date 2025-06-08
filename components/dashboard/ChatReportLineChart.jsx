@@ -10,7 +10,7 @@ import {
   YAxis,
   Tooltip,
 } from "recharts";
-import EmptyState from "@/components/common/EmptyState";
+import EmptyState from "@/components/common/feedback/EmptyState";
 import { MessageSquareOff } from "lucide-react";
 import {
   chartContainerBox,

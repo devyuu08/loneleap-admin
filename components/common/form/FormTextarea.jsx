@@ -1,5 +1,6 @@
 import React from "react";
-import ErrorMessage from "@/components/common/ErrorMessage";
+import ErrorMessage from "@/components/common/feedback/ErrorMessage";
+import PropTypes from "prop-types";
 import {
   inputBaseBox,
   inputVisualStyle,
@@ -8,46 +9,48 @@ import {
   formLabelStyle,
 } from "@/styles/inputStyles";
 
-function FormInput({
+function FormTextarea({
   label,
   id,
   name,
-  type = "text",
   value,
   onChange,
   placeholder = "",
   error,
-  icon,
+  rows = 3,
 }) {
   return (
-    <div className="relative">
+    <div>
       {label && (
         <label htmlFor={id} className={formLabelStyle}>
           {label}
         </label>
       )}
-      {icon && (
-        <div className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400 pointer-events-none">
-          {icon}
-        </div>
-      )}
-      <input
+      <textarea
         id={id}
         name={name}
-        type={type}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        required
-        aria-invalid={!!error}
-        aria-describedby={error ? `${id}-error` : undefined}
+        rows={rows}
         className={`${inputBaseBox} ${
           error ? inputErrorBorder : inputNormalBorder
-        } ${inputVisualStyle} ${icon ? "pl-10" : ""}`}
+        } ${inputVisualStyle}`}
       />
-      {error && <ErrorMessage id={`${id}-error`} message={error} />}
+      {error && <ErrorMessage message={error} />}
     </div>
   );
 }
 
-export default React.memo(FormInput);
+FormTextarea.propTypes = {
+  label: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+  error: PropTypes.string,
+  rows: PropTypes.number,
+};
+
+export default React.memo(FormTextarea);

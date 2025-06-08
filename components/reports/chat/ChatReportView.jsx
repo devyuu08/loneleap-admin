@@ -1,8 +1,8 @@
 import React from "react";
 import ChatReportTable from "@/components/reports/chat/ChatReportTable";
 import ChatReportDetail from "@/components/reports/chat/ChatReportDetail";
-import NoReportSelected from "@/components/common/NoReportSelected";
-import ReportListViewLayout from "@/components/common/ReportListViewLayout";
+import NoReportSelected from "@/components/common/feedback/NoReportSelected";
+import ReportListViewLayout from "@/components/common/reports/ReportListViewLayout";
 
 function ChatReportView(props) {
   const {

@@ -1,8 +1,8 @@
 import React from "react";
 import ReviewReportTable from "@/components/reports/review/ReviewReportTable";
 import ReviewReportDetail from "@/components/reports/review/ReviewReportDetail";
-import NoReportSelected from "@/components/common/NoReportSelected";
-import ReportListViewLayout from "@/components/common/ReportListViewLayout";
+import NoReportSelected from "@/components/common/feedback/NoReportSelected";
+import ReportListViewLayout from "@/components/common/reports/ReportListViewLayout";
 
 function ReviewReportView(props) {
   const {

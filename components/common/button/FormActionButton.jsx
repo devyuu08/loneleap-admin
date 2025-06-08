@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import clsx from "clsx";
-import ButtonSpinner from "@/components/common/ButtonSpinner";
+import ButtonSpinner from "@/components/common/loading/ButtonSpinner";
 import { btnBaseBox, btnSpinnerBox } from "@/styles/buttonStyles";
 
 export default function FormActionButton({

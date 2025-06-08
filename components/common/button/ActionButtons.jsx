@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getAuth } from "firebase/auth";
-import ButtonSpinner from "@/components/common/ButtonSpinner";
+import ButtonSpinner from "@/components/common/loading/ButtonSpinner";
 
 import { btnFlexBox, btnSmallBox } from "@/styles/buttonStyles";
 

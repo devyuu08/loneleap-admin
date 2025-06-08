@@ -10,7 +10,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import EmptyState from "@/components/common/EmptyState";
+import EmptyState from "@/components/common/feedback/EmptyState";
 import {
   chartContainerBox,
   chartEmptyBox,

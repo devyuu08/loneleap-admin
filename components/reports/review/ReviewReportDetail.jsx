@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
-import ActionButtons from "@/components/common/ActionButtons";
-import ReportDetailLayout from "@/components/common/ReportDetailLayout";
+import ActionButtons from "@/components/common/button/ActionButtons";
+import ReportDetailLayout from "@/components/common/reports/ReportDetailLayout";
 import {
   infoBoxClass,
   contentBoxClass,

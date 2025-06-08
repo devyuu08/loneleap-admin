@@ -1,7 +1,7 @@
 import React from "react";
 import { format } from "date-fns";
 import { FileWarning } from "lucide-react";
-import ReportTableLayout from "@/components/common/ReportTableLayout";
+import ReportTableLayout from "@/components/common/reports/ReportTableLayout";
 
 function ReviewReportTable({ reports = [], onSelect }) {
   const rows = reports.map((report) => ({
