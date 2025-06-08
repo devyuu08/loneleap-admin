@@ -19,12 +19,19 @@ import { cn } from "@/lib/shared/utils";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase/client";
 
+/**
+ * AdminLayout
+ * - 관리자 페이지 전체 레이아웃 구성
+ * - 사이드바 열림 상태 로컬 스토리지 저장
+ * - 로그아웃 및 세션 타이머 포함
+ */
+
 export default function AdminLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  // 사이드바 상태 유지
+  // 사이드바 상태 불러오기
   useEffect(() => {
     const saved = localStorage.getItem("sidebar-open");
     if (saved !== null) {
@@ -32,6 +39,7 @@ export default function AdminLayout({ children }) {
     }
   }, []);
 
+  // 사이드바 상태 저장
   useEffect(() => {
     localStorage.setItem("sidebar-open", isSidebarOpen.toString());
   }, [isSidebarOpen]);
@@ -43,8 +51,8 @@ export default function AdminLayout({ children }) {
       try {
         setIsLoading(true);
 
-        await signOut(auth); // Firebase 클라이언트 로그아웃
-        await fetch("/api/admin/auth/logout", { method: "POST" }); // 서버 쿠키 제거
+        await signOut(auth); // Firebase 로그아웃
+        await fetch("/api/admin/auth/logout", { method: "POST" }); // 서버 쿠키 삭제
 
         router.push("/admin/login");
       } catch (error) {
@@ -71,9 +79,10 @@ export default function AdminLayout({ children }) {
           "flex-shrink-0 bg-white border-r shadow-sm flex flex-col transition-all duration-300",
           isSidebarOpen ? "w-64" : "w-16"
         )}
+        aria-label="관리자 메뉴"
       >
-        {/* 상단 로고 & 토글 */}
-        <div className="flex items-center justify-between h-[60px] px-4 border-b">
+        {/* 로고 + 토글 버튼 */}
+        <header className="flex items-center justify-between h-[60px] px-4 border-b">
           <div className="flex items-center gap-2">
             <Footprints size={22} className="text-black" />
             {isSidebarOpen && (
@@ -82,11 +91,10 @@ export default function AdminLayout({ children }) {
               </span>
             )}
           </div>
-
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="text-gray-500 hover:text-black"
-            aria-label="사이드바 토글"
+            aria-label="사이드바 열기/닫기"
           >
             {isSidebarOpen ? (
               <ChevronLeft size={20} />
@@ -94,10 +102,9 @@ export default function AdminLayout({ children }) {
               <ChevronRight size={20} />
             )}
           </button>
-        </div>
+        </header>
 
-        {/* 메뉴 */}
-
+        {/* 네비게이션 메뉴 */}
         <nav className="flex-1 flex flex-col gap-2 px-3 py-4 text-sm text-gray-700">
           {sidebarItems.map(({ href, label, icon }) => (
             <SidebarMenuItem
@@ -111,16 +118,13 @@ export default function AdminLayout({ children }) {
           ))}
         </nav>
 
-        {/* 하단 세션 + 로그아웃 */}
-        <div className="p-4 border-t flex flex-col gap-4 items-center">
-          {/* 세션 타이머: 열림 상태에서만 표시 */}
+        {/* 로그아웃 및 세션 타이머 */}
+        <footer className="p-4 border-t flex flex-col gap-4 items-center">
           {isSidebarOpen && (
             <div className="text-xs text-gray-400 text-center">
               <SessionTimer />
             </div>
           )}
-
-          {/* 로그아웃 버튼 */}
           <button
             onClick={handleLogout}
             disabled={isLoading}
@@ -133,12 +137,14 @@ export default function AdminLayout({ children }) {
             <LogOut size={20} />
             {isSidebarOpen && (isLoading ? <ButtonSpinner /> : "로그아웃")}
           </button>
-        </div>
+        </footer>
       </aside>
 
-      {/* Main content */}
+      {/* 메인 콘텐츠 영역 */}
       <div className="flex-1 flex flex-col">
-        <main className="flex-1 px-8 py-8 overflow-y-auto">{children}</main>
+        <main className="flex-1 px-8 py-8 overflow-y-auto" role="main">
+          {children}
+        </main>
       </div>
     </div>
   );
