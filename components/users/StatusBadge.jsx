@@ -1,5 +1,11 @@
 import React from "react";
 
+/**
+ * StatusBadge
+ * - 사용자 상태(active, banned, dormant)에 따라 뱃지 스타일 및 라벨을 출력
+ * - 시각적으로 상태를 구분하여 관리자 UI의 가독성을 높임
+ */
+
 function StatusBadge({ status }) {
   const variant = {
     active: "bg-green-100 text-green-800",

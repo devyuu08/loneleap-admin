@@ -4,6 +4,14 @@ import { formatDateKR } from "@/lib/shared/date";
 import StatusBadge from "@/components/users/StatusBadge";
 import SkeletonImage from "@/components/common/loading/SkeletonImage";
 
+/**
+ * UserTable
+ * - 관리자 페이지에서 사용자 목록을 테이블 형태로 렌더링
+ * - 사용자 프로필, 가입일, 작성 일정/리뷰 수, 신고 이력, 상태, 액션 버튼 포함
+ * - SkeletonImage를 사용해 fallback 이미지 처리 및 안정적인 렌더링 제공
+ * - 상태 뱃지(StatusBadge)와 액션 버튼(UserActionButtons) 포함
+ */
+
 function UserTable({ users, onReload }) {
   const headerBase = "px-4 py-3";
   const headerLeft = `${headerBase} text-left`;
@@ -13,7 +21,7 @@ function UserTable({ users, onReload }) {
   const cellCenter = `${cellBase} text-center`;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
+    <section className="bg-white rounded-xl shadow-sm overflow-x-auto">
       <table className="min-w-[800px] w-full text-sm">
         <thead className="bg-gray-50 text-xs text-gray-500 uppercase">
           <tr>
@@ -26,6 +34,7 @@ function UserTable({ users, onReload }) {
             <th className={headerCenter}>액션</th>
           </tr>
         </thead>
+
         <tbody className="divide-y divide-gray-100">
           {users.map((user) => (
             <tr key={user.id} className="hover:bg-gray-50 transition">
@@ -93,7 +102,7 @@ function UserTable({ users, onReload }) {
           ))}
         </tbody>
       </table>
-    </div>
+    </section>
   );
 }
 

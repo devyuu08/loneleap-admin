@@ -3,6 +3,13 @@ import { PauseCircle, Trash2, RotateCcw } from "lucide-react";
 import { changeAdminUserStatus, deleteUser } from "@/lib/admin/userActions";
 import { updateUserStatus } from "@/lib/server/users";
 
+/**
+ * UserActionButtons
+ * - 관리자 페이지 사용자 행위 제어 버튼 모음 (계정 정지, 복구, 삭제)
+ * - 계정 상태에 따라 버튼 비활성화 조건을 제어
+ * - 액션 처리 후 상위 컴포넌트에 성공 콜백 전달
+ */
+
 function UserActionButtons({ userId, currentStatus, onSuccess }) {
   const isBanned = currentStatus === "banned";
 
@@ -25,6 +32,7 @@ function UserActionButtons({ userId, currentStatus, onSuccess }) {
 
   return (
     <div className="flex items-center justify-center space-x-2">
+      {/* 계정 복구 버튼 (정지 상태일 때만 활성화) */}
       <button
         onClick={() =>
           handleAction({
@@ -45,6 +53,7 @@ function UserActionButtons({ userId, currentStatus, onSuccess }) {
         <RotateCcw size={16} strokeWidth={1.8} />
       </button>
 
+      {/* 계정 정지 버튼 (이미 정지된 경우 비활성화) */}
       <button
         onClick={() =>
           handleAction({
@@ -66,6 +75,7 @@ function UserActionButtons({ userId, currentStatus, onSuccess }) {
         <PauseCircle size={16} strokeWidth={1.8} />
       </button>
 
+      {/* 계정 삭제 버튼 (항상 활성화됨, 복구 불가) */}
       <button
         onClick={() =>
           handleAction({
