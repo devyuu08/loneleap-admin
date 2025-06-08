@@ -1,5 +1,12 @@
 import React from "react";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import {
+  inputBaseBox,
+  inputVisualStyle,
+  inputErrorBorder,
+  inputNormalBorder,
+  formLabelStyle,
+} from "@/styles/inputStyles";
 
 function FormInput({
   label,
@@ -12,19 +19,10 @@ function FormInput({
   error,
   icon,
 }) {
-  const inputBaseStyle =
-    "w-full px-4 py-3 rounded-md border text-sm focus:outline-none focus:ring-2";
-  const borderColor = error ? "border-red-400" : "border-gray-300";
-  const visualStyle =
-    "bg-white/70 text-gray-800 placeholder:text-gray-400 focus:ring-gray-700";
-
   return (
     <div className="relative">
       {label && (
-        <label
-          htmlFor={id}
-          className="block mb-1 text-sm font-bold text-gray-700"
-        >
+        <label htmlFor={id} className={formLabelStyle}>
           {label}
         </label>
       )}
@@ -43,9 +41,9 @@ function FormInput({
         required
         aria-invalid={!!error}
         aria-describedby={error ? `${id}-error` : undefined}
-        className={`${inputBaseStyle} ${borderColor} ${visualStyle} ${
-          icon ? "pl-10" : ""
-        }`}
+        className={`${inputBaseBox} ${
+          error ? inputErrorBorder : inputNormalBorder
+        } ${inputVisualStyle} ${icon ? "pl-10" : ""}`}
       />
       {error && <ErrorMessage id={`${id}-error`} message={error} />}
     </div>
