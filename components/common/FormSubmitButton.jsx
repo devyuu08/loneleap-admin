@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import ButtonSpinner from "@/components/common/ButtonSpinner";
+import { btnBaseBox, btnSpinnerBox } from "@/styles/buttonStyles";
 
 export default function FormSubmitButton({
   isLoading,
@@ -9,9 +10,6 @@ export default function FormSubmitButton({
   variant = "dark",
   type = "submit",
 }) {
-  const baseClasses =
-    "px-6 py-3 text-sm font-semibold rounded-full shadow-md backdrop-blur-sm transition-all flex items-center justify-center gap-2";
-
   const variants = {
     dark: isLoading
       ? "bg-gray-400 text-white cursor-not-allowed opacity-70"
@@ -30,11 +28,11 @@ export default function FormSubmitButton({
       aria-busy={isLoading}
       className={clsx(
         fullWidth ? "w-full" : "w-auto",
-        baseClasses,
+        btnBaseBox,
         variants[variant]
       )}
     >
-      <div className="relative h-5 flex items-center justify-center min-w-[4rem]">
+      <div className={btnSpinnerBox}>
         {isLoading ? (
           <ButtonSpinner size={16} color={spinnerColor} />
         ) : (

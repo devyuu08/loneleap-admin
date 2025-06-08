@@ -2,6 +2,8 @@ import { useState } from "react";
 import { getAuth } from "firebase/auth";
 import ButtonSpinner from "@/components/common/ButtonSpinner";
 
+import { btnFlexBox, btnSmallBox } from "@/styles/buttonStyles";
+
 export default function ActionButtons({ report, onSuccess }) {
   const [deleting, setDeleting] = useState(false);
   const [dismissing, setDismissing] = useState(false);
@@ -95,7 +97,7 @@ export default function ActionButtons({ report, onSuccess }) {
       <button
         onClick={handleDelete}
         disabled={deleting}
-        className="flex items-center justify-center gap-2 min-w-[96px] px-4 py-2 text-sm rounded bg-red-500 hover:bg-red-600 text-white"
+        className={`${btnFlexBox} ${btnSmallBox} bg-red-500 hover:bg-red-600 text-white`}
       >
         {deleting ? <ButtonSpinner /> : isChat ? "메시지 삭제" : "리뷰 삭제"}
       </button>
@@ -103,7 +105,7 @@ export default function ActionButtons({ report, onSuccess }) {
       <button
         onClick={handleDismiss}
         disabled={dismissing}
-        className="flex items-center justify-center gap-2 min-w-[96px] px-4 py-2 text-sm rounded bg-gray-300 hover:bg-gray-400 text-gray-800"
+        className={`${btnFlexBox} ${btnSmallBox} bg-gray-300 hover:bg-gray-400 text-gray-800`}
       >
         {dismissing ? <ButtonSpinner color="gray" /> : "신고 무시"}
       </button>
