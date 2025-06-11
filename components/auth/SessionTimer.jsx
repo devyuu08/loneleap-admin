@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 /**
  * SessionTimer
@@ -30,8 +31,13 @@ export default function SessionTimer() {
       if (clamped === 0) {
         clearInterval(interval);
         localStorage.removeItem(SESSION_START_KEY);
-        alert("세션이 만료되었습니다. 다시 로그인해 주세요.");
-        window.location.href = "/admin/login";
+
+        toast.error("세션이 만료되었습니다. 다시 로그인해 주세요.");
+
+        // 토스트가 사용자에게 보일 수 있도록 약간의 대기 시간 후 이동
+        setTimeout(() => {
+          window.location.href = "/admin/login";
+        }, 1500); // 1.5초 정도
       }
     }, 1000); // 1초마다 체크
 

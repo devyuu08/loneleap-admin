@@ -95,7 +95,13 @@ export default async function getReviewReportsHandler(req, res) {
 
     return res.status(200).json(enrichedData);
   } catch (error) {
-    console.error("리뷰 신고 데이터 불러오기 오류:", error);
+    const baseMessage = "리뷰 신고 데이터 불러오기 오류";
+
+    if (process.env.NODE_ENV === "development") {
+      console.error(`${baseMessage}:`, error);
+    } else {
+      console.error(baseMessage);
+    }
     return res.status(500).json({
       error: "리뷰 신고 데이터를 불러오는 중 서버 오류가 발생했습니다",
       ...(process.env.NODE_ENV === "development" && {

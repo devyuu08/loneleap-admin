@@ -2,6 +2,7 @@ import React from "react";
 import { PauseCircle, Trash2, RotateCcw } from "lucide-react";
 import { changeAdminUserStatus, deleteUser } from "@/lib/admin/userActions";
 import { updateUserStatus } from "@/lib/server/users";
+import { toast } from "react-hot-toast";
 
 /**
  * UserActionButtons
@@ -21,11 +22,15 @@ function UserActionButtons({ userId, currentStatus, onSuccess }) {
       await action();
       onSuccess();
     } catch (err) {
-      console.error("액션 실패:", err);
+      if (process.env.NODE_ENV === "development") {
+        console.error("액션 실패:", err);
+      }
       if (err.message?.includes("no user record")) {
-        alert("이미 탈퇴된 사용자입니다. 남은 데이터는 정리되었습니다.");
+        toast.success(
+          "이미 탈퇴된 사용자입니다. 남은 데이터는 정리되었습니다."
+        );
       } else {
-        alert(err.message || "작업 중 오류가 발생했습니다.");
+        toast.error(err.message || "작업 중 오류가 발생했습니다.");
       }
     }
   };
@@ -40,7 +45,7 @@ function UserActionButtons({ userId, currentStatus, onSuccess }) {
             action: async () => {
               await changeAdminUserStatus(userId, "active");
               await updateUserStatus(userId, "active");
-              alert("계정이 복구되었습니다.");
+              toast.success("계정이 복구되었습니다.");
             },
           })
         }
@@ -61,7 +66,7 @@ function UserActionButtons({ userId, currentStatus, onSuccess }) {
             action: async () => {
               await changeAdminUserStatus(userId, "banned");
               await updateUserStatus(userId, "banned");
-              alert("계정이 정지되었습니다.");
+              toast.success("계정이 정지되었습니다.");
               location.reload();
             },
           })
@@ -83,7 +88,7 @@ function UserActionButtons({ userId, currentStatus, onSuccess }) {
               "정말 이 계정을 완전히 삭제하시겠어요?\n이 작업은 되돌릴 수 없습니다.",
             action: async () => {
               await deleteUser(userId);
-              alert("계정이 성공적으로 삭제되었습니다.");
+              toast.success("계정이 성공적으로 삭제되었습니다.");
             },
           })
         }

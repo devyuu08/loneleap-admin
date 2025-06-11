@@ -16,6 +16,17 @@ export default async function createAdminSession(req, res) {
     // 토큰 검증
     const decoded = await adminAuth.verifyIdToken(token);
 
+    // 관리자 이메일 확인
+    const adminEmails = process.env.ADMIN_EMAILS
+      ? process.env.ADMIN_EMAILS.split(",").map((email) =>
+          email.trim().toLowerCase()
+        )
+      : [];
+
+    if (!adminEmails.includes(decoded.email.toLowerCase())) {
+      return res.status(401).json({ message: "관리자 권한이 없습니다." });
+    }
+
     // HttpOnly 쿠키 저장
     setCookie({ res }, "admin-auth-token", token, {
       httpOnly: true,
@@ -27,7 +38,9 @@ export default async function createAdminSession(req, res) {
 
     return res.status(200).json({ message: "로그인에 성공했습니다." });
   } catch (error) {
-    console.error("토큰 검증 실패:", error);
+    if (process.env.NODE_ENV === "development") {
+      console.error("토큰 검증 실패:", error);
+    }
     return res.status(401).json({ message: "유효하지 않은 토큰입니다." });
   }
 }

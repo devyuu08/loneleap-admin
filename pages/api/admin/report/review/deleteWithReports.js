@@ -7,7 +7,9 @@ export default async function deleteReviewWithReports(req, res) {
   try {
     await verifyAdminToken(req, res); // 이 안에서 토큰 검증 + 이메일 체크 진행
   } catch (err) {
-    console.error("관리자 인증 실패:", err.message);
+    if (process.env.NODE_ENV === "development") {
+      console.error("관리자 인증 실패:", err);
+    }
     return res.status(401).json({ error: "관리자 권한이 필요합니다." });
   }
 
@@ -75,7 +77,12 @@ export default async function deleteReviewWithReports(req, res) {
       deletedReportsCount: snapshot.docs.length,
     });
   } catch (err) {
-    console.error("리뷰 삭제 오류:", err);
+    const baseError = "리뷰 삭제 오류";
+    if (process.env.NODE_ENV === "development") {
+      console.error(`${baseError}:`, err);
+    } else {
+      console.error(baseError);
+    }
 
     if (err.code === "not-found") {
       return res

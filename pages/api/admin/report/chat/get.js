@@ -68,7 +68,12 @@ export default async function getChatReports(req, res) {
               };
             }
           } catch (error) {
-            console.error(`메시지(${messageId}) 조회 실패:`, error);
+            const errorMessage = `메시지(${messageId}) 조회 실패`;
+            if (process.env.NODE_ENV === "development") {
+              console.error(`${errorMessage}:`, error);
+            } else {
+              console.error(errorMessage);
+            }
           }
         })
     );
@@ -104,7 +109,12 @@ export default async function getChatReports(req, res) {
 
     return res.status(200).json(enrichedData);
   } catch (error) {
-    console.error("채팅 신고 데이터 불러오기 오류:", error);
+    const errorMessage = "채팅 신고 데이터 불러오기 오류";
+    if (process.env.NODE_ENV === "development") {
+      console.error(`${errorMessage}:`, error);
+    } else {
+      console.error(errorMessage);
+    }
     return res.status(500).json({
       error: "채팅 신고 데이터를 불러오는 중 서버 오류가 발생했습니다",
       ...(process.env.NODE_ENV === "development" && {

@@ -40,7 +40,13 @@ export default async function handler(req, res) {
 
     return res.status(405).end(); // 허용되지 않은 메서드
   } catch (error) {
-    console.error("계정 처리 실패:", error);
+    const errorMessage = "계정 처리 실패";
+
+    if (process.env.NODE_ENV === "development") {
+      console.error(`${errorMessage}:`, error);
+    } else {
+      console.error(errorMessage);
+    }
     return res.status(500).json({ error: "서버 오류" });
   }
 }
