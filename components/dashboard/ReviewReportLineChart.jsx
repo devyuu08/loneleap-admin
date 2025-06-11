@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useMemo } from "react";
 import {
   LineChart,
   Line,
@@ -9,27 +10,49 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import EmptyState from "@/components/common/feedback/EmptyState";
+import {
+  chartContainerBox,
+  chartEmptyBox,
+  chartHeading,
+} from "@/styles/chartStyles";
 
-export default function ReviewReportLineChart({ data }) {
-  if (!Array.isArray(data) || data.length === 0) {
+/**
+ * ReviewReportLineChart
+ * - 최근 7일 리뷰 신고 수 데이터를 선 그래프로 시각화
+ * - 신고 수의 일별 추이를 확인할 수 있음
+ * - 데이터가 없을 경우 EmptyState 표시
+ */
+
+const chartMargin = { top: 10, right: 20, bottom: 0, left: 10 };
+const dotStyle = { r: 3 };
+
+function ReviewReportLineChart({ data }) {
+  const hasData = useMemo(() => Array.isArray(data) && data.length > 0, [data]);
+
+  if (!hasData) {
     return (
-      <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-        신고 데이터가 없습니다.
-      </div>
+      <section className={chartEmptyBox}>
+        <EmptyState
+          message="최근 리뷰 신고 데이터가 없습니다."
+          icon={<LineChart className="w-6 h-6 text-gray-300 mb-2" />}
+        />
+      </section>
     );
   }
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow min-h-[280px] flex flex-col">
-      <h3 className="text-base font-semibold mb-4">
+    <section
+      className={chartContainerBox}
+      role="region"
+      aria-labelledby="review-report-chart"
+    >
+      <h3 className={chartHeading} id="review-report-chart">
         📈 최근 7일 리뷰 신고 추이
       </h3>
-      <div className="flex-1">
+      <div className="h-[260px]">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={data}
-            margin={{ top: 10, right: 20, bottom: 0, left: 10 }} // 여백 최소화
-          >
+          <LineChart data={data} margin={chartMargin}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" fontSize={12} />
             <YAxis width={30} allowDecimals={false} fontSize={12} />
@@ -39,11 +62,13 @@ export default function ReviewReportLineChart({ data }) {
               dataKey="count"
               stroke="#3B82F6"
               strokeWidth={2}
-              dot={{ r: 3 }}
+              dot={dotStyle}
             />
           </LineChart>
         </ResponsiveContainer>
       </div>
-    </div>
+    </section>
   );
 }
+
+export default React.memo(ReviewReportLineChart);

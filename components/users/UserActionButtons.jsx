@@ -1,82 +1,97 @@
-import { suspendUser, recoverUser } from "@/lib/admin";
-
+import React from "react";
 import { PauseCircle, Trash2, RotateCcw } from "lucide-react";
-import { updateUserStatus } from "@/lib/users";
-import { deleteUserRequest } from "@/lib/client/deleteUserRequest";
+import { changeAdminUserStatus, deleteUser } from "@/lib/admin/userActions";
+import { updateUserStatus } from "@/lib/server/users";
+import { toast } from "react-hot-toast";
 
-export default function UserActionButtons({ userId, currentStatus }) {
-  const handleSuspend = async () => {
-    const confirm = window.confirm("정말 이 사용자의 계정을 정지하시겠어요?");
-    if (!confirm) return;
+/**
+ * UserActionButtons
+ * - 관리자 페이지 사용자 행위 제어 버튼 모음 (계정 정지, 복구, 삭제)
+ * - 계정 상태에 따라 버튼 비활성화 조건을 제어
+ * - 액션 처리 후 상위 컴포넌트에 성공 콜백 전달
+ */
 
-    try {
-      await suspendUser(userId); // Firebase Auth 정지
-      await updateUserStatus(userId, "suspended"); // Firestore 상태 반영
+function UserActionButtons({ userId, currentStatus, onSuccess }) {
+  const isBanned = currentStatus === "banned";
 
-      alert("계정이 정지되었습니다.");
-      location.reload(); // 필요 시 상태 새로고침
-    } catch (err) {
-      console.error("계정 정지 실패:", err);
-      alert("오류가 발생했습니다.");
-    }
-  };
-
-  const handleRecover = async () => {
-    const confirm = window.confirm("이 사용자의 계정을 다시 활성화할까요?");
-    if (!confirm) return;
+  const handleAction = async ({ message, action }) => {
+    const confirmed = window.confirm(message);
+    if (!confirmed) return;
 
     try {
-      await recoverUser(userId); // Firebase Auth 복구
-      await updateUserStatus(userId, "active"); // Firestore 상태 업데이트
-
-      alert("계정이 복구되었습니다.");
+      await action();
+      onSuccess();
     } catch (err) {
-      console.error("계정 복구 실패:", err);
-      alert("오류가 발생했습니다.");
-    }
-  };
-
-  const handleDelete = async () => {
-    const confirmDelete = window.confirm(
-      "정말 이 계정을 완전히 삭제하시겠어요?\n이 작업은 되돌릴 수 없습니다."
-    );
-    if (!confirmDelete) return;
-
-    try {
-      await deleteUserRequest(userId); // 인증 + DB + 콘텐츠 삭제
-      alert("계정이 성공적으로 삭제되었습니다.");
-
-      if (typeof onSuccess === "function") onSuccess();
-    } catch (err) {
-      console.error("계정 삭제 실패:", err);
-      alert(err.message || "삭제 중 오류가 발생했습니다.");
+      if (process.env.NODE_ENV === "development") {
+        console.error("액션 실패:", err);
+      }
+      if (err.message?.includes("no user record")) {
+        toast.success(
+          "이미 탈퇴된 사용자입니다. 남은 데이터는 정리되었습니다."
+        );
+      } else {
+        toast.error(err.message || "작업 중 오류가 발생했습니다.");
+      }
     }
   };
 
   return (
     <div className="flex items-center justify-center space-x-2">
+      {/* 계정 복구 버튼 (정지 상태일 때만 활성화) */}
       <button
-        onClick={handleRecover}
+        onClick={() =>
+          handleAction({
+            message: "이 사용자의 계정을 다시 활성화할까요?",
+            action: async () => {
+              await changeAdminUserStatus(userId, "active");
+              await updateUserStatus(userId, "active");
+              toast.success("계정이 복구되었습니다.");
+            },
+          })
+        }
         className={`text-gray-400 hover:text-blue-500 ${
-          currentStatus === "suspended" ? "" : "opacity-40 cursor-not-allowed"
+          isBanned ? "" : "opacity-40 cursor-not-allowed"
         }`}
-        disabled={currentStatus !== "suspended"}
+        disabled={!isBanned}
         title="계정 복구"
       >
         <RotateCcw size={16} strokeWidth={1.8} />
       </button>
+
+      {/* 계정 정지 버튼 (이미 정지된 경우 비활성화) */}
       <button
-        onClick={handleSuspend}
+        onClick={() =>
+          handleAction({
+            message: "정말 이 사용자의 계정을 정지하시겠어요?",
+            action: async () => {
+              await changeAdminUserStatus(userId, "banned");
+              await updateUserStatus(userId, "banned");
+              toast.success("계정이 정지되었습니다.");
+              location.reload();
+            },
+          })
+        }
         className={`text-gray-400 hover:text-yellow-500 ${
-          currentStatus === "suspended" ? "opacity-40 cursor-not-allowed" : ""
+          isBanned ? "opacity-40 cursor-not-allowed" : ""
         }`}
-        disabled={currentStatus === "suspended"}
+        disabled={isBanned}
         title="계정 정지"
       >
         <PauseCircle size={16} strokeWidth={1.8} />
       </button>
+
+      {/* 계정 삭제 버튼 (항상 활성화됨, 복구 불가) */}
       <button
-        onClick={handleDelete}
+        onClick={() =>
+          handleAction({
+            message:
+              "정말 이 계정을 완전히 삭제하시겠어요?\n이 작업은 되돌릴 수 없습니다.",
+            action: async () => {
+              await deleteUser(userId);
+              toast.success("계정이 성공적으로 삭제되었습니다.");
+            },
+          })
+        }
         className="text-gray-400 hover:text-red-500"
         title="계정 삭제"
       >
@@ -85,3 +100,5 @@ export default function UserActionButtons({ userId, currentStatus }) {
     </div>
   );
 }
+
+export default React.memo(UserActionButtons);

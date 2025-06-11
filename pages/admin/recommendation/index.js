@@ -1,8 +1,16 @@
-import { useFetchRecommendations } from "@/hooks/useFetchRecommendations";
+"use client";
+
+import { useFetchRecommendations } from "@/hooks/recommendation/useFetchRecommendations";
 import RecommendationList from "@/components/recommendation/RecommendationList";
 import Link from "next/link";
 
-export default function AdminSpotsPage() {
+/**
+ * AdminSpotsPage
+ * - 추천 여행지 목록 페이지
+ * - 여행지 리스트 조회 및 새 여행지 등록 버튼 제공
+ */
+
+function AdminSpotsPage() {
   const { recommendations, loading } = useFetchRecommendations();
 
   return (
@@ -17,11 +25,11 @@ export default function AdminSpotsPage() {
         </Link>
       </div>
 
-      {loading ? (
-        <p className="text-gray-500">불러오는 중...</p>
-      ) : (
-        <RecommendationList recommendations={recommendations} />
-      )}
+      <RecommendationList recommendations={recommendations} loading={loading} />
     </div>
   );
 }
+
+AdminSpotsPage.title = "LoneLeap Admin | 추천 여행지";
+
+export default AdminSpotsPage;
