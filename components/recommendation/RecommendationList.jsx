@@ -1,25 +1,47 @@
-import Link from "next/link"; // ⬅️ 꼭 추가해줘
+import React from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { format } from "date-fns";
+import EmptyState from "@/components/common/feedback/EmptyState";
+import { MapPin } from "lucide-react";
+import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
 
-export default function RecommendationList({ recommendations }) {
-  if (!recommendations?.length) {
+/**
+ * RecommendationList
+ * - 추천 여행지 목록을 카드 형태로 렌더링
+ * - 로딩 중에는 스피너 표시, 데이터 없을 경우 Empty 상태 출력
+ * - 각 아이템은 관리자 상세 페이지로 이동 가능한 링크 형태
+ */
+
+function RecommendationList({ recommendations, loading }) {
+  if (loading || !recommendations) {
     return (
-      <div className="text-center py-20 text-gray-500">
-        등록된 추천 여행지가 없습니다.
-      </div>
+      <section className="py-20">
+        <LoadingSpinner text="추천 여행지를 불러오는 중입니다..." />
+      </section>
+    );
+  }
+
+  if (recommendations.length === 0) {
+    return (
+      <section className="py-20">
+        <EmptyState
+          message="등록된 추천 여행지가 없습니다."
+          icon={<MapPin className="w-8 h-8 text-gray-300 mb-2" />}
+        />
+      </section>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {recommendations.map((item) => (
         <Link
           key={item.id}
           href={`/admin/recommendation/${item.id}`}
           className="bg-white rounded-xl shadow hover:bg-gray-50 transition overflow-hidden"
         >
-          <div className="relative w-full h-48">
+          <div className="relative w-full h-40 sm:h-48">
             <Image
               src={item.imageUrl}
               alt={item.name}
@@ -32,7 +54,7 @@ export default function RecommendationList({ recommendations }) {
           <div className="p-4 space-y-1">
             <h2 className="text-lg font-semibold">{item.name}</h2>
             <p className="text-sm text-gray-500">{item.location}</p>
-            <p className="text-sm text-gray-700 line-clamp-1">{item.summary}</p>
+            <p className="text-sm text-gray-700 line-clamp-2">{item.summary}</p>
 
             <div className="flex items-center justify-between pt-2">
               <span
@@ -53,6 +75,8 @@ export default function RecommendationList({ recommendations }) {
           </div>
         </Link>
       ))}
-    </div>
+    </section>
   );
 }
+
+export default React.memo(RecommendationList);

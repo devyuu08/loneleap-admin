@@ -1,129 +1,86 @@
-// 추천 여행지 등록/수정 폼 - 2단+1단 구조 적용
-import { useEffect, useState } from "react";
+import React from "react";
+import FormInput from "@/components/common/form/FormInput";
+import FormTextarea from "@/components/common/form/FormTextarea";
+import FormSelect from "@/components/common/form/FormSelect";
+import FormSubmitButton from "@/components/common/button/FormSubmitButton";
 
-export default function RecommendationForm({
+/**
+ * RecommendationForm
+ * - 추천 여행지 생성/수정 폼
+ * - 입력 상태(form), 이미지 변경, 제출 핸들러를 props로 받아 처리
+ * - 생성과 수정은 isEdit 여부로 분기 렌더링
+ * - 시맨틱 구조를 고려해 섹션 및 필드셋을 명확히 구분함
+ */
+
+function RecommendationForm({
+  form,
+  onChange,
+  onImageChange,
   onSubmit,
   loading,
-  initialValues,
+  isEdit,
 }) {
-  const [name, setName] = useState("");
-  const [summary, setSummary] = useState("");
-  const [location, setLocation] = useState("");
-  const [description, setDescription] = useState("");
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
-  const [visible, setVisible] = useState(true);
-  const [locationInfo, setLocationInfo] = useState("");
-  const [direction, setDirection] = useState("");
-  const [nearby, setNearby] = useState("");
-
-  useEffect(() => {
-    if (initialValues) {
-      setName(initialValues.name || "");
-      setSummary(initialValues.summary || "");
-      setLocation(initialValues.location || "");
-      setDescription(initialValues.description || "");
-      setImagePreview(initialValues.imageUrl || null);
-      setVisible(initialValues.visible ?? true);
-      setLocationInfo(initialValues.locationInfo || "");
-      setDirection((initialValues.directions || []).join("\n"));
-      setNearby((initialValues.nearbyInfo || []).join("\n"));
-    }
-  }, [initialValues]);
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setImageFile(file);
-    setImagePreview(URL.createObjectURL(file));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!name || !location || !description || (!imageFile && !imagePreview)) {
-      return alert("필수 항목을 모두 입력하세요.");
-    }
-
-    const formData = {
-      name,
-      summary,
-      location,
-      description,
-      imageFile,
-      visible,
-      locationInfo,
-      directions: direction.split("\n").filter((line) => line.trim()),
-      nearbyInfo: nearby.split("\n").filter((line) => line.trim()),
-    };
-
-    await onSubmit(formData);
-  };
-
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
       className="max-w-screen-lg mx-auto px-10 py-16 space-y-16"
     >
       {/* 1. 기본 정보 + 이미지 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <div className="space-y-6">
-          <div>
-            <label className="block text-base font-semibold text-gray-800 mb-2">
-              장소명
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-              placeholder="예: 성산일출봉"
-            />
-          </div>
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <fieldset className="space-y-6">
+          <legend className="sr-only">기본 정보 입력</legend>
 
-          <div>
-            <label className="block text-base font-semibold text-gray-800 mb-2">
-              요약 설명
-            </label>
-            <input
-              type="text"
-              value={summary}
-              onChange={(e) => setSummary(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-              placeholder="예: 붉게 가장 먼저 떠오르는 해"
-            />
-          </div>
+          <FormInput
+            label="장소명"
+            value={form.name}
+            placeholder="예: 성산일출봉"
+            onChange={(e) => onChange("name", e.target.value)}
+          />
 
-          <div>
-            <label className="block text-base font-semibold text-gray-800 mb-2">
-              지역
-            </label>
-            <select
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-            >
-              <option value="">지역 선택</option>
-              <option value="서울">서울</option>
-              <option value="경기도">경기도</option>
-              <option value="인천">인천</option>
-              <option value="충청도">충청도</option>
-              <option value="전라도">전라도</option>
-              <option value="경상도">경상도</option>
-              <option value="강원도">강원도</option>
-              <option value="제주도">제주도</option>
-            </select>
-          </div>
-        </div>
+          <FormInput
+            label="요약 설명"
+            value={form.summary}
+            placeholder="예: 붉게 가장 먼저 떠오르는 해"
+            onChange={(e) => onChange("summary", e.target.value)}
+          />
 
-        <div className="space-y-6">
+          <FormSelect
+            id="location"
+            label="지역"
+            value={form.location}
+            onChange={(e) => onChange("location", e.target.value)}
+            options={[
+              { value: "", label: "지역 선택" },
+              { value: "서울", label: "서울" },
+              { value: "경기도", label: "경기도" },
+              { value: "인천", label: "인천" },
+              { value: "충청도", label: "충청도" },
+              { value: "전라도", label: "전라도" },
+              { value: "경상도", label: "경상도" },
+              { value: "강원도", label: "강원도" },
+              { value: "제주도", label: "제주도" },
+            ]}
+          />
+        </fieldset>
+
+        <fieldset className="space-y-6">
+          <legend className="sr-only">이미지 및 공개 여부</legend>
+
           <div>
             <label className="block text-base font-semibold text-gray-800 mb-2">
               대표 이미지
             </label>
-            <input type="file" accept="image/*" onChange={handleImageChange} />
-            {imagePreview && (
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) onImageChange(file);
+              }}
+            />
+            {form.imagePreview && (
               <img
-                src={imagePreview}
+                src={form.imagePreview}
                 alt="미리보기"
                 className="w-full h-64 object-cover rounded-xl mt-4"
               />
@@ -136,63 +93,70 @@ export default function RecommendationForm({
             </label>
             <input
               type="checkbox"
-              checked={visible}
-              onChange={(e) => setVisible(e.target.checked)}
+              checked={form.visible}
+              onChange={(e) => onChange("visible", e.target.checked)}
             />
             <span className="text-sm text-gray-500">
               체크 시 사용자에게 노출됩니다
             </span>
           </div>
-        </div>
-      </div>
+        </fieldset>
+      </section>
 
-      {/* 2. 상세 설명 */}
-      <div className="space-y-3">
-        <label className="text-lg font-semibold">상세 설명</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows={12}
-          className="w-full px-4 py-4 border border-gray-300 rounded-lg text-base leading-relaxed"
-        />
-      </div>
-
-      {/* 3. 위치 설명 */}
-      <div className="space-y-3">
-        <label className="text-lg font-semibold">위치 설명</label>
-        <input
-          type="text"
-          value={locationInfo}
-          onChange={(e) => setLocationInfo(e.target.value)}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg text-base"
-        />
-      </div>
-
-      {/* 4. 찾아가는 방법 + 주변 정보 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div className="space-y-3">
-          <label className="text-lg font-semibold">찾아가는 방법</label>
-          <textarea
-            value={direction}
-            onChange={(e) => setDirection(e.target.value)}
-            rows={6}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg text-base"
+      {/* 2. 상세 설명 및 위치 설명 */}
+      <section className="space-y-3">
+        <fieldset>
+          <legend className="sr-only">상세 설명</legend>
+          <FormTextarea
+            id="description"
+            label="상세 설명"
+            value={form.description}
+            onChange={(e) => onChange("description", e.target.value)}
+            rows={20}
           />
-        </div>
-        <div className="space-y-3">
-          <label className="text-lg font-semibold">주변 정보</label>
-          <textarea
-            value={nearby}
-            onChange={(e) => setNearby(e.target.value)}
-            rows={6}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg text-base"
-          />
-        </div>
-      </div>
+        </fieldset>
 
-      {/* 5. 버튼 */}
-      <div className="pt-10 border-t flex justify-end">
-        {initialValues && (
+        <fieldset>
+          <legend className="sr-only">위치 설명</legend>
+          <FormInput
+            id="locationInfo"
+            label="위치 설명"
+            type="text"
+            value={form.locationInfo}
+            onChange={(e) => onChange("locationInfo", e.target.value)}
+          />
+        </fieldset>
+      </section>
+
+      {/* 3. 찾아가는 방법 + 주변 정보 */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <fieldset className="space-y-3">
+          <legend className="sr-only">찾아가는 방법</legend>
+          <FormTextarea
+            id="direction"
+            label="찾아가는 방법"
+            value={form.direction}
+            onChange={(e) => onChange("direction", e.target.value)}
+            placeholder="예: 제주국제공항에서 30분 소요"
+            rows={10}
+          />
+        </fieldset>
+
+        <fieldset className="space-y-3">
+          <legend className="sr-only">주변 정보</legend>
+          <FormTextarea
+            id="nearby"
+            label="주변 정보"
+            value={form.nearby}
+            onChange={(e) => onChange("nearby", e.target.value)}
+            rows={10}
+          />
+        </fieldset>
+      </section>
+
+      {/* 4. 제출 버튼 */}
+      <div className="pt-10 border-t flex justify-end gap-3">
+        {isEdit && (
           <button
             type="button"
             onClick={() => window.history.back()}
@@ -201,18 +165,14 @@ export default function RecommendationForm({
             수정 취소
           </button>
         )}
-        <button
-          type="submit"
-          disabled={loading}
-          className="ml-4 px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition"
-        >
-          {loading
-            ? "처리 중..."
-            : initialValues
-            ? "추천 여행지 수정하기"
-            : "추천 여행지 등록하기"}
-        </button>
+        <FormSubmitButton
+          isLoading={loading}
+          label={isEdit ? "추천 여행지 수정하기" : "추천 여행지 등록하기"}
+          variant="dark"
+        />
       </div>
     </form>
   );
 }
+
+export default React.memo(RecommendationForm);

@@ -1,9 +1,21 @@
-import { useState, useEffect } from "react";
-import { fetchUsers } from "@/lib/users";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { fetchUsers } from "@/lib/server/users";
 import UserFilterBar from "@/components/users/UserFilterBar";
 import UserSearchInput from "@/components/users/UserSearchInput";
 import UserTable from "@/components/users/UserTable";
 import { exportToCSV } from "@/utils/exportToCSV";
+import Pagination from "@/components/common/navigation/Pagination";
+import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
+import EmptyState from "@/components/common/feedback/EmptyState";
+import { Inbox } from "lucide-react";
+import toast from "react-hot-toast";
+
+/**
+ * UserTableContainer
+ * - 관리자 페이지 사용자 관리의 컨테이너 컴포넌트
+ * - 사용자 목록 조회, 필터링, 검색, CSV 내보내기, 페이징 처리 포함
+ * - 상태는 local state로 관리하며 비동기 fetchUsers 기반으로 데이터 로딩
+ */
 
 export default function UserTableContainer() {
   const [users, setUsers] = useState([]);
@@ -16,41 +28,48 @@ export default function UserTableContainer() {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const usersPerPage = 10;
+  const usersPerPage = 5;
+  const isInitialEmpty = users.length === 0;
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const data = await fetchUsers(filters);
-        setUsers(data);
-      } catch (err) {
-        console.error("사용자 조회 실패", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
-  }, [filters]);
-
-  const loadUsers = async () => {
+  // 사용자 데이터 fetch 함수
+  const loadUsers = useCallback(async (customFilters) => {
     try {
-      const data = await fetchUsers();
+      const data = await fetchUsers(customFilters);
       setUsers(data);
     } catch (error) {
-      console.error("사용자 로딩 실패:", error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("사용자 로딩 실패:", error);
+      }
+      toast.error("사용자 목록을 불러오는 데 실패했습니다.");
     }
-  };
+  }, []);
+
+  // 필터 변경 시 사용자 데이터 로드
+  useEffect(() => {
+    setLoading(true);
+    loadUsers(filters).finally(() => setLoading(false));
+  }, [filters, loadUsers]);
 
   // 필터 상태 변경
-  const handleFilterChange = (key, value) => {
+  const handleFilterChange = useCallback((key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
-  };
+  }, []);
 
-  const handleFilterReset = () => {
+  // 필터 초기화
+  const handleFilterReset = useCallback(() => {
     setFilters({ status: "all", date: "all", sort: "recent" });
-  };
+  }, []);
 
-  const handleExport = () => {
+  const filteredUsers = useMemo(() => {
+    return users.filter((user) =>
+      `${user.displayName ?? ""} ${user.email ?? ""}`
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    );
+  }, [users, search]);
+
+  // CSV 내보내기 처리
+  const handleExport = useCallback(() => {
     if (!filteredUsers || filteredUsers.length === 0) return;
 
     const exportData = filteredUsers.map((user) => ({
@@ -69,28 +88,22 @@ export default function UserTableContainer() {
     }));
 
     exportToCSV("loneleap_users", exportData);
-  };
+  }, [filteredUsers]);
 
-  // 필터링 + 검색
-  const filteredUsers = users.filter((user) =>
-    `${user.displayName ?? ""} ${user.email ?? ""}`
-      .toLowerCase()
-      .includes(search.toLowerCase())
-  );
+  // 현재 페이지의 사용자 데이터 추출
+  const currentUsers = useMemo(() => {
+    const startIndex = (currentPage - 1) * usersPerPage;
+    const endIndex = startIndex + usersPerPage;
+    return filteredUsers.slice(startIndex, endIndex);
+  }, [filteredUsers, currentPage, usersPerPage]);
 
-  // 현재 페이지 데이터
-  const startIndex = (currentPage - 1) * usersPerPage;
-  const endIndex = startIndex + usersPerPage;
-  const currentUsers = filteredUsers.slice(startIndex, endIndex);
-
-  // 필터/검색 변경 시 페이지 초기화
+  // 필터 또는 검색 변경 시 페이지 초기화
   useEffect(() => {
     setCurrentPage(1);
   }, [filters, search]);
 
   // 페이지 버튼 리스트
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
     <>
@@ -111,32 +124,29 @@ export default function UserTableContainer() {
       />
 
       {/* 사용자 테이블 */}
-      {loading ? (
-        <p>로딩 중...</p>
-      ) : filteredUsers.length === 0 ? (
-        <p className="text-gray-500">검색 결과가 없습니다.</p>
-      ) : (
-        <>
-          <UserTable users={currentUsers} onReload={loadUsers} />
-
-          {/* 페이지네이션 */}
-          <div className="flex justify-center gap-2 mt-6">
-            {pages.map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`px-3 py-1 rounded-md text-sm border ${
-                  page === currentPage
-                    ? "bg-black text-white"
-                    : "bg-white text-gray-600 hover:bg-gray-100"
-                }`}
-              >
-                {page}
-              </button>
-            ))}
-          </div>
-        </>
-      )}
+      <div className="flex flex-col justify-between min-h-[70vh]">
+        <div className="flex-1">
+          {loading ? (
+            <LoadingSpinner text="사용자 목록을 불러오는 중입니다..." />
+          ) : filteredUsers.length === 0 ? (
+            <EmptyState
+              message={
+                isInitialEmpty
+                  ? "등록된 사용자가 아직 없습니다."
+                  : "조건에 맞는 사용자가 없습니다."
+              }
+              icon={<Inbox className="w-10 h-10 text-gray-300 mb-3" />}
+            />
+          ) : (
+            <UserTable users={currentUsers} onReload={loadUsers} />
+          )}
+        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      </div>
     </>
   );
 }
