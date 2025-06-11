@@ -8,6 +8,7 @@ import Pagination from "@/components/common/navigation/Pagination";
 import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
 import EmptyState from "@/components/common/feedback/EmptyState";
 import { Inbox } from "lucide-react";
+import toast from "react-hot-toast";
 
 /**
  * UserTableContainer
@@ -36,7 +37,10 @@ export default function UserTableContainer() {
       const data = await fetchUsers(customFilters);
       setUsers(data);
     } catch (error) {
-      console.error("사용자 로딩 실패:", error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("사용자 로딩 실패:", error);
+      }
+      toast.error("사용자 목록을 불러오는 데 실패했습니다.");
     }
   }, []);
 

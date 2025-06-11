@@ -9,14 +9,20 @@
  * error(err, "저장 중 오류가 발생했습니다.");
  */
 
+import toast from "react-hot-toast";
+
 export function useFeedback() {
   const success = (message) => {
-    alert(message);
+    toast.success(message);
   };
 
   const error = (err, fallbackMessage = "오류가 발생했습니다.") => {
-    console.error(err);
-    alert(err?.message || fallbackMessage);
+    if (process.env.NODE_ENV === "development") {
+      console.error(err);
+    }
+
+    const message = err?.message || fallbackMessage;
+    toast.error(message);
   };
 
   return { success, error };

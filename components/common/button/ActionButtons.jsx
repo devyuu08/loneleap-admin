@@ -3,6 +3,7 @@ import { getAuth } from "firebase/auth";
 import ButtonSpinner from "@/components/common/loading/ButtonSpinner";
 
 import { btnFlexBox, btnSmallBox } from "@/styles/buttonStyles";
+import toast from "react-hot-toast";
 
 export default function ActionButtons({ report, onSuccess }) {
   const [deleting, setDeleting] = useState(false);
@@ -38,18 +39,17 @@ export default function ActionButtons({ report, onSuccess }) {
 
       const result = await res.json();
       if (res.ok) {
-        alert(
+        toast.success(
           isChat
             ? "메시지와 신고가 삭제되었습니다."
             : "리뷰와 신고가 삭제되었습니다."
         );
         onSuccess?.(report); // 전체 report 전달
       } else {
-        alert("삭제 실패: " + result.error);
+        toast.error("삭제 실패: " + result.error);
       }
     } catch (err) {
-      console.error("삭제 오류:", err);
-      alert("신고 삭제 중 오류가 발생했습니다.");
+      toast.error("신고 삭제 중 오류가 발생했습니다.");
     } finally {
       setDeleting(false);
     }
@@ -79,14 +79,13 @@ export default function ActionButtons({ report, onSuccess }) {
 
       const result = await res.json();
       if (res.ok) {
-        alert("신고가 삭제되었습니다.");
+        toast.success("신고가 무시되었습니다.");
         onSuccess?.(report); // 전체 report 전달
       } else {
-        alert("삭제 실패: " + result.error);
+        toast.error("무시 실패: " + result.error);
       }
     } catch (err) {
-      console.error("신고 삭제 오류:", err);
-      alert("신고 삭제 중 오류가 발생했습니다.");
+      toast.error("신고 무시 중 오류가 발생했습니다.");
     } finally {
       setDismissing(false);
     }

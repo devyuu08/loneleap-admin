@@ -11,11 +11,17 @@ export default async function deleteMessageWithReports(req, res) {
   // 관리자 인증
   try {
     const adminUser = await verifyAdminToken(req);
-    console.log(
-      `관리자 ${adminUser.email || adminUser.uid}가 메시지 삭제 시도`
-    );
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        `관리자 ${adminUser.email || adminUser.uid}가 메시지 삭제 시도`
+      );
+    }
   } catch (error) {
-    console.error("관리자 인증 실패:", error.message);
+    if (process.env.NODE_ENV === "development") {
+      console.error("관리자 인증 실패:", error);
+    } else {
+      console.error("관리자 인증 실패");
+    }
     return res.status(401).json({ error: "관리자 권한이 필요합니다." });
   }
 
@@ -37,7 +43,9 @@ export default async function deleteMessageWithReports(req, res) {
 
     // 관련 신고가 없는 경우도 처리
     if (snapshot.empty) {
-      console.log("관련 신고가 없는 메시지입니다. 메시지만 삭제합니다.");
+      if (process.env.NODE_ENV === "development") {
+        console.log("관련 신고가 없는 메시지입니다. 메시지만 삭제합니다.");
+      }
     }
 
     // 트랜잭션: 메시지 + 신고 일괄 삭제
@@ -76,7 +84,11 @@ export default async function deleteMessageWithReports(req, res) {
 
     return res.status(200).json({ message: "메시지 및 관련 신고 삭제 완료" });
   } catch (err) {
-    console.error("채팅 메시지 삭제 오류:", err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("채팅 메시지 삭제 오류:", err);
+    } else {
+      console.error("채팅 메시지 삭제 오류 발생");
+    }
 
     if (err.code === "not-found") {
       return res

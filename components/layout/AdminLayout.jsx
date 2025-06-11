@@ -18,6 +18,7 @@ import SidebarMenuItem from "@/components/layout/SidebarMenuItem";
 import { cn } from "@/lib/shared/utils";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase/client";
+import toast from "react-hot-toast";
 
 /**
  * AdminLayout
@@ -54,9 +55,13 @@ export default function AdminLayout({ children }) {
         await signOut(auth); // Firebase 로그아웃
         await fetch("/api/admin/auth/logout", { method: "POST" }); // 서버 쿠키 삭제
 
+        toast.success("로그아웃 되었습니다.");
         router.push("/admin/login");
       } catch (error) {
-        console.error("로그아웃 중 오류:", error);
+        if (import.meta.env.DEV) {
+          console.error("로그아웃 중 오류:", error);
+        }
+        toast.error("로그아웃 중 문제가 발생했습니다.");
       } finally {
         setIsLoading(false);
       }

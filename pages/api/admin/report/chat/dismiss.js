@@ -80,7 +80,11 @@ export default async function dismissChatReport(req, res) {
       .status(200)
       .json({ message: "신고가 성공적으로 무시 처리되었습니다." });
   } catch (err) {
-    console.error("신고 무시 실패:", err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("신고 무시 실패:", err);
+    } else {
+      console.error("신고 무시 실패");
+    }
     return res.status(500).json({
       error: "서버 오류로 인해 무시 처리에 실패했습니다.",
       details: process.env.NODE_ENV === "development" ? err.message : undefined,
