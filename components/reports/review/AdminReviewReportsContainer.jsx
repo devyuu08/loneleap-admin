@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { getAdminReports } from "@/services/adminReports";
 import { useAdminAuth } from "@/context/auth/useAdminAuth";
 import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
@@ -19,6 +19,7 @@ import { ADMIN_REPORTS } from "@/constants/queryKeys";
 export default function AdminReviewReportsContainer() {
   const { authReady, authUser, getToken } = useAdminAuth();
   const [selectedReport, setSelectedReport] = useState(null);
+  const queryClient = useQueryClient();
 
   const {
     data,
@@ -46,8 +47,22 @@ export default function AdminReviewReportsContainer() {
 
   // 처리 완료 시 상세 보기 초기화
   const handleReportSuccess = useCallback(() => {
+    if (!selectedReport?.id) return;
+
+    // 로컬 캐시에서 해당 신고 제거
+    queryClient.setQueryData(ADMIN_REPORTS.REVIEW, (old) => {
+      if (!old?.pages) return old;
+
+      return {
+        ...old,
+        pages: old.pages.map((page) =>
+          page.filter((report) => report.id !== selectedReport.id)
+        ),
+      };
+    });
+
     setSelectedReport(null);
-  }, []);
+  }, [queryClient, selectedReport]);
 
   if (isLoading || !authReady) {
     <section aria-label="리뷰 신고 목록 로딩 중">

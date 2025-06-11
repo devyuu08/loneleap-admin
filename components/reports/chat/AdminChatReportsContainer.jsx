@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { getAdminReports } from "@/services/adminReports";
 import { useAdminAuth } from "@/context/auth/useAdminAuth";
 import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
@@ -18,6 +18,7 @@ import { ADMIN_REPORTS } from "@/constants/queryKeys";
 export default function AdminChatReportsContainer() {
   const { authReady, authUser, getToken } = useAdminAuth();
   const [selectedReport, setSelectedReport] = useState(null);
+  const queryClient = useQueryClient();
 
   // 신고 목록 불러오기 (React Query - useInfiniteQuery)
   const {
@@ -47,8 +48,21 @@ export default function AdminChatReportsContainer() {
 
   // 처리 후 상세 선택 해제
   const handleReportSuccess = useCallback(() => {
+    if (!selectedReport?.id) return;
+
+    queryClient.setQueryData(ADMIN_REPORTS.CHAT, (old) => {
+      if (!old?.pages) return old;
+
+      return {
+        ...old,
+        pages: old.pages.map((page) =>
+          page.filter((report) => report.id !== selectedReport.id)
+        ),
+      };
+    });
+
     setSelectedReport(null);
-  }, []);
+  }, [queryClient, selectedReport]);
 
   if (isLoading || !authReady) {
     return <LoadingSpinner text="신고된 채팅 메시지를 불러오는 중..." />;
