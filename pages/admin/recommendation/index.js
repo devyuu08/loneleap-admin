@@ -1,5 +1,3 @@
-"use client";
-
 import { useFetchRecommendations } from "@/hooks/recommendation/useFetchRecommendations";
 import RecommendationList from "@/components/recommendation/RecommendationList";
 import Link from "next/link";

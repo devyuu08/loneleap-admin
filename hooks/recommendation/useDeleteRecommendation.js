@@ -1,5 +1,3 @@
-"use client";
-
 import { useMutation } from "@tanstack/react-query";
 import { deleteRecommendationFromFirestore } from "@/services/deleteRecommendation";
 import { useFeedback } from "@/hooks/common/useFeedback";

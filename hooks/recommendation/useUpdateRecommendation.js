@@ -1,5 +1,3 @@
-"use client";
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateRecommendationInFirestore } from "@/services/updateRecommendation";
 import { useRouter } from "next/router";

@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback } from "react";
 import { useRouter } from "next/router";
 import { useRecommendationDetail } from "@/hooks/recommendation/useRecommendationDetail";
