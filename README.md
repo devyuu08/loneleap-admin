@@ -175,7 +175,8 @@ npm run dev
 ## **8. 🌍 배포 정보**
 
 - **배포 플랫폼**: Vercel
-- **배포 URL**: [https://loneleap-admin.vercel.app/admin](https://loneleap-admin.vercel.app/)
+- **배포 URL**: [https://loneleap-admin.vercel.app](https://loneleap-admin.vercel.app/)
+- **관리자 계정**: admin@gmail.com / test1234
 
 ## **9. ✨ 참고사항**
 
